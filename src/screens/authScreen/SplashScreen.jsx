@@ -5,7 +5,7 @@ const SplashScreen = ({ navigation }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Login'); // Login screen ला redirect
+      navigation.replace('OnboardingScreen'); // Login screen ला redirect
     }, 2500); // 2.5 seconds
 
     return () => clearTimeout(timer);
@@ -43,3 +43,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+
+
