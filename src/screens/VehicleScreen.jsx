@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 // ─── Custom Components ────────────────────────────────────────────────────────
 import VehicleCard from '../components/VehicleCard';
@@ -135,6 +135,7 @@ const CATEGORIES = {
 // ─── VehicleScreen ────────────────────────────────────────────────────────────
 const VehicleScreen = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const {vehicleType} = route.params;
 
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -170,7 +171,15 @@ const VehicleScreen = () => {
         <SectionHeader
           emoji="🔥"
           title="New Vehicles"
-          onViewAll={() => console.log('View all new')}
+          onViewAll={() => {
+            if (vehicleType === '2wheeler') {
+              navigation.navigate('AllTwoWheelers');
+            } else if (vehicleType === '4wheeler') {
+              navigation.navigate('AllFourWheelers');
+            } else {
+              console.log('View all new');
+            }
+          }}
         />
 
         {/* Featured horizontal cards */}
@@ -182,7 +191,15 @@ const VehicleScreen = () => {
           renderItem={({item}) => (
             <TopVehicleCard
               item={item}
-              onPress={() => console.log('Top card pressed:', item.title)}
+              onPress={() => {
+                if (vehicleType === '2wheeler') {
+                  navigation.navigate('TwoWheelerDetail', {item});
+                } else if (vehicleType === '4wheeler') {
+                  navigation.navigate('FourWheelerDetail', {item, vehicleType: '4wheeler'});
+                } else {
+                  console.log('Top card pressed:', item.title);
+                }
+              }}
               onHeartPress={() => console.log('Heart pressed:', item.title)}
             />
           )}
@@ -199,7 +216,15 @@ const VehicleScreen = () => {
         <SectionHeader
           emoji="🚘"
           title="All Vehicles"
-          onViewAll={() => console.log('View all vehicles')}
+          onViewAll={() => {
+            if (vehicleType === '2wheeler') {
+              navigation.navigate('AllTwoWheelers');
+            } else if (vehicleType === '4wheeler') {
+              navigation.navigate('AllFourWheelers');
+            } else {
+              console.log('View all vehicles');
+            }
+          }}
         />
 
         {/* Category Tabs */}
@@ -227,7 +252,15 @@ const VehicleScreen = () => {
           renderItem={({item}) => (
             <VehicleCard
               item={item}
-              onPress={() => console.log('Card pressed:', item.title)}
+              onPress={() => {
+                if (vehicleType === '2wheeler') {
+                  navigation.navigate('TwoWheelerDetail', {item});
+                } else if (vehicleType === '4wheeler') {
+                  navigation.navigate('FourWheelerDetail', {item, vehicleType: '4wheeler'});
+                } else {
+                  console.log('Card pressed:', item.title);
+                }
+              }}
               onHeartPress={() => console.log('Liked:', item.title)}
               onBookmarkPress={() => console.log('Saved:', item.title)}
             />
@@ -299,5 +332,6 @@ const styles = StyleSheet.create({
   // Grid
   columnWrapper: {
     justifyContent: 'space-between',
+    paddingHorizontal: 10,
   },
 });

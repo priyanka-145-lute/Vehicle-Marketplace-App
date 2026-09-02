@@ -1,8 +1,13 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import NetworkVehicleImage from './NetworkVehicleImage';
 
 const {width} = Dimensions.get('window');
+
+const getFallbackImage = type => type === '2wheeler'
+  ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
+  : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
 const TopVehicleCard = ({item, onPress, onHeartPress}) => {
   return (
@@ -19,7 +24,11 @@ const TopVehicleCard = ({item, onPress, onHeartPress}) => {
       </TouchableOpacity>
 
       {/* Image */}
-      <Image source={{uri: item.image}} style={styles.topCarImage} />
+      <NetworkVehicleImage
+        uri={item.image}
+        fallbackUri={getFallbackImage(item.type)}
+        style={styles.topCarImage}
+      />
 
       {/* Title */}
       <Text style={styles.topCarTitle} numberOfLines={1}>
@@ -72,8 +81,10 @@ const styles = StyleSheet.create({
   },
   topCarImage: {
     width: '100%',
-    height: 110,
-    resizeMode: 'contain',
+    height: 115,
+    resizeMode: 'cover',
+    borderRadius: 12,
+    backgroundColor: '#f1f5f9',
     marginTop: 8,
   },
   topCarTitle: {

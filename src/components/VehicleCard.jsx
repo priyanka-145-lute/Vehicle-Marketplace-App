@@ -1,8 +1,11 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import NetworkVehicleImage from './NetworkVehicleImage';
 
-const {width} = Dimensions.get('window');
+const getFallbackImage = type => type === '2wheeler'
+  ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
+  : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
 const VehicleCard = ({item, onPress, onHeartPress, onBookmarkPress}) => {
   return (
@@ -14,7 +17,11 @@ const VehicleCard = ({item, onPress, onHeartPress, onBookmarkPress}) => {
       </TouchableOpacity>
 
       {/* Vehicle Image */}
-      <Image source={{uri: item.image}} style={styles.carImage} />
+      <NetworkVehicleImage
+        uri={item.image}
+        fallbackUri={getFallbackImage(item.type)}
+        style={styles.carImage}
+      />
 
       {/* Title */}
       <Text style={styles.carTitle} numberOfLines={1}>
@@ -42,12 +49,11 @@ export default VehicleCard;
 
 const styles = StyleSheet.create({
   card: {
-    width: width * 0.44,
+    width: '48%',
     backgroundColor: '#fff',
-    borderRadius: 18,
+    borderRadius: 16,
     padding: 10,
-    marginBottom: 16,
-    marginHorizontal: 10,
+    marginBottom: 14,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.07,
@@ -62,8 +68,10 @@ const styles = StyleSheet.create({
   },
   carImage: {
     width: '100%',
-    height: 100,
-    resizeMode: 'contain',
+    height: 115,
+    resizeMode: 'cover',
+    borderRadius: 12,
+    backgroundColor: '#f1f5f9',
   },
   carTitle: {
     fontSize: 15,

@@ -5,6 +5,10 @@ import AuthStack from './AuthStack';
 import BottomTabs from './BottomTabs';
 
 import VehicleScreen from '../screens/VehicleScreen';
+import AllTwoWheelersScreen from '../screens/AllTwoWheelersScreen';
+import AllFourWheelersScreen from '../screens/AllFourWheelersScreen';
+import AllOtherVehiclesScreen from '../screens/AllOtherVehiclesScreen';
+import TwoWheelerDetailScreen from '../screens/TwoWheelerDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,14 +30,43 @@ const MainStack = () => {
         component={VehicleScreen}
       />
 
+      <Stack.Screen
+        name="AllTwoWheelers"
+        component={AllTwoWheelersScreen}
+      />
+
+      <Stack.Screen
+        name="AllFourWheelers"
+        component={AllFourWheelersScreen}
+      />
+
+      <Stack.Screen
+        name="AllOtherVehicles"
+        component={AllOtherVehiclesScreen}
+      />
+
+      <Stack.Screen
+        name="TwoWheelerDetail"
+        component={TwoWheelerDetailScreen}
+      />
+
+      <Stack.Screen
+        name="FourWheelerDetail"
+        component={TwoWheelerDetailScreen}
+      />
+
+      <Stack.Screen
+        name="OtherVehicleDetail"
+        component={TwoWheelerDetailScreen}
+      />
+
     </Stack.Navigator>
   );
 };
 
 const AppNavigator = () => {
 
-  // Testing sathi true
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return isLoggedIn ? (
     <MainStack />

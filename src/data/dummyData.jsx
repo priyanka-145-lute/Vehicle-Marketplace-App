@@ -51,6 +51,15 @@ export const categoryData = [
 
   {
     id: '3',
+    title: 'Other Vehicles',
+    subtitle: 'Trucks, buses, tractors and more',
+    type: 'other',
+    image:
+      'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=1200&auto=format&fit=crop',
+  },
+
+  {
+    id: '4',
     title: '2 Wheeler Parts',
     subtitle: 'Genuine parts for top performance',
     type: '2wheeler',
@@ -59,7 +68,7 @@ export const categoryData = [
   },
 
   {
-    id: '4',
+    id: '5',
     title: '4 Wheeler Parts',
     subtitle: 'Quality parts for longer car life',
     type: '4wheeler',
@@ -67,12 +76,4 @@ export const categoryData = [
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
   },
 
-  {
-    id: '5',
-    title: 'Other Vehicles',
-    subtitle: 'Trucks, JCB and more at best prices',
-    type: 'other',
-    image:
-      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1200&auto=format&fit=crop',
-  },
 ];

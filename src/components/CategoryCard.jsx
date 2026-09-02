@@ -18,14 +18,13 @@ const CategoryCard = ({ item }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-     onPress={() =>
-  navigation.navigate(
-    'VehicleScreen',
-    {
-      vehicleType: item.type,
-    },
-  )
-}
+     onPress={() => {
+       if (item.type === 'other') {
+         navigation.navigate('AllOtherVehicles');
+         return;
+       }
+       navigation.navigate('VehicleScreen', {vehicleType: item.type});
+     }}
       style={styles.container}
     >
 
