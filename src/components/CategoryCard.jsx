@@ -20,7 +20,11 @@ const CategoryCard = ({ item }) => {
       activeOpacity={0.8}
      onPress={() => {
        if (item.type === 'other') {
-         navigation.navigate('AllOtherVehicles');
+         navigation.navigate('VehicleScreen', {vehicleType: 'other'});
+         return;
+       }
+       if (item.type === '2wheeler-parts' || item.type === '4wheeler-parts') {
+         navigation.navigate('Parts', {partType: item.type});
          return;
        }
        navigation.navigate('VehicleScreen', {vehicleType: item.type});

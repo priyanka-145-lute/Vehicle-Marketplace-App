@@ -6,10 +6,13 @@ import HomeScreen from '../screens/HomeScreen';
 import WishlistScreen from '../screens/WishlistScreen';
 import MySalesScreen from '../screens/MySalesScreen';
 import MessageScreen from '../screens/MessageScreen';
+import AccountNavigator from '../screens/AccountScreens';
+import {useTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabs = () => {
+  const {isDark} = useTheme();
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -17,13 +20,13 @@ const BottomTabs = () => {
         headerShown: false,
 
         tabBarActiveTintColor: 'red',
-        tabBarInactiveTintColor: '#111',
+        tabBarInactiveTintColor: isDark ? '#f8fafc' : '#111',
 
         tabBarStyle: {
           height: 70,
           paddingTop: 8,
           paddingBottom: 8,
-          backgroundColor: '#fff',
+          backgroundColor: isDark ? '#1f2937' : '#fff',
           borderTopWidth: 0,
           elevation: 10,
         },
@@ -53,12 +56,15 @@ const BottomTabs = () => {
           else if (route.name === 'Messages') {
             iconName = 'comment-discussion';
           }
+          else if (route.name === 'Account') {
+            iconName = 'person';
+          }
 
           return (
             <Icon
               name={iconName}
               size={24}
-              color={focused ? 'red' : '#111'}
+              color={focused ? 'red' : isDark ? '#f8fafc' : '#111'}
             />
           );
         },
@@ -84,6 +90,7 @@ const BottomTabs = () => {
         component={MessageScreen}
       />
 
+      <Tab.Screen name="Account" component={AccountNavigator} />
     </Tab.Navigator>
   );
 };

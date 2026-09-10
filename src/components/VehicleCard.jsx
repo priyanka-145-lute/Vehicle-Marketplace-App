@@ -1,20 +1,19 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import WishlistHeart from './WishlistHeart';
 import NetworkVehicleImage from './NetworkVehicleImage';
 
 const getFallbackImage = type => type === '2wheeler'
   ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
   : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
-const VehicleCard = ({item, onPress, onHeartPress, onBookmarkPress}) => {
+const VehicleCard = ({item, onPress, onBookmarkPress}) => {
   return (
     <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={onPress}>
 
       {/* Heart / Wishlist */}
-      <TouchableOpacity style={styles.heartBtn} onPress={onHeartPress}>
-        <Icon name="heart-outline" size={18} color="#444" />
-      </TouchableOpacity>
+      <WishlistHeart item={item} style={styles.heartBtn} color="#444" />
 
       {/* Vehicle Image */}
       <NetworkVehicleImage

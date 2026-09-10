@@ -3,6 +3,7 @@ import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'rea
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import TwoWheelerFilterDrawer, {TWO_WHEELER_FILTER_DEFAULTS} from '../components/TwoWheelerFilterDrawer';
+import WishlistHeart from '../components/WishlistHeart';
 import NetworkVehicleImage from '../components/NetworkVehicleImage';
 
 const TWO_WHEELERS = [
@@ -37,7 +38,7 @@ const AllTwoWheelersScreen = ({navigation}) => {
 
   const renderVehicle = ({item}) => (
     <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={() => navigation.navigate('TwoWheelerDetail', {item})}>
-      <TouchableOpacity style={styles.heart}><Icon name="heart-outline" size={19} color="#334155" /></TouchableOpacity>
+      <WishlistHeart item={item} vehicleType="2wheeler" style={styles.heart} size={19} color="#334155" />
       <NetworkVehicleImage uri={item.image} fallbackUri="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop" style={styles.image} />
       <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
       <Text style={styles.details}>{item.type} • {item.fuel}</Text>

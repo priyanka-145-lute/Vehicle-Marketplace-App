@@ -3,6 +3,7 @@ import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'rea
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FourWheelerFilterDrawer, {FOUR_WHEELER_FILTER_DEFAULTS} from '../components/FourWheelerFilterDrawer';
+import WishlistHeart from '../components/WishlistHeart';
 import NetworkVehicleImage from '../components/NetworkVehicleImage';
 
 const CARS = [
@@ -33,7 +34,7 @@ const AllFourWheelersScreen = ({navigation}) => {
     return searchMatch && brandMatch && modelMatch && fuelMatch && transmissionMatch && bodyMatch && fromMatch && toMatch && ownerMatch && item.price >= filters.minPrice && item.price <= filters.maxPrice;
   }), [filters, search]);
 
-  const renderCar = ({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={() => navigation.navigate('FourWheelerDetail', {item, vehicleType: '4wheeler'})}><TouchableOpacity style={styles.heart}><Icon name="heart-outline" size={19} color="#334155" /></TouchableOpacity><NetworkVehicleImage uri={item.image} fallbackUri="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop" style={styles.image} /><Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text><Text style={styles.details}>{item.fuel} • {item.transmission}</Text><Text style={styles.price}>₹ {item.price.toLocaleString('en-IN')}</Text></TouchableOpacity>;
+  const renderCar = ({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={() => navigation.navigate('FourWheelerDetail', {item, vehicleType: '4wheeler'})}><WishlistHeart item={item} vehicleType="4wheeler" style={styles.heart} size={19} color="#334155" /><NetworkVehicleImage uri={item.image} fallbackUri="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop" style={styles.image} /><Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text><Text style={styles.details}>{item.fuel} • {item.transmission}</Text><Text style={styles.price}>₹ {item.price.toLocaleString('en-IN')}</Text></TouchableOpacity>;
 
   return <SafeAreaView style={styles.container}>
     <View style={styles.header}><TouchableOpacity style={styles.filterButton} onPress={() => setFilterVisible(true)}><Icon name="menu" size={25} color="#fff" /></TouchableOpacity><Text style={styles.heading}>Four Wheeler</Text><View style={styles.spacer} /></View>

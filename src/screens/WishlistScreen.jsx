@@ -5,26 +5,46 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Image,
   TouchableOpacity,
 } from 'react-native';
 
+import {useWishlist} from '../context/WishlistContext';
+import NetworkVehicleImage from '../components/NetworkVehicleImage';
+
 import Icon from 'react-native-vector-icons/Octicons';
 
-const WishlistScreen = ({route}) => {
-
-  // Dynamic Wishlist Data
-  const wishlistData =
-    route?.params?.wishlistData || [];
+const WishlistScreen = ({navigation}) => {
+  const {wishlistData, removeFromWishlist} = useWishlist();
 
   const renderWishlistItem = ({item}) => {
+    const vehicleType = item.vehicleType || item.type;
+    const detailScreen = vehicleType === '2wheeler'
+      ? 'TwoWheelerDetail'
+      : vehicleType === 'other' ? 'OtherVehicleDetail' : 'FourWheelerDetail';
     return (
       <TouchableOpacity
-        activeOpacity={0.8}
+        activeOpacity={0.85}
+        onPress={() => navigation.navigate(detailScreen, {item, vehicleType})}
         style={styles.card}>
 
-        <Image
-          source={{uri: item.image}}
+        <TouchableOpacity
+          style={styles.deleteButton}
+          accessibilityRole="button"
+          accessibilityLabel={`Remove ${item.title} from wishlist`}
+          hitSlop={8}
+          onPress={event => {
+            event.stopPropagation();
+            removeFromWishlist(item.wishlistKey);
+          }}>
+          <Icon name="trash" size={19} color="#ef4444" />
+        </TouchableOpacity>
+        <NetworkVehicleImage
+          uri={item.image}
+          fallbackUri={(item.vehicleType || item.type) === '2wheeler'
+            ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
+            : (item.vehicleType || item.type) === 'other'
+              ? 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=900&auto=format&fit=crop'
+              : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop'}
           style={styles.image}
         />
 
@@ -40,28 +60,21 @@ const WishlistScreen = ({route}) => {
 
           <Text style={styles.details}>
 
-            {item.fuel} •{' '}
-            {item.transmission}
+            {item.type && item.type !== vehicleType && vehicleType !== '4wheeler'
+              ? `${item.type} • ${item.fuel}`
+              : `${item.fuel} • ${item.transmission}`}
 
           </Text>
 
           <Text style={styles.price}>
 
-            {item.price}
+            {typeof item.price === 'number' ? `₹ ${item.price.toLocaleString('en-IN')}` : item.price}
 
           </Text>
 
         </View>
 
-        <TouchableOpacity>
 
-          <Icon
-            name="trash"
-            size={20}
-            color="red"
-          />
-
-        </TouchableOpacity>
 
       </TouchableOpacity>
     );
@@ -86,12 +99,12 @@ const WishlistScreen = ({route}) => {
 
         <FlatList
           data={wishlistData}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.wishlistKey}
           renderItem={renderWishlistItem}
+          numColumns={2}
+          columnWrapperStyle={styles.columns}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            padding: 16,
-          }}
+          contentContainerStyle={styles.list}
         />
 
       ) : (
@@ -145,45 +158,15 @@ const styles = StyleSheet.create({
     color: '#111',
   },
    
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    padding: 12,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 2,
-  },
-
-  image: {
-    width: 90,
-    height: 70,
-    resizeMode: 'contain',
-  },
-
-  content: {
-    flex: 1,
-    marginLeft: 14,
-  },
-
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#111',
-  },
-
-  details: {
-    color: '#777',
-    fontSize: 12,
-    marginTop: 4,
-  },
-
-  price: {
-    color: 'red',
-    fontSize: 15,
-    fontWeight: '700',
-    marginTop: 6,
-  },
+  list: {paddingHorizontal: 10, paddingTop: 18, paddingBottom: 28},
+  columns: {justifyContent: 'space-between'},
+  card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: '#fff', elevation: 2},
+  deleteButton: {position: 'absolute', top: 9, right: 9, zIndex: 2, width: 30, height: 30, borderRadius: 15, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center'},
+  image: {width: '100%', height: 115, borderRadius: 12, resizeMode: 'cover', backgroundColor: '#f1f5f9'},
+  content: {},
+  title: {fontSize: 14, fontWeight: '700', color: '#111', marginTop: 10},
+  details: {fontSize: 11, color: '#64748b', marginTop: 5},
+  price: {fontSize: 15, fontWeight: '800', color: '#ef4444', marginTop: 7},
 
   emptyContainer: {
     flex: 1,

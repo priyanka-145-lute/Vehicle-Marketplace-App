@@ -3,6 +3,7 @@ import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'rea
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import OtherVehicleFilterDrawer, {OTHER_FILTER_DEFAULTS} from '../components/OtherVehicleFilterDrawer';
+import WishlistHeart from '../components/WishlistHeart';
 import NetworkVehicleImage from '../components/NetworkVehicleImage';
 
 const OTHER_VEHICLES = [
@@ -30,7 +31,7 @@ const AllOtherVehiclesScreen = ({navigation}) => {
     const toMatch = filters.yearTo === 'Any Year' || item.year <= Number(filters.yearTo);
     return searchMatch && typeMatch && fuelMatch && brandMatch && modelMatch && fromMatch && toMatch && item.price >= filters.minPrice && item.price <= filters.maxPrice;
   }), [filters, search]);
-  const renderVehicle = ({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={() => navigation.navigate('OtherVehicleDetail', {item, vehicleType: 'other'})}><TouchableOpacity style={styles.heart}><Icon name="heart-outline" size={19} color="#334155" /></TouchableOpacity><NetworkVehicleImage uri={item.image} fallbackUri="https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=900&auto=format&fit=crop" style={styles.image} /><Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text><Text style={styles.details}>{item.type} • {item.fuel}</Text><Text style={styles.price}>₹ {item.price.toLocaleString('en-IN')}</Text></TouchableOpacity>;
+  const renderVehicle = ({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={() => navigation.navigate('OtherVehicleDetail', {item, vehicleType: 'other'})}><WishlistHeart item={item} vehicleType="other" style={styles.heart} size={19} color="#334155" /><NetworkVehicleImage uri={item.image} fallbackUri="https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=900&auto=format&fit=crop" style={styles.image} /><Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text><Text style={styles.details}>{item.type} • {item.fuel}</Text><Text style={styles.price}>₹ {item.price.toLocaleString('en-IN')}</Text></TouchableOpacity>;
   return <SafeAreaView style={styles.container}>
     <View style={styles.header}><TouchableOpacity style={styles.filterButton} onPress={() => setFilterVisible(true)}><Icon name="menu" size={25} color="#fff" /></TouchableOpacity><Text style={styles.heading}>Other Vehicles</Text><View style={styles.spacer} /></View>
     <View style={styles.search}><Icon name="search" size={20} color="#777" /><TextInput value={search} onChangeText={setSearch} placeholder="Search other vehicles..." placeholderTextColor="#777" style={styles.searchInput} />{search ? <TouchableOpacity onPress={() => setSearch('')}><Icon name="close-circle" size={20} color="#999" /></TouchableOpacity> : null}</View>

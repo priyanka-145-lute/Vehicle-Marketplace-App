@@ -7,28 +7,34 @@ import {
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useTheme} from '../context/ThemeContext';
 
-const SearchBar = () => {
+const SearchBar = ({value, onChangeText, onSaveSearch}) => {
+  const {isDark} = useTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDark && styles.containerDark]}>
       
       <Icon
         name="search"
         size={20}
-        color="#777"
+        color={isDark ? '#cbd5e1' : '#777'}
       />
 
       <TextInput
-        placeholder="Search for cars, brands, models..."
-        placeholderTextColor="#777"
-        style={styles.input}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder="Search categories..."
+        style={[styles.input, isDark && styles.inputDark]}
+        placeholderTextColor={isDark ? '#94a3b8' : '#777'}
       />
 
-      <TouchableOpacity>
+      {value ? <TouchableOpacity onPress={() => onChangeText('')} accessibilityLabel="Clear search"><Icon name="close-circle" size={21} color={isDark ? '#cbd5e1' : '#777'} /></TouchableOpacity> : null}
+
+      <TouchableOpacity onPress={onSaveSearch} accessibilityLabel="Save search">
         <Icon
           name="options-outline"
           size={22}
-          color="#777"
+          color={isDark ? '#cbd5e1' : '#777'}
         />
       </TouchableOpacity>
 
@@ -50,6 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 2,
   },
+  containerDark: {backgroundColor: '#1f2937'},
 
   input: {
     flex: 1,
@@ -57,4 +64,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#111',
   },
+  inputDark: {color: '#f8fafc'},
 });

@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   SafeAreaView,
   FlatList,
+  Dimensions,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -19,6 +20,9 @@ import CategoryTab from '../components/CategoryTab';
 import Header from '../components/Header';
 import SectionHeader from '../components/SectionHeader';
 import SearchBar from '../components/SearchBar';
+
+const {width} = Dimensions.get('window');
+const FEATURED_CARD_INTERVAL = width * 0.44 + 16;
 
 // ─── Vehicle Data ─────────────────────────────────────────────────────────────
 const vehicleData = [
@@ -124,12 +128,55 @@ const vehicleData = [
     image:
       'https://imgd.aeplcdn.com/664x374/n/cw/ec/183523/duke-390-right-front-three-quarter.jpeg',
   },
+
+  // ── Other Vehicles ──
+  {
+    id: 'other-1',
+    title: 'Tata Starbus',
+    fuel: 'Diesel',
+    transmission: 'Manual',
+    price: '₹ 18,50,000',
+    category: 'Bus',
+    type: 'other',
+    image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    id: 'other-2',
+    title: 'Bajaj RE Auto',
+    fuel: 'CNG',
+    transmission: 'Manual',
+    price: '₹ 3,75,000',
+    category: 'Auto Rickshaw',
+    type: 'other',
+    image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    id: 'other-3',
+    title: 'Eicher Pro 3016',
+    fuel: 'Diesel',
+    transmission: 'Manual',
+    price: '₹ 26,50,000',
+    category: 'Truck',
+    type: 'other',
+    image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=900&auto=format&fit=crop',
+  },
+  {
+    id: 'other-4',
+    title: 'Swaraj 744 FE',
+    fuel: 'Diesel',
+    transmission: 'Manual',
+    price: '₹ 7,10,000',
+    category: 'Tractor',
+    type: 'other',
+    image: 'https://images.unsplash.com/photo-1515569067071-ec3b51335dd0?q=80&w=900&auto=format&fit=crop',
+  },
 ];
 
 // ─── Category Maps ────────────────────────────────────────────────────────────
 const CATEGORIES = {
   '4wheeler': ['All', 'Hatchback', 'SUV', 'Sedan'],
   '2wheeler': ['All', 'Sports', 'Scooter', 'Cruiser'],
+  other: ['All', 'Bus', 'Auto Rickshaw', 'Truck', 'Tractor'],
 };
 
 // ─── VehicleScreen ────────────────────────────────────────────────────────────
@@ -139,6 +186,8 @@ const VehicleScreen = () => {
   const {vehicleType} = route.params;
 
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const featuredListRef = useRef(null);
 
   const categories = CATEGORIES[vehicleType] ?? ['All'];
 
@@ -153,6 +202,23 @@ const VehicleScreen = () => {
 
   // Top 2 for the featured horizontal strip
   const featuredData = filteredData.slice(0, 2);
+
+  useEffect(() => {
+    if (featuredData.length < 2) {
+      setFeaturedIndex(0);
+      return undefined;
+    }
+
+    const slider = setInterval(() => {
+      setFeaturedIndex(currentIndex => {
+        const nextIndex = (currentIndex + 1) % featuredData.length;
+        featuredListRef.current?.scrollToIndex({index: nextIndex, animated: true});
+        return nextIndex;
+      });
+    }, 3500);
+
+    return () => clearInterval(slider);
+  }, [featuredData.length]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -176,6 +242,8 @@ const VehicleScreen = () => {
               navigation.navigate('AllTwoWheelers');
             } else if (vehicleType === '4wheeler') {
               navigation.navigate('AllFourWheelers');
+            } else if (vehicleType === 'other') {
+              navigation.navigate('AllOtherVehicles');
             } else {
               console.log('View all new');
             }
@@ -184,10 +252,14 @@ const VehicleScreen = () => {
 
         {/* Featured horizontal cards */}
         <FlatList
+          ref={featuredListRef}
           horizontal
           data={featuredData}
           keyExtractor={item => item.id}
           showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={event => {
+            setFeaturedIndex(Math.round(event.nativeEvent.contentOffset.x / FEATURED_CARD_INTERVAL));
+          }}
           renderItem={({item}) => (
             <TopVehicleCard
               item={item}
@@ -196,20 +268,24 @@ const VehicleScreen = () => {
                   navigation.navigate('TwoWheelerDetail', {item});
                 } else if (vehicleType === '4wheeler') {
                   navigation.navigate('FourWheelerDetail', {item, vehicleType: '4wheeler'});
+                } else if (vehicleType === 'other') {
+                  navigation.navigate('OtherVehicleDetail', {item, vehicleType: 'other'});
                 } else {
                   console.log('Top card pressed:', item.title);
                 }
               }}
-              onHeartPress={() => console.log('Heart pressed:', item.title)}
             />
           )}
         />
 
         {/* Pagination Dots */}
         <View style={styles.dotContainer}>
-          <View style={styles.activeDot} />
-          <View style={styles.dot} />
-          <View style={styles.dot} />
+          {featuredData.map((item, index) => (
+            <View
+              key={item.id}
+              style={featuredIndex === index ? styles.activeDot : styles.dot}
+            />
+          ))}
         </View>
 
         {/* ── All Vehicles Section ── */}
@@ -221,6 +297,8 @@ const VehicleScreen = () => {
               navigation.navigate('AllTwoWheelers');
             } else if (vehicleType === '4wheeler') {
               navigation.navigate('AllFourWheelers');
+            } else if (vehicleType === 'other') {
+              navigation.navigate('AllOtherVehicles');
             } else {
               console.log('View all vehicles');
             }
@@ -257,11 +335,12 @@ const VehicleScreen = () => {
                   navigation.navigate('TwoWheelerDetail', {item});
                 } else if (vehicleType === '4wheeler') {
                   navigation.navigate('FourWheelerDetail', {item, vehicleType: '4wheeler'});
+                } else if (vehicleType === 'other') {
+                  navigation.navigate('OtherVehicleDetail', {item, vehicleType: 'other'});
                 } else {
                   console.log('Card pressed:', item.title);
                 }
               }}
-              onHeartPress={() => console.log('Liked:', item.title)}
               onBookmarkPress={() => console.log('Saved:', item.title)}
             />
           )}

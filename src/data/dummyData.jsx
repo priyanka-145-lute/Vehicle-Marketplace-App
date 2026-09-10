@@ -62,7 +62,7 @@ export const categoryData = [
     id: '4',
     title: '2 Wheeler Parts',
     subtitle: 'Genuine parts for top performance',
-    type: '2wheeler',
+    type: '2wheeler-parts',
     image:
       'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=1200&auto=format&fit=crop',
   },
@@ -71,7 +71,7 @@ export const categoryData = [
     id: '5',
     title: '4 Wheeler Parts',
     subtitle: 'Quality parts for longer car life',
-    type: '4wheeler',
+    type: '4wheeler-parts',
     image:
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
   },
