@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -132,5 +133,5 @@ const AppNavigator = () => {
 export default AppNavigator;
 
 const styles = StyleSheet.create({
-  loading: {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'},
+  loading: {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface},
 });

@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import WishlistHeart from './WishlistHeart';
@@ -19,7 +20,7 @@ const TopVehicleCard = ({item, onPress}) => {
       </View>
 
       {/* Heart */}
-      <WishlistHeart item={item} style={styles.topHeart} color="#555" />
+      <WishlistHeart item={item} style={styles.topHeart} color={colors.text} />
 
       {/* Image */}
       <NetworkVehicleImage
@@ -50,7 +51,7 @@ export default TopVehicleCard;
 const styles = StyleSheet.create({
   topCard: {
     width: width * 0.44,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     marginLeft: 16,
     borderRadius: 18,
     padding: 12,
@@ -82,18 +83,18 @@ const styles = StyleSheet.create({
     height: 115,
     resizeMode: 'cover',
     borderRadius: 12,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: colors.surfaceMuted,
     marginTop: 8,
   },
   topCarTitle: {
     fontSize: 15,
     fontWeight: '700',
     marginTop: 10,
-    color: '#111',
+    color: colors.text,
   },
   topDetails: {
     fontSize: 12,
-    color: '#777',
+    color: colors.textMuted,
     marginTop: 4,
   },
   topPrice: {

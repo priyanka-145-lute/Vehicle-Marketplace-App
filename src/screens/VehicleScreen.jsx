@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
@@ -357,7 +358,7 @@ export default VehicleScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: colors.background,
   },
 
   // Header
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#111',
+    color: colors.text,
   },
   headerRight: {
     flexDirection: 'row',

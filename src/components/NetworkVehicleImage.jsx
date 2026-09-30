@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -14,7 +15,7 @@ const NetworkVehicleImage = ({uri, fallbackUri, style}) => {
   if (failed) {
     return (
       <View style={[style, styles.fallback]}>
-        <Icon name="car-sport-outline" size={42} color="#94a3b8" />
+        <Icon name="car-sport-outline" size={42} color={colors.textMuted} />
       </View>
     );
   }
@@ -38,7 +39,7 @@ export default NetworkVehicleImage;
 
 const styles = StyleSheet.create({
   fallback: {
-    backgroundColor: '#e2e8f0',
+    backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },

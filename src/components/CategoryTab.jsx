@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 
@@ -18,7 +19,7 @@ export default CategoryTab;
 
 const styles = StyleSheet.create({
   tabButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     paddingHorizontal: 18,
     paddingVertical: 11,
     borderRadius: 14,
@@ -30,10 +31,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   activeTabButton: {
-    backgroundColor: '#111',
+    backgroundcolor: colors.text,
   },
   tabText: {
-    color: '#444',
+    color: colors.text,
     fontWeight: '700',
     fontSize: 13,
   },

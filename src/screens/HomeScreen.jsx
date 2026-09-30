@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React, {useContext, useMemo, useState} from 'react';
 import {
   Alert,
@@ -100,9 +101,9 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F4F4',
+    backgroundColor: colors.background,
   },
-  containerDark: {backgroundColor: '#111827'},
+  containerDark: {backgroundcolor: colors.text},
 
   scrollContainer: {
     paddingBottom: 120,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
 
   /* MAIN WHITE BOX */
   mainContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 18,
     paddingTop: 12,
     paddingBottom: 15,
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 14,
     fontSize: 18,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
   },
 
   listContainer: {
@@ -149,5 +150,5 @@ const styles = StyleSheet.create({
   },
   mainContainerDark: {backgroundColor: '#1f2937'},
   textDark: {color: '#f8fafc'},
-  emptyText: {paddingVertical: 28, textAlign: 'center', color: '#64748b', fontSize: 14},
+  emptyText: {paddingVertical: 28, textAlign: 'center', color: colors.textMuted, fontSize: 14},
 });

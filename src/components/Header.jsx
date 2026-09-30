@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React, {useState} from 'react';
 import {
   Modal,
@@ -23,18 +24,18 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
   return (
     <>
       <View style={[styles.container, isDark && styles.containerDark]}>
-      
+
       <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)} accessibilityLabel="Open menu">
         <Icon name="menu" size={28} color={iconColor} />
       </TouchableOpacity>
 
      <Image
-  source={require('../assets/images/headerlogo.png')}
+  source={require('../assets/images/gadi-dekho-logo.png')}
   style={styles.logo}
 />
-        
+
       <View style={styles.rightContainer}>
-        
+
         <TouchableOpacity
           style={styles.notificationContainer}
           onPress={onNotificationPress}
@@ -45,7 +46,7 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
             color={iconColor}
           />
 
-        
+
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -79,13 +80,13 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
   );
 };
 
-const MenuItem = ({icon, label, destructive, onPress}) => <TouchableOpacity style={styles.menuItem} onPress={onPress} accessibilityRole="button"><View style={[styles.menuIcon, destructive && styles.menuIconDestructive]}><Icon name={icon} size={21} color={destructive ? '#ef4444' : '#334155'} /></View><Text style={[styles.menuItemText, destructive && styles.menuItemTextDestructive]}>{label}</Text><Icon name="chevron-forward" size={18} color="#94a3b8" /></TouchableOpacity>;
+const MenuItem = ({icon, label, destructive, onPress}) => <TouchableOpacity style={styles.menuItem} onPress={onPress} accessibilityRole="button"><View style={[styles.menuIcon, destructive && styles.menuIconDestructive]}><Icon name={icon} size={21} color={destructive ? '#ef4444' : '#334155'} /></View><Text style={[styles.menuItemText, destructive && styles.menuItemTextDestructive]}>{label}</Text><Icon name="chevron-forward" size={18} color={colors.textMuted} /></TouchableOpacity>;
 
 export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     paddingHorizontal: 14,
     paddingVertical: 15,
     flexDirection: 'row',
@@ -120,16 +121,16 @@ const styles = StyleSheet.create({
   },
   menuOverlay: {flex: 1, flexDirection: 'row'},
   menuBackdrop: {flex: 1, backgroundColor: 'rgba(0,0,0,0.35)'},
-  menuDrawer: {width: '78%', height: '100%', paddingTop: 52, backgroundColor: '#fff', elevation: 12},
+  menuDrawer: {width: '78%', height: '100%', paddingTop: 52, backgroundColor: colors.surface, elevation: 12},
   menuDrawerDark: {backgroundColor: '#1f2937'},
   menuTitleDark: {color: '#f8fafc'},
-  menuHeader: {paddingHorizontal: 20, paddingBottom: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eef2f7'},
-  menuTitle: {fontSize: 22, fontWeight: '800', color: '#111'},
+  menuHeader: {paddingHorizontal: 20, paddingBottom: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: colors.border},
+  menuTitle: {fontSize: 22, fontWeight: '800', color: colors.text},
   menuItem: {height: 62, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center'},
-  menuIcon: {width: 36, height: 36, borderRadius: 10, backgroundColor: '#f1f5f9', alignItems: 'center', justifyContent: 'center'},
+  menuIcon: {width: 36, height: 36, borderRadius: 10, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},
   menuIconDestructive: {backgroundColor: '#fff1f2'},
-  menuItemText: {flex: 1, marginLeft: 12, fontSize: 15, fontWeight: '600', color: '#1e293b'},
+  menuItemText: {flex: 1, marginLeft: 12, fontSize: 15, fontWeight: '600', color: colors.text},
   menuItemTextDestructive: {color: '#ef4444'},
-  menuDivider: {height: 1, marginHorizontal: 20, backgroundColor: '#eef2f7'},
+  menuDivider: {height: 1, marginHorizontal: 20, backgroundColor: colors.surfaceMuted},
 
 });

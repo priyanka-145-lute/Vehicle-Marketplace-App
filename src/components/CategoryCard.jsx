@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {
   View,
@@ -65,7 +66,7 @@ export default CategoryCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 14,
     marginBottom: 12,
     padding: 10,
@@ -88,12 +89,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
   },
 
   subtitle: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textMuted,
     marginTop: 5,
     lineHeight: 18,
   },
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#111',
+    backgroundcolor: colors.text,
     justifyContent: 'center',
     alignItems: 'center',
   },

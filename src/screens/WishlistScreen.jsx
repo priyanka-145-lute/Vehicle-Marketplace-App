@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {
   SafeAreaView,
@@ -116,7 +117,7 @@ const WishlistScreen = ({navigation}) => {
           <Icon
             name="heart"
             size={70}
-            color="#ddd"
+            color={colors.textMuted}
           />
 
           <Text style={styles.emptyTitle}>
@@ -141,11 +142,11 @@ export default WishlistScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background,
   },
 
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     paddingVertical: 16,
     alignItems: 'center',
     elevation: 2,
@@ -155,17 +156,17 @@ const styles = StyleSheet.create({
     top: 8,
     fontSize: 20,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
   },
-   
+
   list: {paddingHorizontal: 10, paddingTop: 18, paddingBottom: 28},
   columns: {justifyContent: 'space-between'},
-  card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: '#fff', elevation: 2},
-  deleteButton: {position: 'absolute', top: 9, right: 9, zIndex: 2, width: 30, height: 30, borderRadius: 15, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center'},
-  image: {width: '100%', height: 115, borderRadius: 12, resizeMode: 'cover', backgroundColor: '#f1f5f9'},
+  card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: colors.surface, elevation: 2},
+  deleteButton: {position: 'absolute', top: 9, right: 9, zIndex: 2, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center'},
+  image: {width: '100%', height: 115, borderRadius: 12, resizeMode: 'cover', backgroundColor: colors.surfaceMuted},
   content: {},
-  title: {fontSize: 14, fontWeight: '700', color: '#111', marginTop: 10},
-  details: {fontSize: 11, color: '#64748b', marginTop: 5},
+  title: {fontSize: 14, fontWeight: '700', color: colors.text, marginTop: 10},
+  details: {fontSize: 11, color: colors.textMuted, marginTop: 5},
   price: {fontSize: 15, fontWeight: '800', color: '#ef4444', marginTop: 7},
 
   emptyContainer: {
@@ -178,13 +179,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
     marginTop: 18,
   },
 
   emptySubtitle: {
     fontSize: 14,
-    color: '#777',
+    color: colors.textMuted,
     marginTop: 10,
     textAlign: 'center',
     lineHeight: 22,

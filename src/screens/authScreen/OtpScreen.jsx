@@ -1,5 +1,6 @@
+import {colors} from '../../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
-import {KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const OTP_LENGTH = 4;
@@ -34,9 +35,8 @@ const OtpScreen = ({navigation, route, setIsLoggedIn}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <KeyboardAvoidingView style={styles.keyboardView} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}><Icon name="arrow-back" size={24} color="#111827" /></TouchableOpacity>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}><Icon name="arrow-back" size={24} color={colors.text} /></TouchableOpacity>
         <View style={styles.content}>
           <View style={styles.iconWrap}><Icon name="shield-checkmark-outline" size={42} color="#ef4444" /></View>
           <Text style={styles.title}>Verify OTP</Text>
@@ -70,18 +70,18 @@ const OtpScreen = ({navigation, route, setIsLoggedIn}) => {
 export default OtpScreen;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'}, keyboardView: {flex: 1},
+  container: {flex: 1, backgroundColor: colors.surface}, keyboardView: {flex: 1},
   backButton: {width: 44, height: 44, marginTop: 12, marginLeft: 16, alignItems: 'center', justifyContent: 'center'},
   content: {flex: 1, paddingHorizontal: 24, paddingTop: 34},
   iconWrap: {width: 76, height: 76, borderRadius: 38, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center', marginBottom: 28},
-  title: {fontSize: 28, lineHeight: 35, fontWeight: '800', color: '#111827'}, subtitle: {fontSize: 15, color: '#64748b', marginTop: 10},
-  numberRow: {flexDirection: 'row', alignItems: 'center', marginTop: 6}, number: {fontSize: 15, fontWeight: '700', color: '#111827'},
+  title: {fontSize: 28, lineHeight: 35, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 15, color: colors.textMuted, marginTop: 10},
+  numberRow: {flexDirection: 'row', alignItems: 'center', marginTop: 6}, number: {fontSize: 15, fontWeight: '700', color: colors.text},
   change: {fontSize: 14, fontWeight: '700', color: '#ef4444', marginLeft: 12}, otpRow: {flexDirection: 'row', justifyContent: 'space-between', marginTop: 38},
-  otpBox: {width: 62, height: 62, borderRadius: 14, borderWidth: 1.5, borderColor: '#e2e8f0', backgroundColor: '#f8fafc', alignItems: 'center', justifyContent: 'center'},
-  otpBoxActive: {borderColor: '#ef4444', backgroundColor: '#fff'}, otpBoxError: {borderColor: '#ef4444'}, otpDigit: {fontSize: 24, fontWeight: '800', color: '#111827'},
+  otpBox: {width: 62, height: 62, borderRadius: 14, borderWidth: 1.5, borderColor: colors.border, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},
+  otpBoxActive: {borderColor: '#ef4444', backgroundColor: colors.surface}, otpBoxError: {borderColor: '#ef4444'}, otpDigit: {fontSize: 24, fontWeight: '800', color: colors.text},
   hiddenInput: {position: 'absolute', width: 1, height: 1, opacity: 0}, error: {fontSize: 13, color: '#ef4444', marginTop: 10},
-  resendRow: {flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 26}, resendLabel: {fontSize: 14, color: '#64748b'},
-  resend: {fontSize: 14, color: '#ef4444', fontWeight: '700'}, resendDisabled: {color: '#94a3b8'}, footer: {paddingHorizontal: 24, paddingBottom: 24},
+  resendRow: {flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 26}, resendLabel: {fontSize: 14, color: colors.textMuted},
+  resend: {fontSize: 14, color: '#ef4444', fontWeight: '700'}, resendDisabled: {color: colors.textMuted}, footer: {paddingHorizontal: 24, paddingBottom: 24},
   button: {height: 56, borderRadius: 14, backgroundColor: '#ef4444', alignItems: 'center', justifyContent: 'center', elevation: 3},
   buttonDisabled: {backgroundColor: '#fca5a5', elevation: 0}, buttonText: {fontSize: 17, fontWeight: '700', color: '#fff'},
 });

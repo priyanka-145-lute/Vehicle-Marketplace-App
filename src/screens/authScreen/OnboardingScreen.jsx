@@ -1,3 +1,4 @@
+import {colors} from '../../theme/colors';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   },
 
   lightTitle: {
-    color: '#111',
+    color: colors.text,
   },
 
   highlight: {
@@ -267,11 +268,11 @@ const styles = StyleSheet.create({
   },
 
   darkSubtitle: {
-    color: '#cbd5e1',
+    color: colors.textMuted,
   },
 
   lightSubtitle: {
-    color: '#555',
+    color: colors.text,
   },
 
   image: {

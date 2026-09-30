@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {
   View,
@@ -13,7 +14,7 @@ const SearchBar = ({value, onChangeText, onSaveSearch}) => {
   const {isDark} = useTheme();
   return (
     <View style={[styles.container, isDark && styles.containerDark]}>
-      
+
       <Icon
         name="search"
         size={20}
@@ -46,7 +47,7 @@ export default SearchBar;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     marginHorizontal: 10,
     marginTop: 10,
     borderRadius: 14,
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
     fontSize: 14,
-    color: '#111',
+    color: colors.text,
   },
   inputDark: {color: '#f8fafc'},
 });

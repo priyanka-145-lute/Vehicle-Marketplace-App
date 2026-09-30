@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -13,7 +14,7 @@ const VehicleCard = ({item, onPress, onBookmarkPress}) => {
     <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={onPress}>
 
       {/* Heart / Wishlist */}
-      <WishlistHeart item={item} style={styles.heartBtn} color="#444" />
+      <WishlistHeart item={item} style={styles.heartBtn} color={colors.text} />
 
       {/* Vehicle Image */}
       <NetworkVehicleImage
@@ -37,7 +38,7 @@ const VehicleCard = ({item, onPress, onBookmarkPress}) => {
 
       {/* Bookmark */}
       <TouchableOpacity style={styles.bookmarkBtn} onPress={onBookmarkPress}>
-        <Icon name="bookmark-outline" size={17} color="#444" />
+        <Icon name="bookmark-outline" size={17} color={colors.text} />
       </TouchableOpacity>
 
     </TouchableOpacity>
@@ -49,7 +50,7 @@ export default VehicleCard;
 const styles = StyleSheet.create({
   card: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 10,
     marginBottom: 14,
@@ -70,16 +71,16 @@ const styles = StyleSheet.create({
     height: 115,
     resizeMode: 'cover',
     borderRadius: 12,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: colors.surfaceMuted,
   },
   carTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
     marginTop: 10,
   },
   carDetails: {
-    color: '#777',
+    color: colors.textMuted,
     fontSize: 12,
     marginTop: 5,
   },

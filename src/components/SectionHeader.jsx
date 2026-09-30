@@ -1,3 +1,4 @@
+import {colors} from '../theme/colors';
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#111',
+    color: colors.text,
     marginLeft: 6,
   },
   viewAll: {
