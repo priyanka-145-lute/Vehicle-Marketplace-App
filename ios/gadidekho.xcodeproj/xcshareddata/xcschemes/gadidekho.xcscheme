@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "VehicleMarketplaceApp.app"
-               BlueprintName = "VehicleMarketplaceApp"
-               ReferencedContainer = "container:VehicleMarketplaceApp.xcodeproj">
+               BuildableName = "gadidekho.app"
+               BlueprintName = "gadidekho"
+               ReferencedContainer = "container:gadidekho.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "VehicleMarketplaceAppTests.xctest"
-               BlueprintName = "VehicleMarketplaceAppTests"
-               ReferencedContainer = "container:VehicleMarketplaceApp.xcodeproj">
+               BuildableName = "gadidekhoTests.xctest"
+               BlueprintName = "gadidekhoTests"
+               ReferencedContainer = "container:gadidekho.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "VehicleMarketplaceApp.app"
-            BlueprintName = "VehicleMarketplaceApp"
-            ReferencedContainer = "container:VehicleMarketplaceApp.xcodeproj">
+            BuildableName = "gadidekho.app"
+            BlueprintName = "gadidekho"
+            ReferencedContainer = "container:gadidekho.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "VehicleMarketplaceApp.app"
-            BlueprintName = "VehicleMarketplaceApp"
-            ReferencedContainer = "container:VehicleMarketplaceApp.xcodeproj">
+            BuildableName = "gadidekho.app"
+            BlueprintName = "gadidekho"
+            ReferencedContainer = "container:gadidekho.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

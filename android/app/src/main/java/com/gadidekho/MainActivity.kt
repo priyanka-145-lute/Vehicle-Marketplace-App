@@ -1,4 +1,4 @@
-package com.vehiclemarketplaceapp
+package com.gadidekho
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

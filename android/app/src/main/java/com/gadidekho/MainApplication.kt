@@ -1,4 +1,4 @@
-package com.vehiclemarketplaceapp
+package com.gadidekho
 
 import android.app.Application
 import com.facebook.react.PackageList
