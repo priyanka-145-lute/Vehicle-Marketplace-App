@@ -30,7 +30,7 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
       </TouchableOpacity>
 
      <Image
-  source={require('../assets/images/gadi-dekho-logo.png')}
+  source={require('../assets/images/gadi-dekho-logo-transparent.png')}
   style={styles.logo}
 />
 
@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
 
   logo: {
     top: 5,
-    width: 160,
-    height: 40,
+    width: 145,
+    height: 55,
     resizeMode: 'contain',
   },
   containerDark: {backgroundColor: '#1f2937'},
