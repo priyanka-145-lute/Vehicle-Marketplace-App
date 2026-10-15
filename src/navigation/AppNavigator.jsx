@@ -15,6 +15,8 @@ import AllOtherVehiclesScreen from '../screens/AllOtherVehiclesScreen';
 import TwoWheelerDetailScreen from '../screens/TwoWheelerDetailScreen';
 import PartsScreen from '../screens/PartsScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
+import ServicesScreen from '../screens/ServicesScreen';
+import ServiceDetailsScreen from '../screens/ServiceDetailsScreen';
 import {HelpSupportScreen, SavedSearchesScreen} from '../screens/PreferencesScreens';
 
 const Stack = createNativeStackNavigator();
@@ -77,6 +79,9 @@ const MainStack = () => {
         name="Notifications"
         component={NotificationsScreen}
       />
+
+      <Stack.Screen name="Services" component={ServicesScreen} />
+      <Stack.Screen name="ServiceDetails" component={ServiceDetailsScreen} />
 
       <Stack.Screen name="SavedSearches" component={SavedSearchesScreen} />
       <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />

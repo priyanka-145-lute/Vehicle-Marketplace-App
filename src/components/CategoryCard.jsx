@@ -28,6 +28,10 @@ const CategoryCard = ({ item }) => {
          navigation.navigate('Parts', {partType: item.type});
          return;
        }
+       if (item.type === 'services') {
+         navigation.navigate('Services');
+         return;
+       }
        navigation.navigate('VehicleScreen', {vehicleType: item.type});
      }}
       style={styles.container}
