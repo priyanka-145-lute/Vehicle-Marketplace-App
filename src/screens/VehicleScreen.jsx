@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
@@ -182,6 +182,8 @@ const CATEGORIES = {
 
 // ─── VehicleScreen ────────────────────────────────────────────────────────────
 const VehicleScreen = () => {
+  const {styles} = useThemeStyles(createStyles);
+
   const route = useRoute();
   const navigation = useNavigation();
   const {vehicleType} = route.params;
@@ -355,7 +357,7 @@ const VehicleScreen = () => {
 export default VehicleScreen;
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {
   SafeAreaView,
@@ -15,6 +15,8 @@ import NetworkVehicleImage from '../components/NetworkVehicleImage';
 import Icon from 'react-native-vector-icons/Octicons';
 
 const WishlistScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const {wishlistData, removeFromWishlist} = useWishlist();
 
   const renderWishlistItem = ({item}) => {
@@ -139,7 +141,7 @@ const WishlistScreen = ({navigation}) => {
 
 export default WishlistScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

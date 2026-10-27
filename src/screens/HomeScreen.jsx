@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useContext, useMemo, useState} from 'react';
 import {
   Alert,
@@ -24,6 +24,8 @@ import {useTheme} from '../context/ThemeContext';
 const SAVED_SEARCHES_KEY = 'vehicle-saved-searches';
 
 const HomeScreen = ({navigation}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const logout = useContext(AccountLogoutContext);
   const {isDark} = useTheme();
   const [search, setSearch] = useState('');
@@ -98,12 +100,12 @@ const HomeScreen = ({navigation}) => {
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
   },
-  containerDark: {backgroundcolor: colors.text},
+  containerDark: {backgroundColor: colors.background},
 
   scrollContainer: {
     paddingBottom: 120,

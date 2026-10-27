@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {
   View,
@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 const CategoryCard = ({ item }) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
 
   const navigation = useNavigation();
 
@@ -58,7 +60,7 @@ const CategoryCard = ({ item }) => {
         <Icon
           name="chevron-forward"
           size={20}
-          color="#fff"
+          color={colors.surface}
         />
       </View>
 
@@ -68,7 +70,7 @@ const CategoryCard = ({ item }) => {
 
 export default CategoryCard;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
     borderRadius: 14,
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundcolor: colors.text,
+    backgroundColor: colors.text,
     justifyContent: 'center',
     alignItems: 'center',
   },

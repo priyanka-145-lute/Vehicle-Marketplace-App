@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useMemo, useState} from 'react';
 import {FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,6 +19,8 @@ const CARS = [
 ];
 
 const AllFourWheelersScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const [search, setSearch] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
   const [filters, setFilters] = useState(FOUR_WHEELER_FILTER_DEFAULTS);
@@ -39,7 +41,7 @@ const AllFourWheelersScreen = ({navigation}) => {
 
   return <SafeAreaView style={styles.container}>
     <View style={styles.header}><TouchableOpacity style={styles.filterButton} onPress={() => setFilterVisible(true)}><Icon name="menu" size={25} color="#fff" /></TouchableOpacity><Text style={styles.heading}>Four Wheeler</Text><View style={styles.spacer} /></View>
-    <View style={styles.search}><Icon name="search" size={20} color={colors.textMuted} /><TextInput value={search} onChangeText={setSearch} placeholder="Search cars..." placeholderTextcolor={colors.textMuted} style={styles.searchInput} />{search ? <TouchableOpacity onPress={() => setSearch('')}><Icon name="close-circle" size={20} color={colors.textMuted} /></TouchableOpacity> : null}</View>
+    <View style={styles.search}><Icon name="search" size={20} color={colors.textMuted} /><TextInput value={search} onChangeText={setSearch} placeholder="Search cars..." placeholderTextColor={colors.textMuted} style={styles.searchInput} />{search ? <TouchableOpacity onPress={() => setSearch('')}><Icon name="close-circle" size={20} color={colors.textMuted} /></TouchableOpacity> : null}</View>
     <FlatList data={filteredCars} keyExtractor={item => item.id} numColumns={2} renderItem={renderCar} columnWrapperStyle={styles.columns} contentContainerStyle={styles.list} showsVerticalScrollIndicator={false} ListEmptyComponent={<View style={styles.empty}><Icon name="car-outline" size={44} color={colors.textMuted} /><Text style={styles.emptyText}>No four wheelers found</Text></View>} />
     <FourWheelerFilterDrawer visible={filterVisible} filters={filters} onClose={() => setFilterVisible(false)} onApply={next => {setFilters(next); setFilterVisible(false);}} />
   </SafeAreaView>;
@@ -47,7 +49,7 @@ const AllFourWheelersScreen = ({navigation}) => {
 
 export default AllFourWheelersScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.background}, header: {minHeight: 72, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 10, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center'}, filterButton: {width: 44, height: 44, borderRadius: 13, backgroundColor: '#ef4444', alignItems: 'center', justifyContent: 'center'}, heading: {flex: 1, fontSize: 23, fontWeight: '800', color: colors.text, textAlign: 'center'}, spacer: {width: 44}, search: {height: 52, marginHorizontal: 14, marginTop: 14, paddingHorizontal: 14, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', elevation: 2}, searchInput: {flex: 1, marginHorizontal: 10, fontSize: 14, color: colors.text},
   list: {paddingHorizontal: 10, paddingTop: 18, paddingBottom: 28}, columns: {justifyContent: 'space-between'}, card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: colors.surface, elevation: 2}, heart: {position: 'absolute', top: 9, right: 9, zIndex: 2, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center'}, image: {width: '100%', height: 115, borderRadius: 12, resizeMode: 'cover', backgroundColor: colors.surfaceMuted}, cardTitle: {fontSize: 14, fontWeight: '700', color: colors.text, marginTop: 10}, details: {fontSize: 11, color: colors.textMuted, marginTop: 5}, price: {fontSize: 15, fontWeight: '800', color: '#ef4444', marginTop: 7}, empty: {alignItems: 'center', paddingTop: 80}, emptyText: {fontSize: 15, color: colors.textMuted, marginTop: 10},
 });

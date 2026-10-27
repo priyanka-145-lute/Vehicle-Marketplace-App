@@ -1,16 +1,19 @@
-import {DynamicColorIOS, Platform, PlatformColor} from 'react-native';
+import {useMemo} from 'react';
+import {useTheme} from '../context/ThemeContext';
 
-const adaptive = (name, light, dark) => Platform.select({
-  ios: DynamicColorIOS({light, dark}),
-  android: PlatformColor(`@color/${name}`),
-  default: light,
-});
-
-export const colors = {
-  background: adaptive('app_background', '#f4f4f4', '#111827'),
-  surface: adaptive('app_surface', '#ffffff', '#1f2937'),
-  surfaceMuted: adaptive('app_surface_muted', '#f1f5f9', '#334155'),
-  text: adaptive('app_text', '#111827', '#f8fafc'),
-  textMuted: adaptive('app_text_muted', '#64748b', '#cbd5e1'),
-  border: adaptive('app_border', '#e2e8f0', '#475569'),
+export const lightColors = {
+  background: '#f4f4f4', surface: '#ffffff', surfaceMuted: '#f1f5f9',
+  text: '#111827', textMuted: '#64748b', border: '#e2e8f0',
+  accentSurface: '#fff1f2',
+};
+export const darkColors = {
+  background: '#111827', surface: '#1f2937', surfaceMuted: '#334155',
+  text: '#f8fafc', textMuted: '#cbd5e1', border: '#475569',
+  accentSurface: '#3b202b',
+};
+export const useThemeStyles = createStyles => {
+  const {isDark} = useTheme();
+  const colors = isDark ? darkColors : lightColors;
+  const styles = useMemo(() => createStyles(colors), [createStyles, colors]);
+  return {colors, styles};
 };

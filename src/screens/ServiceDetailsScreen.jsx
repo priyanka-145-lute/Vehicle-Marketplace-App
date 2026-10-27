@@ -1,10 +1,12 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useState} from 'react';
 import {Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const ServiceDetailsScreen = ({navigation, route}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState('Overview');
   const item = route.params?.item || {};
@@ -89,17 +91,18 @@ const ServiceDetailsScreen = ({navigation, route}) => {
   );
 };
 
-const ContactRow = ({icon, label, value, onPress}) => (
-  <TouchableOpacity style={styles.contactRow} onPress={onPress} accessibilityRole="button">
+const ContactRow = ({icon, label, value, onPress}) => {
+  const {styles} = useThemeStyles(createStyles);
+  return (<TouchableOpacity style={styles.contactRow} onPress={onPress} accessibilityRole="button">
     <View style={styles.contactIcon}><Icon name={icon} size={20} color="#ef4444" /></View>
     <View style={styles.contactCopy}><Text style={styles.contactLabel}>{label}</Text><Text style={styles.contactValue}>{value}</Text></View>
     <Icon name="chevron-forward" size={18} color="#ef4444" />
-  </TouchableOpacity>
-);
+  </TouchableOpacity>);
+};
 
 export default ServiceDetailsScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.background},
   imageWrap: {height: 260, backgroundColor: colors.surfaceMuted},
   heroImage: {width: '100%', height: '100%', resizeMode: 'cover'},
@@ -111,11 +114,11 @@ const styles = StyleSheet.create({
   meta: {fontSize: 12, color: colors.textMuted, marginLeft: 4},
   dot: {fontSize: 12, color: colors.textMuted, marginHorizontal: 7},
   chips: {flexDirection: 'row', gap: 7, marginTop: 12},
-  chip: {paddingHorizontal: 9, paddingVertical: 5, borderRadius: 6, backgroundColor: '#fff1f2'},
+  chip: {paddingHorizontal: 9, paddingVertical: 5, borderRadius: 6, backgroundColor: colors.accentSurface},
   chipText: {fontSize: 10, fontWeight: '700', color: '#ef4444'},
   tabs: {height: 52, padding: 4, marginHorizontal: 18, borderRadius: 14, backgroundColor: colors.surfaceMuted, flexDirection: 'row'},
   tab: {flex: 1, borderRadius: 11, flexDirection: 'row', gap: 6, alignItems: 'center', justifyContent: 'center'},
-  activeTab: {backgroundColor: '#fff1f2'},
+  activeTab: {backgroundColor: colors.accentSurface},
   tabText: {fontSize: 13, fontWeight: '600', color: colors.textMuted},
   activeTabText: {color: '#ef4444'},
   section: {paddingHorizontal: 18, paddingTop: 20},
@@ -123,12 +126,12 @@ const styles = StyleSheet.create({
   body: {fontSize: 13, lineHeight: 21, color: colors.textMuted, marginBottom: 18},
   horizontalList: {gap: 10, paddingRight: 18, paddingBottom: 4},
   serviceCard: {width: 112, minHeight: 112, padding: 12, borderRadius: 16, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},
-  serviceIcon: {width: 40, height: 40, borderRadius: 12, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center'},
+  serviceIcon: {width: 40, height: 40, borderRadius: 12, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'},
   serviceName: {fontSize: 12, lineHeight: 16, fontWeight: '700', color: colors.text, textAlign: 'center', marginTop: 9},
   galleryTitle: {fontSize: 17, fontWeight: '800', color: colors.text, marginBottom: 12, marginTop: 22},
   galleryImage: {width: 170, height: 110, borderRadius: 14, backgroundColor: colors.surfaceMuted},
   contactRow: {minHeight: 76, borderBottomWidth: 1, borderBottomColor: colors.border, flexDirection: 'row', alignItems: 'center'},
-  contactIcon: {width: 42, height: 42, borderRadius: 12, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center'},
+  contactIcon: {width: 42, height: 42, borderRadius: 12, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'},
   contactCopy: {flex: 1, marginHorizontal: 12},
   contactLabel: {fontSize: 12, fontWeight: '800', color: colors.text},
   contactValue: {fontSize: 12, lineHeight: 18, color: colors.textMuted, marginTop: 4},

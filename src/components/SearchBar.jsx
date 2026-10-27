@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {
   View,
@@ -11,6 +11,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 
 const SearchBar = ({value, onChangeText, onSaveSearch}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const {isDark} = useTheme();
   return (
     <View style={[styles.container, isDark && styles.containerDark]}>
@@ -45,7 +47,7 @@ const SearchBar = ({value, onChangeText, onSaveSearch}) => {
 
 export default SearchBar;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
     marginHorizontal: 10,

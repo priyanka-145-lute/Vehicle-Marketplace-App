@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useState} from 'react';
 import {Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,13 +11,16 @@ export const TWO_WHEELER_FILTER_DEFAULTS = {
   yearFrom: 'Any Year', yearTo: 'Any Year', brand: 'All Brands', model: 'All Models',
 };
 
-const Chip = ({label, active, onPress}) => (
-  <TouchableOpacity style={[styles.chip, active && styles.chipActive]} onPress={onPress}>
+const Chip = ({label, active, onPress}) => {
+  const {styles} = useThemeStyles(createStyles);
+  return (<TouchableOpacity style={[styles.chip, active && styles.chipActive]} onPress={onPress}>
     <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
-  </TouchableOpacity>
-);
+  </TouchableOpacity>);
+};
 
 const Dropdown = ({name, value, values, openName, setOpenName, onChange}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const open = openName === name;
   return (
     <View style={styles.dropdownWrap}>
@@ -36,6 +39,8 @@ const Dropdown = ({name, value, values, openName, setOpenName, onChange}) => {
 };
 
 const PriceSlider = ({min, max, onChange}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const [width, setWidth] = useState(1);
   const minPosition = ((min - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
   const maxPosition = ((max - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
@@ -58,6 +63,8 @@ const PriceSlider = ({min, max, onChange}) => {
 };
 
 const TwoWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const [draft, setDraft] = useState(filters);
   const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -99,9 +106,9 @@ const TwoWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
 
 export default TwoWheelerFilterDrawer;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   modalRoot: {flex: 1, flexDirection: 'row'}, panel: {width: '84%', maxWidth: 390, backgroundColor: colors.surface, borderRightWidth: 1, borderRightColor: colors.border}, backdrop: {flex: 1, backgroundColor: 'rgba(0,0,0,0.55)'}, header: {paddingTop: 42, paddingHorizontal: 17, paddingBottom: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.border}, title: {fontSize: 20, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 10, color: colors.textMuted, marginTop: 3}, content: {paddingHorizontal: 17, paddingBottom: 20}, resetRow: {height: 46, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}, reset: {fontSize: 12, fontWeight: '700', color: '#ff1838'}, label: {fontSize: 12, fontWeight: '700', color: colors.text, marginTop: 16, marginBottom: 8},
-  priceInputs: {flexDirection: 'row', alignItems: 'center'}, input: {flex: 1, height: 40, borderWidth: 1, borderColor: colors.border, borderRadius: 6, backgroundColor: colors.surfaceMuted, color: colors.text, fontSize: 11, paddingHorizontal: 9}, dash: {color: colors.textMuted, marginHorizontal: 7}, sliderTouch: {height: 34, marginHorizontal: 7, justifyContent: 'center'}, sliderTrack: {position: 'absolute', left: 0, right: 0, height: 4, backgroundcolor: colors.textMuted}, sliderFill: {position: 'absolute', height: 4, backgroundColor: '#ff1838'}, sliderKnob: {position: 'absolute', marginLeft: -7, width: 15, height: 15, borderRadius: 8, backgroundColor: colors.surface, borderWidth: 2, borderColor: '#ff1838'}, priceLabels: {flexDirection: 'row', justifyContent: 'space-between'}, help: {fontSize: 9, color: colors.textMuted},
+  priceInputs: {flexDirection: 'row', alignItems: 'center'}, input: {flex: 1, height: 40, borderWidth: 1, borderColor: colors.border, borderRadius: 6, backgroundColor: colors.surfaceMuted, color: colors.text, fontSize: 11, paddingHorizontal: 9}, dash: {color: colors.textMuted, marginHorizontal: 7}, sliderTouch: {height: 34, marginHorizontal: 7, justifyContent: 'center'}, sliderTrack: {position: 'absolute', left: 0, right: 0, height: 4, backgroundColor: colors.textMuted}, sliderFill: {position: 'absolute', height: 4, backgroundColor: '#ff1838'}, sliderKnob: {position: 'absolute', marginLeft: -7, width: 15, height: 15, borderRadius: 8, backgroundColor: colors.surface, borderWidth: 2, borderColor: '#ff1838'}, priceLabels: {flexDirection: 'row', justifyContent: 'space-between'}, help: {fontSize: 9, color: colors.textMuted},
   chipRow: {flexDirection: 'row', flexWrap: 'wrap', gap: 7}, chip: {height: 34, paddingHorizontal: 10, borderRadius: 5, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'}, chipActive: {borderColor: '#ff1838'}, chipText: {fontSize: 10, color: colors.text}, chipTextActive: {color: '#ff1838', fontWeight: '700'}, yearRow: {flexDirection: 'row', gap: 8}, yearColumn: {flex: 1, gap: 5}, dropdownWrap: {zIndex: 2}, dropdown: {height: 39, paddingHorizontal: 9, borderWidth: 1, borderColor: colors.border, borderRadius: 5, backgroundColor: colors.surfaceMuted, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}, dropdownOpen: {borderColor: '#ff1838'}, dropdownText: {flex: 1, fontSize: 10, color: colors.text}, dropdownOptions: {borderWidth: 1, borderTopWidth: 0, borderColor: colors.border, borderBottomLeftRadius: 5, borderBottomRightRadius: 5, backgroundColor: colors.surface}, dropdownOption: {minHeight: 34, paddingHorizontal: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: colors.border}, optionText: {fontSize: 10, color: colors.text}, optionActive: {color: '#ff1838', fontWeight: '700'},
   actions: {padding: 16, borderTopWidth: 1, borderTopColor: colors.border}, applyButton: {height: 46, borderRadius: 5, backgroundColor: '#ff1838', alignItems: 'center', justifyContent: 'center'}, applyText: {fontSize: 13, fontWeight: '800', color: '#fff'}, clearButton: {height: 43, marginTop: 9, borderRadius: 5, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center'}, clearText: {fontSize: 12, color: colors.text},
 });

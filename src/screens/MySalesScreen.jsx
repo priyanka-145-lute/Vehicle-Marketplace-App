@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Alert, FlatList, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -10,6 +10,8 @@ const STORAGE_KEY = 'vehicle-my-sales';
 const EMPTY = {title: '', category: '4 Wheeler', price: '', year: '', fuel: '', location: '', image: '', description: ''};
 
 const MySalesScreen = () => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -65,7 +67,7 @@ const MySalesScreen = () => {
   const remove = item => Alert.alert('Delete listing?', `Remove ${item.title} from My Sales?`, [{text: 'Cancel', style: 'cancel'}, {text: 'Delete', style: 'destructive', onPress: () => persist(listings.filter(saved => saved.id !== item.id))}]);
   const markSold = item => Alert.alert('Mark as sold?', `${item.title} will move to Sold.`, [{text: 'Cancel', style: 'cancel'}, {text: 'Mark as Sold', onPress: () => persist(listings.map(saved => saved.id === item.id ? {...saved, status: 'Sold'} : saved))}]);
   const button = (label, onPress, style = styles.primary, disabled = saving) => <TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={onPress} style={[style, disabled && styles.disabled]}><Text style={style === styles.primary ? styles.primaryText : styles.actionText}>{label}</Text></TouchableOpacity>;
-  const field = (key, label, options = {}) => <View style={styles.field} key={key}><Text style={styles.label}>{label}</Text><TextInput accessibilityLabel={label} style={[styles.input, options.multiline && styles.multiline]} value={form[key]} onChangeText={value => setForm(current => ({...current, [key]: value}))} editable={!saving} placeholderTextcolor={colors.textMuted} {...options} /></View>;
+  const field = (key, label, options = {}) => <View style={styles.field} key={key}><Text style={styles.label}>{label}</Text><TextInput accessibilityLabel={label} style={[styles.input, options.multiline && styles.multiline]} value={form[key]} onChangeText={value => setForm(current => ({...current, [key]: value}))} editable={!saving} placeholderTextColor={colors.textMuted} {...options} /></View>;
   const renderListing = ({item}) => <View style={styles.card}>
     <View style={styles.row}>
       {item.image ? <NetworkVehicleImage uri={item.image} fallbackUri={item.image} style={styles.image} /> : <View style={[styles.image, styles.placeholder]}><Icon name="car-sport-outline" size={36} color={colors.textMuted} /></View>}
@@ -109,13 +111,13 @@ const MySalesScreen = () => {
 
 export default MySalesScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   flex: {flex: 1}, container: {flex: 1, backgroundColor: colors.background},
   header: {padding: 20, backgroundColor: colors.surface}, heading: {fontSize: 23, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 13, color: colors.textMuted, marginTop: 5},
-  toolbar: {padding: 16, gap: 14}, row: {flexDirection: 'row', gap: 10}, chip: {flex: 1, minHeight: 44, paddingVertical: 12, borderRadius: 10, alignItems: 'center', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border}, selected: {backgroundColor: '#fff1f2', borderColor: '#ef4444'}, chipText: {fontSize: 12, fontWeight: '600', color: colors.textMuted}, selectedText: {color: '#ef4444'},
+  toolbar: {padding: 16, gap: 14}, row: {flexDirection: 'row', gap: 10}, chip: {flex: 1, minHeight: 44, paddingVertical: 12, borderRadius: 10, alignItems: 'center', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border}, selected: {backgroundColor: colors.accentSurface, borderColor: '#ef4444'}, chipText: {fontSize: 12, fontWeight: '600', color: colors.textMuted}, selectedText: {color: '#ef4444'},
   primary: {minHeight: 46, paddingHorizontal: 20, borderRadius: 12, backgroundColor: '#ef4444', alignItems: 'center', justifyContent: 'center'}, primaryText: {fontSize: 14, fontWeight: '700', color: '#fff'}, disabled: {opacity: 0.5}, note: {fontSize: 12, color: colors.textMuted, lineHeight: 18},
-  list: {paddingHorizontal: 16, paddingBottom: 24, flexGrow: 1}, card: {backgroundColor: colors.surface, padding: 12, borderRadius: 16, marginBottom: 14, elevation: 2}, image: {width: 100, height: 110, borderRadius: 12, backgroundColor: colors.surfaceMuted, resizeMode: 'cover'}, placeholder: {alignItems: 'center', justifyContent: 'center'}, info: {flex: 1}, statusRow: {flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, justifyContent: 'space-between'}, category: {fontSize: 10, color: colors.textMuted}, badge: {fontSize: 10, fontWeight: '700', color: '#15803d', backgroundColor: '#dcfce7', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6}, soldBadge: {color: '#475569', backgroundColor: colors.surfaceMuted}, vehicleTitle: {fontSize: 15, fontWeight: '700', color: colors.text, marginTop: 7}, details: {fontSize: 12, color: colors.textMuted, marginTop: 5}, price: {fontSize: 17, fontWeight: '800', color: '#ef4444', marginTop: 7}, locationRow: {flexDirection: 'row', alignItems: 'center', gap: 4, marginVertical: 12}, location: {fontSize: 12, color: colors.textMuted, flex: 1},
+  list: {paddingHorizontal: 16, paddingBottom: 24, flexGrow: 1}, card: {backgroundColor: colors.surface, padding: 12, borderRadius: 16, marginBottom: 14, elevation: 2}, image: {width: 100, height: 110, borderRadius: 12, backgroundColor: colors.surfaceMuted, resizeMode: 'cover'}, placeholder: {alignItems: 'center', justifyContent: 'center'}, info: {flex: 1}, statusRow: {flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, justifyContent: 'space-between'}, category: {fontSize: 10, color: colors.textMuted}, badge: {fontSize: 10, fontWeight: '700', color: '#15803d', backgroundColor: '#dcfce7', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6}, soldBadge: {color: colors.textMuted, backgroundColor: colors.surfaceMuted}, vehicleTitle: {fontSize: 15, fontWeight: '700', color: colors.text, marginTop: 7}, details: {fontSize: 12, color: colors.textMuted, marginTop: 5}, price: {fontSize: 17, fontWeight: '800', color: '#ef4444', marginTop: 7}, locationRow: {flexDirection: 'row', alignItems: 'center', gap: 4, marginVertical: 12}, location: {fontSize: 12, color: colors.textMuted, flex: 1},
   actions: {flexDirection: 'row', flexWrap: 'wrap', borderTopWidth: 1, borderTopColor: colors.border, justifyContent: 'space-between'}, action: {minHeight: 44, justifyContent: 'center', paddingHorizontal: 8}, actionText: {fontSize: 12, fontWeight: '600', color: '#ef4444'},
-  empty: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 36, gap: 16}, emptyIcon: {width: 96, height: 96, borderRadius: 48, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center'}, emptyTitle: {fontSize: 20, fontWeight: '700', color: colors.text, textAlign: 'center'}, emptyText: {fontSize: 14, color: colors.textMuted, lineHeight: 22, textAlign: 'center'},
+  empty: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 36, gap: 16}, emptyIcon: {width: 96, height: 96, borderRadius: 48, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'}, emptyTitle: {fontSize: 20, fontWeight: '700', color: colors.text, textAlign: 'center'}, emptyText: {fontSize: 14, color: colors.textMuted, lineHeight: 22, textAlign: 'center'},
   formHeader: {paddingHorizontal: 20, paddingVertical: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.surface}, form: {padding: 20, gap: 14}, field: {gap: 7}, label: {fontSize: 13, fontWeight: '600', color: colors.text}, input: {minHeight: 48, borderWidth: 1, borderColor: colors.border, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, backgroundColor: colors.surface, color: colors.text, fontSize: 14}, multiline: {minHeight: 100, textAlignVertical: 'top'}, error: {fontSize: 13, color: '#dc2626'},
 });

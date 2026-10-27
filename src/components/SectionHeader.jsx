@@ -1,8 +1,10 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const SectionHeader = ({emoji, title, onViewAll}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   return (
     <View style={styles.sectionHeader}>
       <View style={styles.leftRow}>
@@ -18,7 +20,7 @@ const SectionHeader = ({emoji, title, onViewAll}) => {
 
 export default SectionHeader;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   sectionHeader: {
     marginTop: 24,
     marginBottom: 14,

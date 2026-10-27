@@ -1,8 +1,10 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const CategoryTab = ({label, isSelected, onPress}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -17,7 +19,7 @@ const CategoryTab = ({label, isSelected, onPress}) => {
 
 export default CategoryTab;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   tabButton: {
     backgroundColor: colors.surface,
     paddingHorizontal: 18,
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   activeTabButton: {
-    backgroundcolor: colors.text,
+    backgroundColor: colors.text,
   },
   tabText: {
     color: colors.text,
@@ -39,6 +41,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   activeTabText: {
-    color: '#fff',
+    color: colors.surface,
   },
 });

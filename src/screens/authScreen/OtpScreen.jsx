@@ -1,4 +1,4 @@
-import {colors} from '../../theme/colors';
+import {useThemeStyles} from '../../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,6 +7,8 @@ const OTP_LENGTH = 4;
 const DUMMY_OTP = '1234';
 
 const OtpScreen = ({navigation, route, setIsLoggedIn}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const [otp, setOtp] = useState(DUMMY_OTP);
   const [seconds, setSeconds] = useState(30);
   const [error, setError] = useState('');
@@ -69,11 +71,11 @@ const OtpScreen = ({navigation, route, setIsLoggedIn}) => {
 
 export default OtpScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.surface}, keyboardView: {flex: 1},
   backButton: {width: 44, height: 44, marginTop: 12, marginLeft: 16, alignItems: 'center', justifyContent: 'center'},
   content: {flex: 1, paddingHorizontal: 24, paddingTop: 34},
-  iconWrap: {width: 76, height: 76, borderRadius: 38, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center', marginBottom: 28},
+  iconWrap: {width: 76, height: 76, borderRadius: 38, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center', marginBottom: 28},
   title: {fontSize: 28, lineHeight: 35, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 15, color: colors.textMuted, marginTop: 10},
   numberRow: {flexDirection: 'row', alignItems: 'center', marginTop: 6}, number: {fontSize: 15, fontWeight: '700', color: colors.text},
   change: {fontSize: 14, fontWeight: '700', color: '#ef4444', marginLeft: 12}, otpRow: {flexDirection: 'row', justifyContent: 'space-between', marginTop: 38},

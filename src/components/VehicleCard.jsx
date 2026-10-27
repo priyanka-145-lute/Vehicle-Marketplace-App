@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,6 +10,8 @@ const getFallbackImage = type => type === '2wheeler'
   : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
 const VehicleCard = ({item, onPress, onBookmarkPress}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   return (
     <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={onPress}>
 
@@ -47,7 +49,7 @@ const VehicleCard = ({item, onPress, onBookmarkPress}) => {
 
 export default VehicleCard;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   card: {
     width: '48%',
     backgroundColor: colors.surface,

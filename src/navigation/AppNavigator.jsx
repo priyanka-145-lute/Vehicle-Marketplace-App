@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -91,6 +91,8 @@ const MainStack = () => {
 };
 
 const AppNavigator = () => {
+  const {styles} = useThemeStyles(createStyles);
+
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [restoring, setRestoring] = useState(true);
@@ -137,6 +139,6 @@ const AppNavigator = () => {
 
 export default AppNavigator;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   loading: {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface},
 });

@@ -1,4 +1,4 @@
-import {colors} from '../../theme/colors';
+import {useThemeStyles} from '../../theme/colors';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -71,6 +71,8 @@ const onboardingData = [
 ];
 
 const OnboardingScreen = ({navigation}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -202,7 +204,7 @@ const OnboardingScreen = ({navigation}) => {
 
 export default OnboardingScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     flex: 1,
   },

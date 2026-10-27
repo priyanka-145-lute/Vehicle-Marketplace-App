@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -20,6 +20,8 @@ const banners = [
 ];
 
 const ServicesScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const insets = useSafeAreaInsets();
   const sliderRef = useRef(null);
   const [activeBanner, setActiveBanner] = useState(0);
@@ -83,7 +85,7 @@ const ServicesScreen = ({navigation}) => {
 
 export default ServicesScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.background},
   header: {paddingHorizontal: 15, paddingBottom: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 12},
   backButton: {width: 42, height: 42, borderRadius: 21, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   addressRow: {flexDirection: 'row', alignItems: 'center', marginTop: 7},
   address: {flex: 1, minHeight: 28, marginLeft: 4, fontSize: 10, color: colors.textMuted},
   chips: {flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 10},
-  chip: {paddingHorizontal: 8, paddingVertical: 5, borderRadius: 6, backgroundColor: '#fff1f2'},
+  chip: {paddingHorizontal: 8, paddingVertical: 5, borderRadius: 6, backgroundColor: colors.accentSurface},
   chipText: {fontSize: 10, fontWeight: '700', color: '#ef4444'},
   detailsButton: {height: 36, marginTop: 12, borderRadius: 8, backgroundColor: '#ef4444', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'},
   detailsText: {fontSize: 11, fontWeight: '800', color: '#fff', marginRight: 4},

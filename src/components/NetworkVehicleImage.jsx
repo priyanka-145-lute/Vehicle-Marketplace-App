@@ -1,9 +1,11 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const NetworkVehicleImage = ({uri, fallbackUri, style}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const [sourceUri, setSourceUri] = useState(uri);
   const [failed, setFailed] = useState(false);
 
@@ -37,7 +39,7 @@ const NetworkVehicleImage = ({uri, fallbackUri, style}) => {
 
 export default NetworkVehicleImage;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   fallback: {
     backgroundColor: colors.surfaceMuted,
     alignItems: 'center',

@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {createContext, useContext, useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Alert, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -13,11 +13,22 @@ const Stack = createNativeStackNavigator();
 const STORAGE_KEY = 'vehicle-account-profile';
 const EMPTY_PROFILE = {name: '', mobile: '', email: '', city: ''};
 
-const Button = ({title, onPress, disabled}) => <TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={onPress} style={[styles.button, disabled && styles.disabled]}><Text style={styles.buttonText}>{title}</Text></TouchableOpacity>;
-const Avatar = ({name}) => <View style={styles.avatar}>{name ? <Text style={styles.initial}>{name.trim().charAt(0).toUpperCase()}</Text> : <Icon name="person-outline" size={32} color="#ef4444" />}</View>;
-const Page = ({title, navigation, children}) => <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}><View style={styles.header}>{navigation.canGoBack() && <TouchableOpacity accessibilityRole="button" accessibilityLabel="Go back" style={styles.back} onPress={() => navigation.goBack()}><Icon name="arrow-back" size={24} color={colors.text} /></TouchableOpacity>}<Text style={styles.heading}>{title}</Text></View>{children}</SafeAreaView>;
+const Button = ({title, onPress, disabled}) => {
+  const {styles} = useThemeStyles(createStyles);
+  return (<TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={onPress} style={[styles.button, disabled && styles.disabled]}><Text style={styles.buttonText}>{title}</Text></TouchableOpacity>);
+};
+const Avatar = ({name}) => {
+  const {styles} = useThemeStyles(createStyles);
+  return (<View style={styles.avatar}>{name ? <Text style={styles.initial}>{name.trim().charAt(0).toUpperCase()}</Text> : <Icon name="person-outline" size={32} color="#ef4444" />}</View>);
+};
+const Page = ({title, navigation, children}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+  return (<SafeAreaView edges={['top', 'left', 'right']} style={styles.container}><View style={styles.header}>{navigation.canGoBack() && <TouchableOpacity accessibilityRole="button" accessibilityLabel="Go back" style={styles.back} onPress={() => navigation.goBack()}><Icon name="arrow-back" size={24} color={colors.text} /></TouchableOpacity>}<Text style={styles.heading}>{title}</Text></View>{children}</SafeAreaView>);
+};
 
 const AccountScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const {profile, loading, loadError} = useContext(ProfileContext);
   const logout = useContext(AccountLogoutContext);
   const options = [
@@ -35,6 +46,8 @@ const AccountScreen = ({navigation}) => {
 };
 
 export const ProfileScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const {profile, loading, loadError, load} = useContext(ProfileContext);
   const {isDark, toggleTheme} = useTheme();
   return <Page title="My Profile" navigation={navigation}>{loading ? <ActivityIndicator style={styles.flex} color="#ef4444" /> : loadError ? <View style={styles.content}><Text style={styles.body}>Could not load your profile. Please try again.</Text><Button title="Try Again" onPress={load} /></View> : <ScrollView contentContainerStyle={styles.content}>
@@ -47,6 +60,8 @@ export const ProfileScreen = ({navigation}) => {
 };
 
 export const EditProfileScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const {profile, saveProfile} = useContext(ProfileContext);
   const [form, setForm] = useState({...profile});
   const [saving, setSaving] = useState(false);
@@ -70,7 +85,7 @@ export const EditProfileScreen = ({navigation}) => {
       ['mobile', 'Mobile number', '10-digit mobile number', {keyboardType: 'phone-pad', maxLength: 10}],
       ['email', 'Email address', 'you@example.com', {keyboardType: 'email-address', autoCapitalize: 'none', autoCorrect: false, maxLength: 254}],
       ['city', 'City', 'Your city', {maxLength: 100}],
-    ].map(([key, label, placeholder, options]) => <View key={key} style={styles.field}><Text style={styles.label}>{label}</Text><TextInput accessibilityLabel={label} editable={!saving} style={styles.input} value={form[key]} placeholder={placeholder} placeholderTextcolor={colors.textMuted} onChangeText={value => setForm(current => ({...current, [key]: key === 'mobile' ? value.replace(/[^0-9]/g, '') : value}))} {...options} /></View>)}
+    ].map(([key, label, placeholder, options]) => <View key={key} style={styles.field}><Text style={styles.label}>{label}</Text><TextInput accessibilityLabel={label} editable={!saving} style={styles.input} value={form[key]} placeholder={placeholder} placeholderTextColor={colors.textMuted} onChangeText={value => setForm(current => ({...current, [key]: key === 'mobile' ? value.replace(/[^0-9]/g, '') : value}))} {...options} /></View>)}
     {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
     <Button title={saving ? 'Saving…' : 'Save Changes'} disabled={saving} onPress={save} />
   </ScrollView></KeyboardAvoidingView></Page>;
@@ -82,6 +97,8 @@ const info = {
   TermsConditions: {title: 'Terms & Conditions', icon: 'document-text-outline', heading: 'Terms of use', text: 'The official terms and conditions have not been published yet. Please check back for the terms that apply to using this marketplace.'},
 };
 const InformationScreen = ({navigation, route}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const content = info[route.name];
   const openContact = async whatsapp => {
     try {
@@ -122,10 +139,10 @@ const AccountNavigator = () => {
 };
 export default AccountNavigator;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   contactActions: {gap: 14}, contactButton: {flexDirection: 'row', gap: 10}, whatsappButton: {backgroundColor: '#15803d'},
   flex: {flex: 1}, container: {flex: 1, backgroundColor: colors.background}, header: {minHeight: 72, paddingHorizontal: 20, paddingVertical: 16, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 10}, back: {width: 44, height: 44, justifyContent: 'center', alignItems: 'center'}, heading: {fontSize: 23, fontWeight: '800', color: colors.text}, content: {padding: 18, paddingBottom: 30, gap: 18},
-  profileCard: {flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.surface, padding: 16, borderRadius: 16}, avatar: {width: 68, height: 68, borderRadius: 34, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center'}, initial: {fontSize: 28, fontWeight: '800', color: '#ef4444'}, name: {fontSize: 19, fontWeight: '700', color: colors.text}, muted: {fontSize: 12, color: colors.textMuted, marginTop: 5, lineHeight: 18}, sectionLabel: {fontSize: 11, fontWeight: '700', color: colors.textMuted, letterSpacing: 1, marginTop: 6}, card: {backgroundColor: colors.surface, borderRadius: 16, overflow: 'hidden'}, menuRow: {padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12}, divider: {borderBottomWidth: 1, borderBottomColor: colors.border}, menuIcon: {width: 40, height: 40, borderRadius: 12, backgroundColor: '#fff1f2', alignItems: 'center', justifyContent: 'center'}, menuTitle: {fontSize: 15, fontWeight: '600', color: colors.text}, logout: {minHeight: 52, backgroundColor: colors.surface, borderRadius: 12, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center'}, logoutText: {fontSize: 15, color: '#ef4444', fontWeight: '700'},
+  profileCard: {flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.surface, padding: 16, borderRadius: 16}, avatar: {width: 68, height: 68, borderRadius: 34, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'}, initial: {fontSize: 28, fontWeight: '800', color: '#ef4444'}, name: {fontSize: 19, fontWeight: '700', color: colors.text}, muted: {fontSize: 12, color: colors.textMuted, marginTop: 5, lineHeight: 18}, sectionLabel: {fontSize: 11, fontWeight: '700', color: colors.textMuted, letterSpacing: 1, marginTop: 6}, card: {backgroundColor: colors.surface, borderRadius: 16, overflow: 'hidden'}, menuRow: {padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12}, divider: {borderBottomWidth: 1, borderBottomColor: colors.border}, menuIcon: {width: 40, height: 40, borderRadius: 12, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'}, menuTitle: {fontSize: 15, fontWeight: '600', color: colors.text}, logout: {minHeight: 52, backgroundColor: colors.surface, borderRadius: 12, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center'}, logoutText: {fontSize: 15, color: '#ef4444', fontWeight: '700'},
   themeRow: {minHeight: 76, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', gap: 12},
   profileSummary: {alignItems: 'center', gap: 10, paddingVertical: 12}, detail: {paddingHorizontal: 18, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border}, value: {fontSize: 15, color: colors.text, marginTop: 6}, button: {minHeight: 50, backgroundColor: '#ef4444', borderRadius: 12, alignItems: 'center', justifyContent: 'center'}, buttonText: {fontSize: 15, color: '#fff', fontWeight: '700'}, disabled: {opacity: 0.5}, note: {fontSize: 12, lineHeight: 19, color: colors.textMuted}, field: {gap: 8}, label: {fontSize: 13, fontWeight: '600', color: colors.text}, input: {minHeight: 50, borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, backgroundColor: colors.surface, color: colors.text, fontSize: 15}, error: {color: '#dc2626', fontSize: 13}, infoCard: {padding: 24, borderRadius: 16, backgroundColor: colors.surface, gap: 18}, body: {fontSize: 15, lineHeight: 25, color: colors.textMuted},
 });

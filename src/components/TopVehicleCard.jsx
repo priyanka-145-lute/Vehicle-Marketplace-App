@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
 import WishlistHeart from './WishlistHeart';
@@ -11,6 +11,8 @@ const getFallbackImage = type => type === '2wheeler'
   : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
 const TopVehicleCard = ({item, onPress}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   return (
     <TouchableOpacity activeOpacity={0.85} style={styles.topCard} onPress={onPress}>
 
@@ -48,7 +50,7 @@ const TopVehicleCard = ({item, onPress}) => {
 
 export default TopVehicleCard;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   topCard: {
     width: width * 0.44,
     backgroundColor: colors.surface,

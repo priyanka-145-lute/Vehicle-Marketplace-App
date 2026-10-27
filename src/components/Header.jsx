@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useState} from 'react';
 import {
   Modal,
@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 
 const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSettingsPress, onHelpPress, onLogoutPress}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const [menuVisible, setMenuVisible] = useState(false);
   const {isDark} = useTheme();
   const iconColor = isDark ? '#f8fafc' : '#111';
@@ -80,11 +82,14 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
   );
 };
 
-const MenuItem = ({icon, label, destructive, onPress}) => <TouchableOpacity style={styles.menuItem} onPress={onPress} accessibilityRole="button"><View style={[styles.menuIcon, destructive && styles.menuIconDestructive]}><Icon name={icon} size={21} color={destructive ? '#ef4444' : '#334155'} /></View><Text style={[styles.menuItemText, destructive && styles.menuItemTextDestructive]}>{label}</Text><Icon name="chevron-forward" size={18} color={colors.textMuted} /></TouchableOpacity>;
+const MenuItem = ({icon, label, destructive, onPress}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+  return (<TouchableOpacity style={styles.menuItem} onPress={onPress} accessibilityRole="button"><View style={[styles.menuIcon, destructive && styles.menuIconDestructive]}><Icon name={icon} size={21} color={destructive ? '#ef4444' : colors.textMuted} /></View><Text style={[styles.menuItemText, destructive && styles.menuItemTextDestructive]}>{label}</Text><Icon name="chevron-forward" size={18} color={colors.textMuted} /></TouchableOpacity>);
+};
 
 export default Header;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
     paddingHorizontal: 14,
@@ -128,7 +133,7 @@ const styles = StyleSheet.create({
   menuTitle: {fontSize: 22, fontWeight: '800', color: colors.text},
   menuItem: {height: 62, paddingHorizontal: 20, flexDirection: 'row', alignItems: 'center'},
   menuIcon: {width: 36, height: 36, borderRadius: 10, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},
-  menuIconDestructive: {backgroundColor: '#fff1f2'},
+  menuIconDestructive: {backgroundColor: colors.accentSurface},
   menuItemText: {flex: 1, marginLeft: 12, fontSize: 15, fontWeight: '600', color: colors.text},
   menuItemTextDestructive: {color: '#ef4444'},
   menuDivider: {height: 1, marginHorizontal: 20, backgroundColor: colors.surfaceMuted},

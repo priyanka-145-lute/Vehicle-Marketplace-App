@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -11,8 +11,9 @@ const NOTIFICATIONS = [
   {id: '4', icon: 'shield-checkmark-outline', color: '#16a34a', title: 'Welcome to Gadi Dekho', message: 'Browse vehicles, compare options and find the right deal.', time: '2 days ago', unread: false},
 ];
 
-const NotificationsScreen = ({navigation}) => (
-  <SafeAreaView style={styles.container} edges={['top']}>
+const NotificationsScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+  return (<SafeAreaView style={styles.container} edges={['top']}>
     <View style={styles.header}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()} accessibilityLabel="Go back">
         <Icon name="chevron-back" size={24} color={colors.text} />
@@ -40,12 +41,12 @@ const NotificationsScreen = ({navigation}) => (
         </View>
       )}
     />
-  </SafeAreaView>
-);
+  </SafeAreaView>);
+};
 
 export default NotificationsScreen;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   container: {flex: 1, backgroundColor: colors.background},
   header: {height: 68, paddingHorizontal: 15, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'},
   backButton: {width: 42, height: 42, borderRadius: 21, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},

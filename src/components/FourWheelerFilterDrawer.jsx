@@ -1,4 +1,4 @@
-import {colors} from '../theme/colors';
+import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useState} from 'react';
 import {Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -7,14 +7,21 @@ const MIN_PRICE = 100000;
 const MAX_PRICE = 5000000;
 export const FOUR_WHEELER_FILTER_DEFAULTS = {minPrice: MIN_PRICE, maxPrice: MAX_PRICE, brand: 'All Brands', model: 'All Models', fuel: 'All', transmission: 'All', bodyType: 'All', yearFrom: 'Any Year', yearTo: 'Any Year', owner: 'Any'};
 
-const Chip = ({label, active, onPress}) => <TouchableOpacity style={[styles.chip, active && styles.chipActive]} onPress={onPress}><Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text></TouchableOpacity>;
+const Chip = ({label, active, onPress}) => {
+  const {styles} = useThemeStyles(createStyles);
+  return (<TouchableOpacity style={[styles.chip, active && styles.chipActive]} onPress={onPress}><Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text></TouchableOpacity>);
+};
 
 const Dropdown = ({name, value, options, opened, setOpened, onSelect}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const open = opened === name;
   return <View><TouchableOpacity style={[styles.dropdown, open && styles.dropdownActive]} onPress={() => setOpened(open ? null : name)}><Text style={styles.dropdownText}>{value}</Text><Icon name={open ? 'chevron-up' : 'chevron-down'} size={14} color={colors.textMuted} /></TouchableOpacity>{open ? <View style={styles.options}>{options.map(option => <TouchableOpacity key={option} style={styles.option} onPress={() => {onSelect(option); setOpened(null);}}><Text style={[styles.optionText, value === option && styles.optionSelected]}>{option}</Text>{value === option ? <Icon name="checkmark" size={15} color="#ff1838" /> : null}</TouchableOpacity>)}</View> : null}</View>;
 };
 
 const PriceSlider = ({min, max, onChange}) => {
+  const {styles} = useThemeStyles(createStyles);
+
   const [width, setWidth] = useState(1);
   const minPos = ((min - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
   const maxPos = ((max - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
@@ -28,6 +35,8 @@ const PriceSlider = ({min, max, onChange}) => {
 };
 
 const FourWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+
   const [draft, setDraft] = useState(filters);
   const [opened, setOpened] = useState(null);
   useEffect(() => {if (visible) {setDraft(filters); setOpened(null);}}, [filters, visible]);
@@ -55,9 +64,9 @@ const FourWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
 
 export default FourWheelerFilterDrawer;
 
-const styles = StyleSheet.create({
+const createStyles = colors => StyleSheet.create({
   root: {flex: 1, flexDirection: 'row'}, panel: {width: '86%', maxWidth: 400, backgroundColor: colors.surface, borderRightWidth: 1, borderRightColor: colors.border}, backdrop: {flex: 1, backgroundColor: 'rgba(0,0,0,0.55)'}, header: {paddingTop: 42, paddingHorizontal: 17, paddingBottom: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.border}, title: {fontSize: 20, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 10, color: colors.textMuted, marginTop: 3}, content: {paddingHorizontal: 17, paddingBottom: 20}, resetRow: {height: 46, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}, reset: {fontSize: 12, fontWeight: '700', color: '#ff1838'}, label: {fontSize: 12, fontWeight: '700', color: colors.text, marginTop: 15, marginBottom: 8},
-  priceRow: {flexDirection: 'row', alignItems: 'center'}, input: {flex: 1, height: 40, borderWidth: 1, borderColor: colors.border, borderRadius: 6, backgroundColor: colors.surfaceMuted, color: colors.text, fontSize: 11, paddingHorizontal: 9}, dash: {color: colors.textMuted, marginHorizontal: 7}, slider: {height: 34, marginHorizontal: 7, justifyContent: 'center'}, track: {position: 'absolute', left: 0, right: 0, height: 4, backgroundcolor: colors.textMuted}, fill: {position: 'absolute', height: 4, backgroundColor: '#ff1838'}, knob: {position: 'absolute', marginLeft: -7, width: 15, height: 15, borderRadius: 8, backgroundColor: colors.surface, borderWidth: 2, borderColor: '#ff1838'}, rangeLabels: {flexDirection: 'row', justifyContent: 'space-between'}, help: {fontSize: 9, color: colors.textMuted},
+  priceRow: {flexDirection: 'row', alignItems: 'center'}, input: {flex: 1, height: 40, borderWidth: 1, borderColor: colors.border, borderRadius: 6, backgroundColor: colors.surfaceMuted, color: colors.text, fontSize: 11, paddingHorizontal: 9}, dash: {color: colors.textMuted, marginHorizontal: 7}, slider: {height: 34, marginHorizontal: 7, justifyContent: 'center'}, track: {position: 'absolute', left: 0, right: 0, height: 4, backgroundColor: colors.textMuted}, fill: {position: 'absolute', height: 4, backgroundColor: '#ff1838'}, knob: {position: 'absolute', marginLeft: -7, width: 15, height: 15, borderRadius: 8, backgroundColor: colors.surface, borderWidth: 2, borderColor: '#ff1838'}, rangeLabels: {flexDirection: 'row', justifyContent: 'space-between'}, help: {fontSize: 9, color: colors.textMuted},
   dropdown: {height: 39, paddingHorizontal: 9, borderWidth: 1, borderColor: colors.border, borderRadius: 5, backgroundColor: colors.surfaceMuted, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}, dropdownActive: {borderColor: '#ff1838'}, dropdownText: {fontSize: 10, color: colors.text}, options: {borderWidth: 1, borderTopWidth: 0, borderColor: colors.border, backgroundColor: colors.surface}, option: {minHeight: 34, paddingHorizontal: 9, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: colors.border}, optionText: {fontSize: 10, color: colors.text}, optionSelected: {color: '#ff1838', fontWeight: '700'}, chips: {flexDirection: 'row', flexWrap: 'wrap', gap: 7}, chip: {height: 34, paddingHorizontal: 10, borderRadius: 5, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'}, chipActive: {borderColor: '#ff1838'}, chipText: {fontSize: 10, color: colors.text}, chipTextActive: {color: '#ff1838', fontWeight: '700'}, yearRow: {flexDirection: 'row', gap: 8}, yearCol: {flex: 1, gap: 5},
   actions: {padding: 16, borderTopWidth: 1, borderTopColor: colors.border}, apply: {height: 46, borderRadius: 5, backgroundColor: '#ff1838', alignItems: 'center', justifyContent: 'center'}, applyText: {fontSize: 13, fontWeight: '800', color: '#fff'}, clear: {height: 43, marginTop: 9, borderRadius: 5, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center'}, clearText: {fontSize: 12, color: colors.text},
 });
