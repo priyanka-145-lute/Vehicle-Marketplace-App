@@ -4,6 +4,8 @@ import { StatusBar } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {DarkTheme, DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 import {WishlistProvider} from './src/context/WishlistContext';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
@@ -15,7 +17,7 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
 
-        <ThemeProvider><ThemedApp /></ThemeProvider>
+        <Provider store={store}><ThemeProvider><ThemedApp /></ThemeProvider></Provider>
 
       </SafeAreaProvider>
     </GestureHandlerRootView>

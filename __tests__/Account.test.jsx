@@ -6,6 +6,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AccountNavigator, {AccountLogoutContext} from '../src/screens/AccountScreens';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn()}));
+
+jest.mock('../src/redux/api', () => ({
+  useGetCountriesQuery: jest.fn(() => ({currentData: {success: true, data: [{CountryID: 1, CountryName: 'India'}]}})),
+  useGetStatesQuery: jest.fn(() => ({currentData: {success: true, data: [{StateID: 1, StateName: 'Maharashtra'}]}})),
+  useGetCitiesQuery: jest.fn(() => ({currentData: {success: true, data: [{CityID: 1, CityName: 'Nagpur'}]}})),
+  useGetAreasQuery: jest.fn(() => ({currentData: {success: true, data: [{AreaID: 10, AreaName: 'Ayodhya Nagar', Pincode: '440024'}]}})),
+}));
+
 jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 jest.mock('react-native-safe-area-context', () => ({SafeAreaView: require('react-native').View}));
 jest.mock('@react-navigation/native-stack', () => {
@@ -52,15 +60,19 @@ test('profile validates, saves, appears on Account and restores after reopening'
   await press(tree, 'Save Changes');
   expect(AsyncStorage.setItem).not.toHaveBeenCalled();
   await act(async () => tree.root.findAllByType(TextInput).find(node => node.props.accessibilityLabel === 'Full name *').props.onChangeText('Asha Patil'));
+  for (const label of ['Select Country', 'Country: India', 'Select State', 'State: Maharashtra', 'Select City', 'City: Nagpur', 'Select Area', 'Area: Ayodhya Nagar']) {await press(tree, label);}
   await press(tree, 'Save Changes');
   const saved = AsyncStorage.setItem.mock.calls.at(-1)[1];
-  expect(JSON.parse(saved).name).toBe('Asha Patil');
+  expect(JSON.parse(saved)).toMatchObject({name: 'Asha Patil', city: 'Nagpur', locationDetails: {countryId: 1, stateId: 1, cityId: 1, areaId: 10, pincode: '440024'}});
   await press(tree, 'Go back');
   expect(tree.root.findAllByType(Text).some(node => node.props.children === 'Asha Patil')).toBe(true);
   await act(async () => tree.unmount());
   AsyncStorage.getItem.mockResolvedValue(saved);
   await act(async () => {tree = create(<AccountNavigator />);});
   expect(tree.root.findAllByType(Text).some(node => node.props.children === 'Asha Patil')).toBe(true);
+  await press(tree, 'My Profile');
+  await press(tree, 'Edit Profile');
+  expect(tree.root.findAllByType(Text).some(node => node.props.children === 'Ayodhya Nagar')).toBe(true);
   await act(async () => tree.unmount());
 });
 

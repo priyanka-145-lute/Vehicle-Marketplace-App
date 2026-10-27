@@ -1,7 +1,9 @@
 import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useRef, useState} from 'react';
 import {ActivityIndicator, Alert, StyleSheet, View} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {api} from '../redux/api';
+import {clearSession, restoreSession, saveSession, setSession} from '../redux/authSlice';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import AuthStack from './AuthStack';
@@ -20,7 +22,6 @@ import ServiceDetailsScreen from '../screens/ServiceDetailsScreen';
 import {HelpSupportScreen, SavedSearchesScreen} from '../screens/PreferencesScreens';
 
 const Stack = createNativeStackNavigator();
-const SESSION_KEY = 'vehicle-login-session';
 
 const MainStack = () => {
   return (
@@ -94,31 +95,37 @@ const AppNavigator = () => {
   const {styles} = useThemeStyles(createStyles);
 
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => Boolean(state.auth.session));
   const [restoring, setRestoring] = useState(true);
   const updatingSession = useRef(false);
 
   useEffect(() => {
     let active = true;
-    AsyncStorage.getItem(SESSION_KEY)
-      .then(value => {if (active) {setIsLoggedIn(value === 'logged-in');}})
+    restoreSession(async body => {
+      const request = dispatch(api.endpoints.refreshToken.initiate(body));
+      try {return await request.unwrap();} finally {request.reset();}
+    })
+      .then(session => {if (active) {dispatch(setSession(session));}})
       .catch(() => {if (active) {Alert.alert('Session unavailable', 'Could not restore your login. Please sign in again.');}})
       .finally(() => {if (active) {setRestoring(false);}});
     return () => {active = false;};
-  }, []);
+  }, [dispatch]);
 
-  const updateSession = async loggedIn => {
+  const updateSession = async session => {
     if (updatingSession.current) {return;}
     updatingSession.current = true;
     try {
-      if (loggedIn) {
-        await AsyncStorage.setItem(SESSION_KEY, 'logged-in');
+      if (session) {
+        await saveSession(session);
       } else {
-        await AsyncStorage.removeItem(SESSION_KEY);
+        await clearSession();
+        dispatch(api.util.resetApiState());
       }
-      setIsLoggedIn(loggedIn);
-    } catch {
-      Alert.alert(loggedIn ? 'Could not save login' : 'Could not log out', 'Please try again.');
+      dispatch(setSession(session || null));
+    } catch (error) {
+      if (session) {throw error;}
+      Alert.alert('Could not log out', 'Please try again.');
     } finally {
       updatingSession.current = false;
     }
@@ -129,7 +136,7 @@ const AppNavigator = () => {
   }
 
   return isLoggedIn ? (
-    <AccountLogoutContext.Provider value={() => updateSession(false)}>
+    <AccountLogoutContext.Provider value={() => updateSession(null)}>
       <MainStack />
     </AccountLogoutContext.Provider>
   ) : (

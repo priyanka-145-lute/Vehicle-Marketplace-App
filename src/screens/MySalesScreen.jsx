@@ -5,6 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NetworkVehicleImage from '../components/NetworkVehicleImage';
+import LocationFields from '../components/LocationFields';
 
 const STORAGE_KEY = 'vehicle-my-sales';
 const EMPTY = {title: '', category: '4 Wheeler', price: '', year: '', fuel: '', location: '', image: '', description: ''};
@@ -56,6 +57,7 @@ const MySalesScreen = () => {
   };
   const save = async () => {
     const price = Number(form.price.replace(/,/g, ''));
+    if (form.locationDetails?.countryId && !form.locationDetails.cityId) {setError('Please select a state and city.'); return;}
     if (!form.title.trim() || !form.location.trim() || !form.fuel.trim()) {setError('Enter a vehicle name, fuel type and location.'); return;}
     if (!Number.isFinite(price) || price <= 0) {setError('Enter a valid price greater than zero.'); return;}
     if (!/^\d{4}$/.test(form.year) || Number(form.year) < 1900 || Number(form.year) > new Date().getFullYear() + 1) {setError('Enter a valid four-digit model year.'); return;}
@@ -95,7 +97,8 @@ const MySalesScreen = () => {
               {field('price', 'Price (₹) *', {placeholder: 'e.g. 650000', keyboardType: 'numeric', maxLength: 12})}
               {field('year', 'Model year *', {placeholder: 'e.g. 2024', keyboardType: 'number-pad', maxLength: 4})}
               {field('fuel', 'Fuel type *', {placeholder: 'e.g. Petrol, Diesel, Electric', maxLength: 30})}
-              {field('location', 'Location *', {placeholder: 'City or area', maxLength: 100})}
+              {!form.locationDetails?.countryId && form.location ? <Text style={styles.note}>Saved location: {form.location}</Text> : null}
+              {visible && <LocationFields value={form.locationDetails} disabled={saving} onChange={locationDetails => {setForm(current => ({...current, locationDetails, location: [locationDetails.areaName, locationDetails.cityName, locationDetails.stateName].filter(Boolean).join(', ')})); setError('');}} />}
               {field('image', 'Photo URL (optional)', {placeholder: 'https://...', keyboardType: 'url', autoCapitalize: 'none', autoCorrect: false})}
               {field('description', 'Description (optional)', {placeholder: 'Condition, ownership and other details', multiline: true, maxLength: 1000})}
               {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}

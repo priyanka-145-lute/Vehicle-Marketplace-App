@@ -2,19 +2,19 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from '../screens/authScreen/LoginScreen';
-import SplashScreen from '../screens/authScreen/SplashScreen';
 import OtpScreen from '../screens/authScreen/OtpScreen';
+import SplashScreen from '../screens/authScreen/SplashScreen';
 import OnboardingScreen from '../screens/authScreen/OnboardingScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AuthStack = ({ setIsLoggedIn }) => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      
-      <Stack.Screen 
-        name="Splash" 
-        component={SplashScreen} 
+    <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+
+      <Stack.Screen
+        name="Splash"
+        component={SplashScreen}
       />
 
       <Stack.Screen
@@ -24,20 +24,15 @@ const AuthStack = ({ setIsLoggedIn }) => {
 
       <Stack.Screen name="Login">
         {(props) => (
-          <LoginScreen 
-            {...props} 
-            setIsLoggedIn={setIsLoggedIn} 
+          <LoginScreen
+            {...props}
+            setIsLoggedIn={setIsLoggedIn}
           />
         )}
       </Stack.Screen>
 
       <Stack.Screen name="Otp">
-        {props => (
-          <OtpScreen
-            {...props}
-            setIsLoggedIn={setIsLoggedIn}
-          />
-        )}
+        {props => <OtpScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
       </Stack.Screen>
 
     </Stack.Navigator>

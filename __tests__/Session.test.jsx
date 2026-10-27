@@ -2,10 +2,16 @@
 import React from 'react';
 import {act, create} from 'react-test-renderer';
 import {Alert} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Provider} from 'react-redux';
+import {configureStore} from '@reduxjs/toolkit';
+import authReducer from '../src/redux/authSlice';
+import {restoreSession, saveSession, clearSession} from '../src/redux/authSlice';
 import AppNavigator from '../src/navigation/AppNavigator';
+jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn()}));
 
-jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn(), removeItem: jest.fn()}));
+jest.mock('react-native-keychain', () => ({}));
+jest.mock('../src/redux/authSlice', () => ({__esModule: true, ...jest.requireActual('../src/redux/authSlice'), restoreSession: jest.fn(), saveSession: jest.fn(), clearSession: jest.fn()}));
+jest.mock('../src/redux/api', () => ({api: {util: {resetApiState: () => ({type: 'api/resetApiState'})}}}));
 jest.mock('../src/navigation/AuthStack', () => 'AuthStack');
 jest.mock('../src/screens/AccountScreens', () => ({AccountLogoutContext: require('react').createContext(null)}));
 jest.mock('../src/navigation/BottomTabs', () => {
@@ -18,6 +24,13 @@ jest.mock('../src/screens/AllTwoWheelersScreen', () => 'AllTwoWheelersScreen');
 jest.mock('../src/screens/AllFourWheelersScreen', () => 'AllFourWheelersScreen');
 jest.mock('../src/screens/AllOtherVehiclesScreen', () => 'AllOtherVehiclesScreen');
 jest.mock('../src/screens/TwoWheelerDetailScreen', () => 'TwoWheelerDetailScreen');
+jest.mock('../src/screens/PartsScreen', () => 'PartsScreen');
+jest.mock('../src/screens/NotificationsScreen', () => 'NotificationsScreen');
+jest.mock('../src/screens/ServicesScreen', () => 'ServicesScreen');
+jest.mock('../src/screens/ServiceDetailsScreen', () => 'ServiceDetailsScreen');
+jest.mock('../src/screens/PreferencesScreens', () => ({HelpSupportScreen: 'HelpSupportScreen', SavedSearchesScreen: 'SavedSearchesScreen'}));
+const session = {accessToken: 'test-access', refreshToken: 'test-refresh', accessTokenExpiresAt: '2099-01-01T00:00:00Z'};
+const renderApp = () => create(<Provider store={configureStore({reducer: {auth: authReducer}})}><AppNavigator /></Provider>);
 jest.mock('@react-navigation/native-stack', () => ({createNativeStackNavigator: () => ({
   Navigator: ({children}) => {
     const ReactModule = require('react');
@@ -27,40 +40,40 @@ jest.mock('@react-navigation/native-stack', () => ({createNativeStackNavigator: 
 })}));
 beforeEach(() => {
   jest.clearAllMocks();
-  AsyncStorage.getItem.mockResolvedValue(null);
-  AsyncStorage.setItem.mockResolvedValue(undefined);
-  AsyncStorage.removeItem.mockResolvedValue(undefined);
+  restoreSession.mockResolvedValue(null);
+  saveSession.mockResolvedValue(undefined);
+  clearSession.mockResolvedValue(undefined);
 });
 
 test('login survives restarting and logout clears the saved session', async () => {
   let tree;
-  await act(async () => {tree = create(<AppNavigator />);});
-  await act(async () => tree.root.findByType('AuthStack').props.setIsLoggedIn(true));
-  expect(AsyncStorage.setItem).toHaveBeenCalledWith('vehicle-login-session', 'logged-in');
+  await act(async () => {tree = renderApp();});
+  await act(async () => tree.root.findByType('AuthStack').props.setIsLoggedIn(session));
+  expect(saveSession).toHaveBeenCalledWith(session);
   expect(tree.root.findAllByType('MainScreen')).toHaveLength(1);
   await act(async () => tree.unmount());
-  AsyncStorage.getItem.mockResolvedValue('logged-in');
-  await act(async () => {tree = create(<AppNavigator />);});
+  restoreSession.mockResolvedValue(session);
+  await act(async () => {tree = renderApp();});
   expect(tree.root.findAllByType('AuthStack')).toHaveLength(0);
   await act(async () => tree.root.findByType('MainScreen').props.logout());
-  expect(AsyncStorage.removeItem).toHaveBeenCalledWith('vehicle-login-session');
+  expect(clearSession).toHaveBeenCalled();
   expect(tree.root.findAllByType('AuthStack')).toHaveLength(1);
   await act(async () => tree.unmount());
-  AsyncStorage.getItem.mockResolvedValue(null);
-  await act(async () => {tree = create(<AppNavigator />);});
+  restoreSession.mockResolvedValue(null);
+  await act(async () => {tree = renderApp();});
   expect(tree.root.findAllByType('AuthStack')).toHaveLength(1);
   await act(async () => tree.unmount());
 });
 
 test('does not show login before restoration finishes or log out when removal fails', async () => {
   let resolveSession;
-  AsyncStorage.getItem.mockReturnValue(new Promise(resolve => {resolveSession = resolve;}));
+  restoreSession.mockReturnValue(new Promise(resolve => {resolveSession = resolve;}));
   let tree;
-  await act(async () => {tree = create(<AppNavigator />);});
+  await act(async () => {tree = renderApp();});
   expect(tree.root.findAllByType('AuthStack')).toHaveLength(0);
-  await act(async () => resolveSession('logged-in'));
+  await act(async () => resolveSession(session));
   const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
-  AsyncStorage.removeItem.mockRejectedValue(new Error('Storage unavailable'));
+  clearSession.mockRejectedValue(new Error('Storage unavailable'));
   await act(async () => tree.root.findByType('MainScreen').props.logout());
   expect(tree.root.findAllByType('MainScreen')).toHaveLength(1);
   expect(alert).toHaveBeenCalledWith('Could not log out', 'Please try again.');

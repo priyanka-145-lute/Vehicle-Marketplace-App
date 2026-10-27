@@ -6,6 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
+import LocationFields from '../components/LocationFields';
 
 export const AccountLogoutContext = createContext(null);
 const ProfileContext = createContext(null);
@@ -69,10 +70,11 @@ export const EditProfileScreen = ({navigation}) => {
   const busy = useRef(false);
   const save = async () => {
     if (busy.current) {return;}
-    const next = Object.fromEntries(Object.entries(form).map(([key, value]) => [key, value.trim()]));
+    const next = {...form, ...Object.fromEntries(Object.keys(EMPTY_PROFILE).map(key => [key, form[key].trim()]))};
     if (!next.name) {setError('Please enter your full name.'); return;}
     if (next.mobile && !/^[0-9]{10}$/.test(next.mobile)) {setError('Enter a valid 10-digit mobile number.'); return;}
     if (next.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(next.email)) {setError('Enter a valid email address.'); return;}
+    if (next.locationDetails?.countryId && !next.locationDetails.cityId) {setError('Please select a state and city.'); return;}
     busy.current = true;
     setSaving(true);
     setError('');
@@ -84,8 +86,9 @@ export const EditProfileScreen = ({navigation}) => {
       ['name', 'Full name *', 'Your full name', {maxLength: 80, autoCapitalize: 'words'}],
       ['mobile', 'Mobile number', '10-digit mobile number', {keyboardType: 'phone-pad', maxLength: 10}],
       ['email', 'Email address', 'you@example.com', {keyboardType: 'email-address', autoCapitalize: 'none', autoCorrect: false, maxLength: 254}],
-      ['city', 'City', 'Your city', {maxLength: 100}],
     ].map(([key, label, placeholder, options]) => <View key={key} style={styles.field}><Text style={styles.label}>{label}</Text><TextInput accessibilityLabel={label} editable={!saving} style={styles.input} value={form[key]} placeholder={placeholder} placeholderTextColor={colors.textMuted} onChangeText={value => setForm(current => ({...current, [key]: key === 'mobile' ? value.replace(/[^0-9]/g, '') : value}))} {...options} /></View>)}
+    {!form.locationDetails?.countryId && form.city ? <Text style={styles.muted}>Saved city: {form.city}</Text> : null}
+    <LocationFields value={form.locationDetails} disabled={saving} onChange={locationDetails => {setForm(current => ({...current, locationDetails, city: locationDetails.cityName || ''})); setError('');}} />
     {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
     <Button title={saving ? 'Saving…' : 'Save Changes'} disabled={saving} onPress={save} />
   </ScrollView></KeyboardAvoidingView></Page>;
@@ -127,7 +130,7 @@ const AccountNavigator = () => {
       const raw = await AsyncStorage.getItem(STORAGE_KEY);
       const data = raw ? JSON.parse(raw) : EMPTY_PROFILE;
       if (!data || Object.keys(EMPTY_PROFILE).some(key => typeof data[key] !== 'string')) {throw new Error('Invalid profile');}
-      setProfile(Object.fromEntries(Object.keys(EMPTY_PROFILE).map(key => [key, data[key]])));
+      setProfile({...Object.fromEntries(Object.keys(EMPTY_PROFILE).map(key => [key, data[key]])), ...(data.locationDetails && typeof data.locationDetails === 'object' && !Array.isArray(data.locationDetails) ? {locationDetails: data.locationDetails} : {})});
     } catch {setLoadError(true);} finally {setLoading(false);}
   };
   useEffect(() => {load();}, []);
