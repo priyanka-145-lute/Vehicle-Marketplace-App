@@ -6,6 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NetworkVehicleImage from '../components/NetworkVehicleImage';
 import LocationFields from '../components/LocationFields';
+import BrandDropdown from '../components/BrandDropdown';
+import VehicleTypeDropdown from '../components/VehicleTypeDropdown';
+import VehicleCategoryDropdown from '../components/VehicleCategoryDropdown';
 
 const STORAGE_KEY = 'vehicle-my-sales';
 const EMPTY = {title: '', category: '4 Wheeler', price: '', year: '', fuel: '', location: '', image: '', description: ''};
@@ -22,6 +25,9 @@ const MySalesScreen = () => {
   const [form, setForm] = useState(EMPTY);
   const [editingId, setEditingId] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [brandOpen, setBrandOpen] = useState(false);
+  const [typeOpen, setTypeOpen] = useState(false);
+  const [categoryOpen, setCategoryOpen] = useState(false);
   const [error, setError] = useState('');
 
   const load = async () => {
@@ -50,10 +56,24 @@ const MySalesScreen = () => {
     } finally {busy.current = false; setSaving(false);}
   };
   const openForm = item => {
+    setCategoryOpen(false);
+    setBrandOpen(false);
+    setTypeOpen(false);
     setEditingId(item?.id || null);
     setForm(item ? {...EMPTY, ...item, price: String(item.price)} : {...EMPTY});
     setError('');
     setVisible(true);
+  };
+  const selectVehicleType = type => {
+    setBrandOpen(false);
+    setCategoryOpen(false);
+    setForm(current => ({
+      ...current,
+      VEHICLETYPEID: type?.VEHICLETYPEID ?? null,
+      VEHICLETYPENAME: type?.VEHICLETYPENAME || '',
+      VEHICLETYPECODE: type?.VEHICLETYPECODE || '',
+      ...(current.VEHICLETYPEID !== type?.VEHICLETYPEID ? {BrandName: '', VehicleBrandId: null, VehicleCategoryId: null, CATEGORYNAME: '', CATEGORYCODE: '', ParentCategoryID: null, CategoryLevel: null} : {}),
+    }));
   };
   const save = async () => {
     const price = Number(form.price.replace(/,/g, ''));
@@ -92,7 +112,10 @@ const MySalesScreen = () => {
           <View style={styles.formHeader}><Text style={styles.heading}>{editingId ? 'Edit Listing' : 'Sell Vehicle'}</Text>{button('Close', () => setVisible(false), styles.action)}</View>
           <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
             <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
-              <Text style={styles.label}>Vehicle category</Text><View style={styles.row}>{['2 Wheeler', '4 Wheeler', 'Other'].map(category => <TouchableOpacity key={category} disabled={saving} accessibilityRole="button" accessibilityState={{selected: form.category === category}} style={[styles.chip, form.category === category && styles.selected]} onPress={() => setForm(current => ({...current, category}))}><Text style={[styles.chipText, form.category === category && styles.selectedText]}>{category}</Text></TouchableOpacity>)}</View>
+              <Text style={styles.label}>Vehicle category</Text><View style={styles.row}>{['2 Wheeler', '4 Wheeler', 'Other'].map(category => <TouchableOpacity key={category} disabled={saving} accessibilityRole="button" accessibilityState={{selected: form.category === category}} style={[styles.chip, form.category === category && styles.selected]} onPress={() => {setBrandOpen(false); setTypeOpen(false); setCategoryOpen(false); setForm(current => current.category === category ? current : {...current, category, BrandName: '', VehicleBrandId: null, VEHICLETYPEID: null, VEHICLETYPENAME: '', VEHICLETYPECODE: '', VehicleCategoryId: null, CATEGORYNAME: '', CATEGORYCODE: '', ParentCategoryID: null, CategoryLevel: null});}}><Text style={[styles.chipText, form.category === category && styles.selectedText]}>{category}</Text></TouchableOpacity>)}</View>
+              <Text style={styles.label}>Vehicle Type</Text>{visible && <VehicleTypeDropdown category={form.category} value={form} disabled={saving} open={typeOpen} onOpenChange={open => {setTypeOpen(open); setBrandOpen(false); setCategoryOpen(false);}} onChange={selectVehicleType} />}
+              <Text style={styles.label}>Vehicle Category</Text>{visible && <VehicleCategoryDropdown vehicleTypeId={form.VEHICLETYPEID} value={form} disabled={saving} open={categoryOpen} onOpenChange={open => {setCategoryOpen(open); setTypeOpen(false); setBrandOpen(false);}} onChange={item => setForm(current => ({...current, VehicleCategoryId: item?.VehicleCategoryId ?? null, CATEGORYNAME: item?.CATEGORYNAME || '', CATEGORYCODE: item?.CATEGORYCODE || '', ParentCategoryID: item?.ParentCategoryID ?? null, CategoryLevel: item?.CategoryLevel ?? null}))} />}
+              <Text style={styles.label}>Brand</Text>{visible && <BrandDropdown vehicleTypeId={form.VEHICLETYPEID} value={form} disabled={saving || !form.VEHICLETYPEID} open={brandOpen} onOpenChange={open => {setBrandOpen(open); setTypeOpen(false); setCategoryOpen(false);}} onChange={brand => setForm(current => ({...current, BrandName: brand?.BrandName || '', VehicleBrandId: brand?.VehicleBrandId ?? null}))} />}
               {field('title', 'Vehicle name *', {placeholder: 'e.g. Maruti Suzuki Swift', maxLength: 80})}
               {field('price', 'Price (₹) *', {placeholder: 'e.g. 650000', keyboardType: 'numeric', maxLength: 12})}
               {field('year', 'Model year *', {placeholder: 'e.g. 2024', keyboardType: 'number-pad', maxLength: 4})}

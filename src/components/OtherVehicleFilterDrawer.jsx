@@ -2,6 +2,8 @@ import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useState} from 'react';
 import {Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import VehicleTypeDropdown from './VehicleTypeDropdown';
+import BrandDropdown from './BrandDropdown';
 
 const MIN_PRICE = 50000;
 const MAX_PRICE = 10000000;
@@ -31,19 +33,17 @@ const OtherVehicleFilterDrawer = ({visible, filters, onClose, onApply}) => {
   const [draft, setDraft] = useState(filters); const [opened, setOpened] = useState(null);
   useEffect(() => {if (visible) {setDraft(filters); setOpened(null);}}, [filters, visible]);
   const update = (key, value) => setDraft(current => ({...current, [key]: value}));
-  const types = ['All', 'School Bus', 'Auto Rickshaw', 'Truck', 'Mini Truck', 'Tow Truck', 'Van', 'LCV', 'Tractor', 'Crane', 'Forklift', 'Trailer', 'Tanker', 'Ambulance', 'Fire Engine'];
   const years = ['Any Year', '2026', '2025', '2024', '2023', '2022', '2021', '2020'];
-  const brands = ['All Brands', 'Tata', 'Bajaj', 'Ashok Leyland', 'Eicher', 'Force', 'JCB', 'Swaraj', 'ACE', 'Godrej'];
   const models = ['All Models', 'Starbus', 'RE Auto', 'Dost+', 'Pro 3016', '407 Gold', 'Traveller', '3DX Plus', '744 FE', 'Hydra 12XW', 'RX 20'];
   return <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}><View style={styles.root}><View style={styles.panel}>
     <View style={styles.header}><View><Text style={styles.title}>Filters</Text><Text style={styles.subtitle}>Other Vehicles</Text></View><TouchableOpacity onPress={onClose}><Icon name="close" size={22} color={colors.textMuted} /></TouchableOpacity></View>
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
       <TouchableOpacity style={styles.resetRow} onPress={() => setDraft(OTHER_FILTER_DEFAULTS)}><Text style={styles.reset}>Reset All</Text><Icon name="refresh-outline" size={17} color={colors.textMuted} /></TouchableOpacity>
       <Text style={styles.label}>Price Range (₹)</Text><View style={styles.priceRow}><TextInput value={String(draft.minPrice)} onChangeText={text => update('minPrice', Number(text.replace(/[^0-9]/g, '')) || MIN_PRICE)} keyboardType="number-pad" style={styles.input} /><Text style={styles.dash}>–</Text><TextInput value={String(draft.maxPrice)} onChangeText={text => update('maxPrice', Number(text.replace(/[^0-9]/g, '')) || MAX_PRICE)} keyboardType="number-pad" style={styles.input} /></View><PriceSlider min={draft.minPrice} max={draft.maxPrice} onChange={(minPrice, maxPrice) => setDraft(current => ({...current, minPrice, maxPrice}))} /><View style={styles.rangeLabels}><Text style={styles.help}>₹50,000</Text><Text style={styles.help}>₹1,00,00,000+</Text></View>
-      <Text style={styles.label}>Vehicle Type</Text><View style={styles.chips}>{types.map(value => <Chip key={value} label={value} active={draft.type === value} onPress={() => update('type', value)} />)}</View>
+      <Text style={styles.label}>Vehicle Type</Text><VehicleTypeDropdown compact enabled={visible} category="Other" value={{VEHICLETYPENAME: draft.type === 'All' ? '' : draft.type, VEHICLETYPEID: draft.VEHICLETYPEID}} placeholder="All" open={opened === 'type'} onOpenChange={open => setOpened(open ? 'type' : null)} onChange={type => setDraft(current => ({...current, type: type?.VEHICLETYPENAME || 'All', VEHICLETYPEID: type?.VEHICLETYPEID ?? null, VEHICLETYPECODE: type?.VEHICLETYPECODE || '', brand: 'All Brands', VehicleBrandId: null, model: 'All Models'}))} />
       <Text style={styles.label}>Fuel Type</Text><View style={styles.chips}>{['All', 'Diesel', 'Petrol', 'CNG', 'Electric', 'LPG'].map(value => <Chip key={value} label={value} active={draft.fuel === value} onPress={() => update('fuel', value)} />)}</View>
       <Text style={styles.label}>Registration Year</Text><View style={styles.yearRow}><View style={styles.yearCol}><Text style={styles.help}>From</Text><Dropdown name="yearFrom" value={draft.yearFrom} options={years} opened={opened} setOpened={setOpened} onSelect={value => update('yearFrom', value)} /></View><View style={styles.yearCol}><Text style={styles.help}>To</Text><Dropdown name="yearTo" value={draft.yearTo} options={years} opened={opened} setOpened={setOpened} onSelect={value => update('yearTo', value)} /></View></View>
-      <Text style={styles.label}>Brand</Text><Dropdown name="brand" value={draft.brand} options={brands} opened={opened} setOpened={setOpened} onSelect={value => update('brand', value)} />
+      <Text style={styles.label}>Brand</Text><BrandDropdown compact enabled={visible} disabled={!draft.VEHICLETYPEID} vehicleTypeId={draft.VEHICLETYPEID} value={{BrandName: draft.brand, VehicleBrandId: draft.VehicleBrandId}} placeholder="All Brands" open={opened === 'brand'} onOpenChange={open => setOpened(open ? 'brand' : null)} onChange={brand => setDraft(current => ({...current, brand: brand?.BrandName || 'All Brands', VehicleBrandId: brand?.VehicleBrandId ?? null, model: 'All Models'}))} />
       <Text style={styles.label}>Model</Text><Dropdown name="model" value={draft.model} options={models} opened={opened} setOpened={setOpened} onSelect={value => update('model', value)} />
     </ScrollView>
     <View style={styles.actions}><TouchableOpacity style={styles.apply} onPress={() => onApply(draft)}><Text style={styles.applyText}>Apply Filters</Text></TouchableOpacity><TouchableOpacity style={styles.clear} onPress={() => setDraft(OTHER_FILTER_DEFAULTS)}><Text style={styles.clearText}>Clear All</Text></TouchableOpacity></View>

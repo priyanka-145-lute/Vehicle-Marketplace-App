@@ -7,11 +7,12 @@ import {configureStore} from '@reduxjs/toolkit';
 import authReducer from '../src/redux/authSlice';
 import {restoreSession, saveSession, clearSession} from '../src/redux/authSlice';
 import AppNavigator from '../src/navigation/AppNavigator';
+import {api} from '../src/redux/api';
 jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn()}));
 
 jest.mock('react-native-keychain', () => ({}));
 jest.mock('../src/redux/authSlice', () => ({__esModule: true, ...jest.requireActual('../src/redux/authSlice'), restoreSession: jest.fn(), saveSession: jest.fn(), clearSession: jest.fn()}));
-jest.mock('../src/redux/api', () => ({api: {util: {resetApiState: () => ({type: 'api/resetApiState'})}}}));
+jest.mock('../src/redux/api', () => ({api: {endpoints: {logout: {initiate: jest.fn()}}, util: {resetApiState: () => ({type: 'api/resetApiState'})}}}));
 jest.mock('../src/navigation/AuthStack', () => 'AuthStack');
 jest.mock('../src/screens/AccountScreens', () => ({AccountLogoutContext: require('react').createContext(null)}));
 jest.mock('../src/navigation/BottomTabs', () => {
@@ -43,6 +44,7 @@ beforeEach(() => {
   restoreSession.mockResolvedValue(null);
   saveSession.mockResolvedValue(undefined);
   clearSession.mockResolvedValue(undefined);
+  api.endpoints.logout.initiate.mockImplementation(() => () => ({unwrap: async () => ({success: true}), reset: jest.fn()}));
 });
 
 test('login survives restarting and logout clears the saved session', async () => {
@@ -57,6 +59,7 @@ test('login survives restarting and logout clears the saved session', async () =
   expect(tree.root.findAllByType('AuthStack')).toHaveLength(0);
   await act(async () => tree.root.findByType('MainScreen').props.logout());
   expect(clearSession).toHaveBeenCalled();
+  expect(api.endpoints.logout.initiate).toHaveBeenCalledWith({RefreshToken: session.refreshToken});
   expect(tree.root.findAllByType('AuthStack')).toHaveLength(1);
   await act(async () => tree.unmount());
   restoreSession.mockResolvedValue(null);
@@ -79,4 +82,17 @@ test('does not show login before restoration finishes or log out when removal fa
   expect(alert).toHaveBeenCalledWith('Could not log out', 'Please try again.');
   await act(async () => tree.unmount());
   alert.mockRestore();
+});
+
+test('server logout failure still clears this device and reports the server failure', async () => {
+  restoreSession.mockResolvedValue(session);
+  api.endpoints.logout.initiate.mockImplementation(() => () => ({unwrap: async () => {throw new Error('Offline');}, reset: jest.fn()}));
+  const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  let tree;
+  await act(async () => {tree = renderApp();});
+  await act(async () => tree.root.findByType('MainScreen').props.logout());
+  expect(clearSession).toHaveBeenCalledTimes(1);
+  expect(tree.root.findAllByType('AuthStack')).toHaveLength(1);
+  expect(alert).toHaveBeenCalledWith('Logged out on this device', 'Could not confirm logout with the server.');
+  await act(async () => tree.unmount()); alert.mockRestore();
 });

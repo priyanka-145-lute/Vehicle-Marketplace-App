@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import * as Keychain from 'react-native-keychain';
-import {clearSession, restoreSession, saveSession} from '../src/redux/authSlice';
+import {canRefreshSession, clearSession, isValidSession, restoreSession, saveSession} from '../src/redux/authSlice';
 
 jest.mock('react-native-keychain', () => ({getGenericPassword: jest.fn(), setGenericPassword: jest.fn(), resetGenericPassword: jest.fn()}));
 const session = {accessToken: 'test-access', refreshToken: 'test-refresh', accessTokenExpiresAt: '2099-01-01T00:00:00Z'};
@@ -31,4 +31,14 @@ test('rejects an invalid session and reports storage failure', async () => {
 test('accepts the API timestamp precision', async () => {
   const precise = {...session, accessTokenExpiresAt: '2099-01-01T00:00:00.3953285'};
   await expect(saveSession(precise)).resolves.toBe(true);
+});
+
+test('timezone-free API dates defer expiry to the server instead of device local time', () => {
+  const ambiguous = {...session, accessTokenExpiresAt: '2000-01-01T00:00:00.3953285', refreshTokenExpiresAt: '2000-01-08T00:00:00.3953285'};
+  expect(isValidSession(ambiguous)).toBe(true);
+  expect(canRefreshSession(ambiguous)).toBe(true);
+  expect(isValidSession({...ambiguous, accessTokenExpiresAt: 'invalid'})).toBe(false);
+  expect(canRefreshSession({...ambiguous, refreshTokenExpiresAt: 'invalid'})).toBe(false);
+  expect(isValidSession({...ambiguous, accessTokenExpiresAt: '2000-01-01T00:00:00Z'})).toBe(false);
+  expect(canRefreshSession({...ambiguous, refreshTokenExpiresAt: '2000-01-01T00:00:00+05:30'})).toBe(false);
 });

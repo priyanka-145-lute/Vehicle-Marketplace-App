@@ -1,7 +1,9 @@
 import {useThemeStyles} from '../theme/colors';
 import React, {useEffect, useState} from 'react';
-import {Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import BrandDropdown from './BrandDropdown';
+import {useGetVehicleCategoriesQuery, useGetVehicleTypesQuery} from '../redux/api';
 
 const MIN_PRICE = 100000;
 const MAX_PRICE = 5000000;
@@ -39,10 +41,15 @@ const FourWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
 
   const [draft, setDraft] = useState(filters);
   const [opened, setOpened] = useState(null);
+  const vehicleTypes = useGetVehicleTypesQuery(undefined, {skip: !visible});
+  const carType = vehicleTypes.currentData?.success === true && Array.isArray(vehicleTypes.currentData.data) ? vehicleTypes.currentData.data.find(item => item?.VEHICLETYPENAME === 'Car') : null;
+  const categoriesQuery = useGetVehicleCategoriesQuery(carType?.VEHICLETYPEID, {skip: !visible || carType?.VEHICLETYPEID == null});
+  const categoriesFailed = categoriesQuery.isError || (categoriesQuery.currentData && (categoriesQuery.currentData.success !== true || !Array.isArray(categoriesQuery.currentData.data)));
+  const categories = !categoriesFailed && Array.isArray(categoriesQuery.currentData?.data) ? categoriesQuery.currentData.data.filter(item => item && typeof item.CATEGORYNAME === 'string' && ['number', 'string'].includes(typeof item.VehicleCategoryId) && String(item.VEHICLETYPEID) === String(carType?.VEHICLETYPEID)) : [];
+  const selectBodyType = item => setDraft(current => ({...current, bodyType: item?.CATEGORYNAME || 'All', VehicleCategoryId: item?.VehicleCategoryId ?? null, CATEGORYCODE: item?.CATEGORYCODE || '', CATEGORYNAME: item?.CATEGORYNAME || '', ParentCategoryID: item?.ParentCategoryID ?? null, CategoryLevel: item?.CategoryLevel ?? null, ...(item ? {VEHICLETYPEID: item.VEHICLETYPEID} : {})}));
   useEffect(() => {if (visible) {setDraft(filters); setOpened(null);}}, [filters, visible]);
   const update = (key, value) => setDraft(current => ({...current, [key]: value}));
   const years = ['Any Year', '2026', '2025', '2024', '2023', '2022', '2021', '2020'];
-  const brands = ['All Brands', 'Maruti Suzuki', 'Hyundai', 'Tata', 'Honda', 'Mahindra', 'Kia', 'Toyota', 'MG'];
   const models = ['All Models', 'Swift', 'i20', 'Nexon', 'City', 'Thar', 'Seltos', 'Innova Crysta', 'Hector'];
 
   return <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}><View style={styles.root}><View style={styles.panel}>
@@ -50,11 +57,17 @@ const FourWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
     <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
       <TouchableOpacity style={styles.resetRow} onPress={() => setDraft(FOUR_WHEELER_FILTER_DEFAULTS)}><Text style={styles.reset}>Reset All</Text><Icon name="refresh-outline" size={17} color={colors.textMuted} /></TouchableOpacity>
       <Text style={styles.label}>Price Range (₹)</Text><View style={styles.priceRow}><TextInput value={String(draft.minPrice)} onChangeText={text => update('minPrice', Number(text.replace(/[^0-9]/g, '')) || MIN_PRICE)} keyboardType="number-pad" style={styles.input} /><Text style={styles.dash}>–</Text><TextInput value={String(draft.maxPrice)} onChangeText={text => update('maxPrice', Number(text.replace(/[^0-9]/g, '')) || MAX_PRICE)} keyboardType="number-pad" style={styles.input} /></View><PriceSlider min={draft.minPrice} max={draft.maxPrice} onChange={(minPrice, maxPrice) => setDraft(current => ({...current, minPrice, maxPrice}))} /><View style={styles.rangeLabels}><Text style={styles.help}>₹1,00,000</Text><Text style={styles.help}>₹50,00,000+</Text></View>
-      <Text style={styles.label}>Brand</Text><Dropdown name="brand" value={draft.brand} options={brands} opened={opened} setOpened={setOpened} onSelect={value => update('brand', value)} />
+      <Text style={styles.label}>Brand</Text><BrandDropdown compact enabled={visible} vehicleType="Car" value={{BrandName: draft.brand, VehicleBrandId: draft.VehicleBrandId}} placeholder="All Brands" open={opened === 'brand'} onOpenChange={open => setOpened(open ? 'brand' : null)} onChange={brand => setDraft(current => ({...current, brand: brand?.BrandName || 'All Brands', VehicleBrandId: brand?.VehicleBrandId ?? null, VEHICLETYPEID: brand?.VEHICLETYPEID ?? null, model: 'All Models'}))} />
       <Text style={styles.label}>Model</Text><Dropdown name="model" value={draft.model} options={models} opened={opened} setOpened={setOpened} onSelect={value => update('model', value)} />
       <Text style={styles.label}>Fuel Type</Text><View style={styles.chips}>{['All', 'Petrol', 'Diesel', 'CNG', 'Hybrid', 'Electric'].map(value => <Chip key={value} label={value} active={draft.fuel === value} onPress={() => update('fuel', value)} />)}</View>
       <Text style={styles.label}>Transmission</Text><View style={styles.chips}>{['All', 'Manual', 'Automatic', 'AMT', 'CVT'].map(value => <Chip key={value} label={value} active={draft.transmission === value} onPress={() => update('transmission', value)} />)}</View>
-      <Text style={styles.label}>Body Type</Text><View style={styles.chips}>{['All', 'Hatchback', 'Sedan', 'SUV', 'MUV', 'Coupe', 'Convertible'].map(value => <Chip key={value} label={value} active={draft.bodyType === value} onPress={() => update('bodyType', value)} />)}</View>
+      <Text style={styles.label}>Body Type</Text>
+      {visible && vehicleTypes.isFetching ? <ActivityIndicator accessibilityLabel="Loading body type vehicle" color="#ef4444" /> : null}
+      {visible && !vehicleTypes.isFetching && (vehicleTypes.isError || (vehicleTypes.currentData && !carType)) ? <View><Text style={styles.help}>Could not load the car vehicle type.</Text><TouchableOpacity accessibilityRole="button" accessibilityLabel="Retry body type vehicle" onPress={vehicleTypes.refetch}><Text style={styles.reset}>Try Again</Text></TouchableOpacity></View> : null}
+      {visible && categoriesQuery.isFetching ? <ActivityIndicator accessibilityLabel="Loading body types" color="#ef4444" /> : null}
+      {visible && carType && categoriesFailed && !categoriesQuery.isFetching ? <View><Text style={styles.help}>Could not load body types.</Text><TouchableOpacity accessibilityRole="button" accessibilityLabel="Retry body types" onPress={categoriesQuery.refetch}><Text style={styles.reset}>Try Again</Text></TouchableOpacity></View> : null}
+      <View style={styles.chips}><Chip label="All" active={draft.bodyType === 'All'} onPress={() => selectBodyType(null)} />{categories.map(item => <Chip key={item.VehicleCategoryId} label={item.CATEGORYNAME} active={draft.bodyType === item.CATEGORYNAME} onPress={() => selectBodyType(item)} />)}</View>
+      {visible && carType && categoriesQuery.currentData && !categoriesQuery.isFetching && !categoriesFailed && !categories.length ? <Text style={styles.help}>No body types available.</Text> : null}
       <Text style={styles.label}>Year of Registration</Text><View style={styles.yearRow}><View style={styles.yearCol}><Text style={styles.help}>From</Text><Dropdown name="yearFrom" value={draft.yearFrom} options={years} opened={opened} setOpened={setOpened} onSelect={value => update('yearFrom', value)} /></View><View style={styles.yearCol}><Text style={styles.help}>To</Text><Dropdown name="yearTo" value={draft.yearTo} options={years} opened={opened} setOpened={setOpened} onSelect={value => update('yearTo', value)} /></View></View>
       <Text style={styles.label}>Owner</Text><View style={styles.chips}>{['Any', '1st Owner', '2nd Owner', '3rd Owner+'].map(value => <Chip key={value} label={value} active={draft.owner === value} onPress={() => update('owner', value)} />)}</View>
     </ScrollView>

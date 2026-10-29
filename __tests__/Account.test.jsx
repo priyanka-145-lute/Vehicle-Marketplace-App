@@ -4,10 +4,16 @@ import {act, create} from 'react-test-renderer';
 import {Alert, Linking, Text, TextInput, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AccountNavigator, {AccountLogoutContext} from '../src/screens/AccountScreens';
+import {useDeleteAddressMutation, useGetProfileQuery, useGetUserAddressByIdMutation, useGetUserAddressesQuery, useUpdateAddressMutation} from '../src/redux/api';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn()}));
 
 jest.mock('../src/redux/api', () => ({
+  useGetUserAddressByIdMutation: jest.fn(() => [jest.fn()]),
+  useUpdateAddressMutation: jest.fn(() => [jest.fn()]),
+  useDeleteAddressMutation: jest.fn(() => [jest.fn()]),
+  useGetProfileQuery: jest.fn(() => ({})),
+  useGetUserAddressesQuery: jest.fn(),
   useGetCountriesQuery: jest.fn(() => ({currentData: {success: true, data: [{CountryID: 1, CountryName: 'India'}]}})),
   useGetStatesQuery: jest.fn(() => ({currentData: {success: true, data: [{StateID: 1, StateName: 'Maharashtra'}]}})),
   useGetCitiesQuery: jest.fn(() => ({currentData: {success: true, data: [{CityID: 1, CityName: 'Nagpur'}]}})),
@@ -32,7 +38,76 @@ const press = async (tree, label) => {
   const target = tree.root.findAllByType(TouchableOpacity).find(node => node.props.accessibilityLabel === label || node.findAllByType(Text).some(text => text.props.children === label));
   await act(async () => target.props.onPress());
 };
-beforeEach(() => {jest.clearAllMocks(); AsyncStorage.getItem.mockResolvedValue(null); AsyncStorage.setItem.mockResolvedValue(undefined);});
+beforeEach(() => {jest.clearAllMocks(); useGetProfileQuery.mockReturnValue({}); AsyncStorage.getItem.mockResolvedValue(null); AsyncStorage.setItem.mockResolvedValue(undefined);});
+
+test('backend profile supplies Account, My Profile and the edit form; failures can retry', async () => {
+  const refetch = jest.fn();
+  useGetProfileQuery.mockReturnValue({currentData: {success: true, data: [{UserID: 10, FirstName: 'SHUBHAM', LastName: 'GHODPAGE', MobileNo: '8766568596', Email: ''}]}, refetch});
+  let tree;
+  await act(async () => {tree = create(<AccountNavigator />);});
+  const hasText = value => tree.root.findAllByType(Text).some(node => node.props.children === value);
+  expect(hasText('SHUBHAM GHODPAGE')).toBe(true);
+  await press(tree, 'My Profile');
+  expect(hasText('8766568596')).toBe(true);
+  expect(hasText('Not added')).toBe(true);
+  await press(tree, 'Edit Profile');
+  expect(tree.root.findAllByType(TextInput).find(node => node.props.accessibilityLabel === 'Full name *').props.value).toBe('SHUBHAM GHODPAGE');
+  await press(tree, 'Go back');
+  useGetProfileQuery.mockReturnValue({isError: true, refetch});
+  await act(async () => tree.update(<AccountNavigator />));
+  await press(tree, 'Try Again');
+  expect(refetch).toHaveBeenCalledTimes(1);
+  await act(async () => tree.unmount());
+});
+
+test('profile opens backend addresses and supports retry and empty results', async () => {
+  const refetch = jest.fn();
+  useGetUserAddressesQuery.mockReturnValue({currentData: {success: true, data: [{AddressID: 3, AddressType: 'WORK', AddressLine1: 'BAJRANG NAGAR', AddressLine2: '', Landmark: 'Hudkeshwar', AreaName: 'Trimurtinagar', CityName: 'Nagpur', Pincode: '440022', IsDefault: true}]}, refetch});
+  let tree;
+  await act(async () => {tree = create(<AccountNavigator />);});
+  await press(tree, 'My Profile');
+  await press(tree, 'My Addresses');
+  const hasText = value => tree.root.findAllByType(Text).some(node => node.props.children === value);
+  for (const value of ['WORK', 'BAJRANG NAGAR', 'Hudkeshwar', 'Trimurtinagar', 'Nagpur', '440022', 'Default address']) {expect(hasText(value)).toBe(true);}
+  useGetUserAddressesQuery.mockReturnValue({isError: true, refetch});
+  await act(async () => tree.update(<AccountNavigator />));
+  await press(tree, 'Try Again');
+  expect(refetch).toHaveBeenCalledTimes(1);
+  useGetUserAddressesQuery.mockReturnValue({currentData: {success: true, data: []}, refetch});
+  await act(async () => tree.update(<AccountNavigator />));
+  expect(hasText('No saved addresses found.')).toBe(true);
+  await act(async () => tree.unmount());
+});
+
+test('address edit loads details, saves exact fields and delete requires confirmation', async () => {
+  const address = {AddressID: 4, AddressType: 'WORK', AddressLine1: 'Old road', AddressLine2: '', Landmark: 'Hudkeshwar', Pincode: '440022', Latitude: 21.0898, Longitude: 79.135};
+  const refetch = jest.fn();
+  const get = jest.fn(() => ({unwrap: async () => ({success: true, data: [address]})}));
+  const update = jest.fn(() => ({unwrap: async () => ({success: true})}));
+  const remove = jest.fn(() => ({unwrap: async () => ({success: true})}));
+  useGetUserAddressByIdMutation.mockReturnValue([get]);
+  useUpdateAddressMutation.mockReturnValue([update]);
+  useDeleteAddressMutation.mockReturnValue([remove]);
+  useGetUserAddressesQuery.mockReturnValue({currentData: {success: true, data: [address]}, refetch});
+  const alert = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
+  let tree;
+  await act(async () => {tree = create(<AccountNavigator />);});
+  await press(tree, 'My Profile'); await press(tree, 'My Addresses'); await press(tree, 'Edit');
+  expect(get).toHaveBeenCalledWith({AddressID: '4'});
+  const input = label => tree.root.findAllByType(TextInput).find(node => node.props.accessibilityLabel === label);
+  expect(input('AddressLine1').props.value).toBe('Old road');
+  await act(async () => input('Pincode').props.onChangeText('bad'));
+  await press(tree, 'Save Address'); expect(update).not.toHaveBeenCalled();
+  await act(async () => {input('Pincode').props.onChangeText('440022'); input('AddressLine1').props.onChangeText('Updated road');});
+  await press(tree, 'Save Address');
+  expect(update).toHaveBeenCalledWith({...address, AddressID: '4', AddressLine1: 'Updated road', Latitude: '21.0898', Longitude: '79.135'});
+  expect(refetch).toHaveBeenCalledTimes(1);
+  await press(tree, 'Delete'); expect(remove).not.toHaveBeenCalled();
+  await act(async () => alert.mock.calls.at(-1)[2].find(button => button.text === 'Delete').onPress());
+  expect(remove).toHaveBeenCalledWith({AddressID: '4'});
+  expect(refetch).toHaveBeenCalledTimes(2);
+  await act(async () => tree.unmount()); alert.mockRestore();
+});
 
 test('contact buttons open the supplied number and handle unavailable apps', async () => {
   const openURL = jest.spyOn(Linking, 'openURL').mockResolvedValue(undefined);

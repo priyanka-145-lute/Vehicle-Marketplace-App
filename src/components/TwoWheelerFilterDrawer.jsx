@@ -2,6 +2,7 @@ import {useThemeStyles} from '../theme/colors';
 import React, {useState} from 'react';
 import {Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import BrandDropdown from './BrandDropdown';
 
 const MIN_PRICE = 10000;
 const MAX_PRICE = 500000;
@@ -74,7 +75,6 @@ const TwoWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
 
   const update = (key, value) => setDraft(current => ({...current, [key]: value}));
   const years = ['Any Year', '2026', '2025', '2024', '2023', '2022', '2021', '2020'];
-  const brands = ['All Brands', 'Yamaha', 'Honda', 'Royal Enfield', 'KTM', 'Suzuki', 'TVS', 'Ather', 'Bajaj'];
   const models = ['All Models', 'R15 V4', 'Activa 6G', 'Classic 350', 'Duke 390', 'Access 125', 'Apache RTR 200', '450X', 'Pulsar N160'];
 
   return (
@@ -93,7 +93,7 @@ const TwoWheelerFilterDrawer = ({visible, filters, onClose, onApply}) => {
             <Text style={styles.label}>Fuel Type</Text><View style={styles.chipRow}>{['All', 'Petrol', 'Electric', 'CNG'].map(value => <Chip key={value} label={value} active={draft.fuel === value} onPress={() => update('fuel', value)} />)}</View>
 
             <Text style={styles.label}>Registration Year</Text><View style={styles.yearRow}><View style={styles.yearColumn}><Text style={styles.help}>From</Text><Dropdown name="yearFrom" value={draft.yearFrom} values={years} openName={openDropdown} setOpenName={setOpenDropdown} onChange={value => update('yearFrom', value)} /></View><View style={styles.yearColumn}><Text style={styles.help}>To</Text><Dropdown name="yearTo" value={draft.yearTo} values={years} openName={openDropdown} setOpenName={setOpenDropdown} onChange={value => update('yearTo', value)} /></View></View>
-            <Text style={styles.label}>Brand</Text><Dropdown name="brand" value={draft.brand} values={brands} openName={openDropdown} setOpenName={setOpenDropdown} onChange={value => update('brand', value)} />
+            <Text style={styles.label}>Brand</Text><BrandDropdown compact enabled={visible} vehicleType="Bike" value={{BrandName: draft.brand, VehicleBrandId: draft.VehicleBrandId}} placeholder="All Brands" open={openDropdown === 'brand'} onOpenChange={open => setOpenDropdown(open ? 'brand' : null)} onChange={brand => setDraft(current => ({...current, brand: brand?.BrandName || 'All Brands', VehicleBrandId: brand?.VehicleBrandId ?? null, VEHICLETYPEID: brand?.VEHICLETYPEID ?? null, model: 'All Models'}))} />
             <Text style={styles.label}>Model</Text><Dropdown name="model" value={draft.model} values={models} openName={openDropdown} setOpenName={setOpenDropdown} onChange={value => update('model', value)} />
           </ScrollView>
           <View style={styles.actions}><TouchableOpacity style={styles.applyButton} onPress={() => onApply(draft)}><Text style={styles.applyText}>Apply Filters</Text></TouchableOpacity><TouchableOpacity style={styles.clearButton} onPress={() => setDraft(TWO_WHEELER_FILTER_DEFAULTS)}><Text style={styles.clearText}>Clear All</Text></TouchableOpacity></View>

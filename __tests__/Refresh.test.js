@@ -59,6 +59,28 @@ test('concurrent 401 responses share one refresh request', async () => {
   expect(global.fetch.mock.calls.filter(([request]) => isRefresh(request))).toHaveLength(1);
   first.unsubscribe(); second.unsubscribe();
 });
+
+test('a newly refreshed token rejected with 401 ends the session without a refresh loop', async () => {
+  global.fetch = jest.fn(async request => isRefresh(request) ? response({success: true, data: rotated}) : response({}, 401));
+  const request = store.dispatch(api.endpoints.getProfile.initiate());
+  await request;
+  expect(global.fetch).toHaveBeenCalledTimes(3);
+  expect(store.getState().auth.session).toBeNull();
+  expect(Keychain.resetGenericPassword).toHaveBeenCalled();
+  request.unsubscribe();
+});
+
+test.each(['getProfile', 'getUserAddresses'])('%s refreshes the token and retries its protected AuthCustomer endpoint', async endpoint => {
+  global.fetch = jest.fn(async request => {
+    if (isRefresh(request)) {return response({success: true, data: rotated});}
+    return request.headers.get('Authorization') === 'Bearer new-access' ? response({success: true, data: []}) : response({}, 401);
+  });
+  const request = store.dispatch(api.endpoints[endpoint].initiate());
+  await expect(request.unwrap()).resolves.toEqual({success: true, data: []});
+  expect(global.fetch).toHaveBeenCalledTimes(3);
+  expect(store.getState().auth.session.refreshToken).toBe('new-refresh');
+  request.unsubscribe();
+});
 test.each([
   ['HTTP rejection', () => response({}, 401)],
   ['business rejection', () => response({success: false})],

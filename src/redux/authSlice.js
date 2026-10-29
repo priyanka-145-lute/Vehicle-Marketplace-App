@@ -20,8 +20,15 @@ const writeCredentials = task => {
   storageWrite = result.catch(() => {});
   return result;
 };
-const expiresInFuture = value => typeof value === 'string' &&
-  Date.parse(value.replace(/(\.\d{3})\d+/, '$1')) > Date.now();
+const expiresInFuture = value => {
+  if (typeof value !== 'string') {return false;}
+  const normalized = value.replace(/(\.\d{3})\d+/, '$1');
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})?$/i.test(normalized)) {return false;}
+  const explicitZone = /(?:Z|[+-]\d{2}:\d{2})$/i.test(normalized);
+  const expiry = Date.parse(explicitZone ? normalized : `${normalized}Z`);
+  // Without a timezone, let the server enforce expiry rather than guessing the device's zone.
+  return Number.isFinite(expiry) && (!explicitZone || expiry > Date.now());
+};
 
 export const isValidSession = session => Boolean(
   session && typeof session.accessToken === 'string' && session.accessToken.trim() &&

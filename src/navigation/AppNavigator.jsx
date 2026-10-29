@@ -96,7 +96,8 @@ const AppNavigator = () => {
 
 
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => Boolean(state.auth.session));
+  const currentSession = useSelector(state => state.auth.session);
+  const isLoggedIn = Boolean(currentSession);
   const [restoring, setRestoring] = useState(true);
   const updatingSession = useRef(false);
 
@@ -119,8 +120,18 @@ const AppNavigator = () => {
       if (session) {
         await saveSession(session);
       } else {
+        let remoteFailed = false;
+        if (currentSession?.refreshToken) {
+          const request = dispatch(api.endpoints.logout.initiate({RefreshToken: currentSession.refreshToken}));
+          try {
+            const response = await request.unwrap();
+            remoteFailed = response?.success === false;
+          } catch {remoteFailed = true;} finally {request.reset();}
+        }
         await clearSession();
+        dispatch(setSession(null));
         dispatch(api.util.resetApiState());
+        if (remoteFailed) {Alert.alert('Logged out on this device', 'Could not confirm logout with the server.');}
       }
       dispatch(setSession(session || null));
     } catch (error) {

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 import LocationFields from '../components/LocationFields';
+import {useDeleteAddressMutation, useGetProfileQuery, useGetUserAddressByIdMutation, useGetUserAddressesQuery, useUpdateAddressMutation} from '../redux/api';
 
 export const AccountLogoutContext = createContext(null);
 const ProfileContext = createContext(null);
@@ -56,8 +57,68 @@ export const ProfileScreen = ({navigation}) => {
     <View style={styles.card}>{[['Full name', 'name'], ['Mobile number', 'mobile'], ['Email address', 'email'], ['City', 'city']].map(([label, key]) => <View key={key} style={styles.detail}><Text style={styles.muted}>{label}</Text><Text style={styles.value}>{profile[key] || 'Not added'}</Text></View>)}</View>
     <View style={styles.card}><View style={styles.themeRow}><View style={styles.menuIcon}><Icon name="moon-outline" size={22} color="#ef4444" /></View><View style={styles.flex}><Text style={styles.menuTitle}>Dark Theme</Text><Text style={styles.muted}>Use dark colours across the app</Text></View><Switch accessibilityLabel="Dark theme" value={isDark} onValueChange={toggleTheme} trackColor={{false: colors.border, true: '#fca5a5'}} thumbColor={isDark ? '#ef4444' : '#f8fafc'} /></View></View>
     <Button title="Edit Profile" onPress={() => navigation.navigate('EditProfile')} />
+    <Button title="My Addresses" onPress={() => navigation.navigate('MyAddresses')} />
     <Text style={styles.note}>Profile details are saved on this device. Editing your mobile number here does not change your sign-in number.</Text>
   </ScrollView>}</Page>;
+};
+
+export const UserAddressesScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+  const {currentData, isFetching, isError, refetch} = useGetUserAddressesQuery(undefined, {refetchOnMountOrArgChange: true});
+  const [getAddress] = useGetUserAddressByIdMutation();
+  const [updateAddress] = useUpdateAddressMutation();
+  const [deleteAddress] = useDeleteAddressMutation();
+  const [form, setForm] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const pending = useRef(false);
+  const fields = ['AddressType', 'AddressLine1', 'AddressLine2', 'Landmark', 'Pincode', 'Latitude', 'Longitude'];
+  const run = async action => {
+    if (pending.current) {return;}
+    pending.current = true; setBusy(true); setError('');
+    try {await action();} catch (failure) {setError(failure.data?.message || failure.message || 'Could not complete the request. Please try again.');}
+    finally {pending.current = false; setBusy(false);}
+  };
+  const edit = address => run(async () => {
+    const response = await getAddress({AddressID: String(address.AddressID)}).unwrap();
+    const detail = Array.isArray(response.data) ? response.data[0] : response.data;
+    if (response.success !== true || !detail || String(detail.AddressID) !== String(address.AddressID)) {throw new Error('Could not load this address. Please try again.');}
+    setForm({AddressID: String(detail.AddressID), ...Object.fromEntries(fields.map(key => [key, String(detail[key] ?? '')]))});
+  });
+  const save = () => {
+    const body = Object.fromEntries(Object.entries(form).map(([key, value]) => [key, value.trim()]));
+    if (!body.AddressType || !body.AddressLine1 || !/^[0-9]{6}$/.test(body.Pincode)) {setError('Enter address type, address line 1 and a valid 6-digit pincode.'); return;}
+    if (body.Latitude === '' || body.Longitude === '' || !Number.isFinite(Number(body.Latitude)) || Math.abs(Number(body.Latitude)) > 90 || !Number.isFinite(Number(body.Longitude)) || Math.abs(Number(body.Longitude)) > 180) {setError('Enter valid latitude and longitude.'); return;}
+    run(async () => {
+      const response = await updateAddress(body).unwrap();
+      if (response.success !== true) {throw new Error(response.message || 'Could not update address.');}
+      setForm(null); refetch();
+    });
+  };
+  const remove = address => Alert.alert('Delete address?', 'This saved address will be removed.', [{text: 'Cancel', style: 'cancel'}, {text: 'Delete', style: 'destructive', onPress: () => run(async () => {
+    const response = await deleteAddress({AddressID: String(address.AddressID)}).unwrap();
+    if (response.success !== true) {throw new Error(response.message || 'Could not delete address.');}
+    refetch();
+  })}]);
+  const invalid = currentData && (currentData.success !== true || !Array.isArray(currentData.data));
+  const addresses = Array.isArray(currentData?.data) ? currentData.data : [];
+  if (form) {return <Page title="Edit Address" navigation={navigation}><KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}><ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+    {fields.map(key => <View key={key} style={styles.field}><Text style={styles.label}>{key}</Text><TextInput accessibilityLabel={key} style={styles.input} placeholderTextColor={colors.textMuted} value={form[key]} editable={!busy} onChangeText={value => setForm(current => ({...current, [key]: value}))} keyboardType={key === 'Pincode' ? 'number-pad' : 'default'} /></View>)}
+    {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
+    <Button title={busy ? 'Saving…' : 'Save Address'} disabled={busy} onPress={save} />
+    <Button title="Cancel" disabled={busy} onPress={() => {setForm(null); setError('');}} />
+  </ScrollView></KeyboardAvoidingView></Page>;}
+  return <Page title="My Addresses" navigation={navigation}><ScrollView contentContainerStyle={styles.content}>
+    {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
+    {busy ? <ActivityIndicator accessibilityLabel="Updating address" color="#ef4444" /> : null}
+    {isFetching ? <ActivityIndicator accessibilityLabel="Loading addresses" color="#ef4444" /> : isError || invalid ? <View><Text accessibilityRole="alert" style={styles.error}>Could not load your addresses. Please try again.</Text><Button title="Try Again" onPress={refetch} /></View> : addresses.length ? addresses.map(address => <View key={address.AddressID} style={[styles.card, styles.detail]}>
+      <Text style={styles.menuTitle}>{address.AddressType || 'Address'}</Text>
+      {address.IsDefault === true && <Text style={styles.muted}>Default address</Text>}
+      {[address.AddressLine1, address.AddressLine2, address.Landmark, address.AreaName, address.CityName, address.Pincode].filter(value => value != null && value !== '').map((value, index) => <Text key={index} style={styles.value}>{value}</Text>)}
+      <Button title="Edit" disabled={busy || address.AddressID == null} onPress={() => edit(address)} />
+      <Button title="Delete" disabled={busy || address.AddressID == null} onPress={() => remove(address)} />
+    </View>) : <Text style={styles.body}>No saved addresses found.</Text>}
+  </ScrollView></Page>;
 };
 
 export const EditProfileScreen = ({navigation}) => {
@@ -120,6 +181,7 @@ const InformationScreen = ({navigation, route}) => {
 };
 
 const AccountNavigator = () => {
+  const {currentData, isLoading, isError, refetch} = useGetProfileQuery(undefined, {refetchOnMountOrArgChange: true});
   const [profile, setProfile] = useState(EMPTY_PROFILE);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
@@ -134,11 +196,18 @@ const AccountNavigator = () => {
     } catch {setLoadError(true);} finally {setLoading(false);}
   };
   useEffect(() => {load();}, []);
+  const customer = currentData?.data?.[0];
+  const invalidProfile = currentData && (currentData.success !== true || !Array.isArray(currentData.data) || !customer || ['FirstName', 'LastName', 'MobileNo', 'Email'].some(key => customer[key] != null && typeof customer[key] !== 'string'));
+  useEffect(() => {
+    if (!loading && customer && !invalidProfile) {
+      setProfile(current => ({...current, name: [customer.FirstName, customer.LastName].filter(Boolean).join(' ').trim(), mobile: customer.MobileNo || '', email: customer.Email || ''}));
+    }
+  }, [customer, invalidProfile, loading]);
   const saveProfile = async next => {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     setProfile(next);
   };
-  return <ProfileContext.Provider value={{profile, loading, loadError, load, saveProfile}}><Stack.Navigator screenOptions={{headerShown: false}}><Stack.Screen name="AccountHome" component={AccountScreen} /><Stack.Screen name="Profile" component={ProfileScreen} /><Stack.Screen name="EditProfile" component={EditProfileScreen} /><Stack.Screen name="ContactUs" component={InformationScreen} /><Stack.Screen name="PrivacyPolicy" component={InformationScreen} /><Stack.Screen name="TermsConditions" component={InformationScreen} /></Stack.Navigator></ProfileContext.Provider>;
+  return <ProfileContext.Provider value={{profile, loading: loading || isLoading, loadError: loadError || isError || invalidProfile, load: () => {load(); refetch();}, saveProfile}}><Stack.Navigator screenOptions={{headerShown: false}}><Stack.Screen name="AccountHome" component={AccountScreen} /><Stack.Screen name="Profile" component={ProfileScreen} /><Stack.Screen name="EditProfile" component={EditProfileScreen} /><Stack.Screen name="MyAddresses" component={UserAddressesScreen} /><Stack.Screen name="ContactUs" component={InformationScreen} /><Stack.Screen name="PrivacyPolicy" component={InformationScreen} /><Stack.Screen name="TermsConditions" component={InformationScreen} /></Stack.Navigator></ProfileContext.Provider>;
 };
 export default AccountNavigator;
 
