@@ -168,15 +168,15 @@
     "semantic_hash": ""
   },
   "src/components/BannerSlider.jsx": {
-    "mtime": 1793181107.4271464,
-    "seen": 1793181224.0866685,
+    "mtime": 1793343128.3490086,
+    "seen": 1793343161.137859,
     "ast_hash": "716edb5e120aff6839eea4a3493e0a4e",
     "semantic_hash": ""
   },
   "src/components/CategoryCard.jsx": {
-    "mtime": 1793102688.3382778,
-    "seen": 1793102707.5314667,
-    "ast_hash": "e388b67adaca6ac44e35501e8096414e",
+    "mtime": 1793343128.2042596,
+    "seen": 1793343161.137859,
+    "ast_hash": "9887ad793e82ea2fc58ff8ee968f6a7a",
     "semantic_hash": ""
   },
   "src/components/CategoryTab.jsx": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "src/components/Header.jsx": {
-    "mtime": 1793102688.3392773,
-    "seen": 1793102707.5314667,
-    "ast_hash": "b006e728c5e9e372a6df8da8ed0c0e0d",
+    "mtime": 1793268268.5487268,
+    "seen": 1793268307.663135,
+    "ast_hash": "3fec286bde69422642dde02665207357",
     "semantic_hash": ""
   },
   "src/components/NetworkVehicleImage.jsx": {
@@ -216,21 +216,21 @@
     "semantic_hash": ""
   },
   "src/components/SearchBar.jsx": {
-    "mtime": 1793102688.340277,
-    "seen": 1793102707.5314667,
-    "ast_hash": "9d78fc8da6b4427fa6719a19c9625a6d",
+    "mtime": 1793270569.8416743,
+    "seen": 1793270611.5226712,
+    "ast_hash": "e509fb1ad88a7aa54801c11cb4883f7f",
     "semantic_hash": ""
   },
   "src/components/SectionHeader.jsx": {
-    "mtime": 1793102688.340277,
-    "seen": 1793102707.5314667,
-    "ast_hash": "9cf5f6ad5cf6a38dd704784219c4cba1",
+    "mtime": 1793268069.4463658,
+    "seen": 1793268152.1975088,
+    "ast_hash": "aee95079bfa89ceb39bde2d1409614ac",
     "semantic_hash": ""
   },
   "src/components/TopVehicleCard.jsx": {
-    "mtime": 1793102688.340277,
-    "seen": 1793102707.5314667,
-    "ast_hash": "9a95c7d69bafff686f9c582498b0a3a5",
+    "mtime": 1793271129.5979898,
+    "seen": 1793271168.7122889,
+    "ast_hash": "49c6ed7145a95d5f7718b227320572ab",
     "semantic_hash": ""
   },
   "src/components/TwoWheelerFilterDrawer.jsx": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "src/components/VehicleCard.jsx": {
-    "mtime": 1793102688.3412774,
-    "seen": 1793102707.5314667,
-    "ast_hash": "81e16a7058e08bcd0baf1ae958e44688",
+    "mtime": 1793271129.2412462,
+    "seen": 1793271168.7122889,
+    "ast_hash": "f37b6bf55c960bd55b4c47206c0dd3e6",
     "semantic_hash": ""
   },
   "src/components/WishlistHeart.jsx": {
@@ -264,8 +264,8 @@
     "semantic_hash": ""
   },
   "src/data/dummyData.jsx": {
-    "mtime": 1792826478.3203812,
-    "seen": 1793102452.514252,
+    "mtime": 1793343128.4137795,
+    "seen": 1793343161.137859,
     "ast_hash": "26a9b2c002f3cae3a41c11a9e7cf539d",
     "semantic_hash": ""
   },
@@ -324,9 +324,9 @@
     "semantic_hash": ""
   },
   "src/screens/HomeScreen.jsx": {
-    "mtime": 1793102688.349277,
-    "seen": 1793102707.5314667,
-    "ast_hash": "10ead05ad6620be0f54ec24be082dfd7",
+    "mtime": 1793343128.146608,
+    "seen": 1793343161.137859,
+    "ast_hash": "cdf1592a0b0a920da974da4c18ac9c8e",
     "semantic_hash": ""
   },
   "src/screens/MessageScreen.tsx": {
@@ -348,9 +348,9 @@
     "semantic_hash": ""
   },
   "src/screens/PartsScreen.jsx": {
-    "mtime": 1793102688.3522804,
-    "seen": 1793102707.5314667,
-    "ast_hash": "12f9e3f347889170121e79eb6816e702",
+    "mtime": 1793271328.9519641,
+    "seen": 1793271338.4849122,
+    "ast_hash": "8b00f5f3c422d34140a279d077e1dfb3",
     "semantic_hash": ""
   },
   "src/screens/PreferencesScreens.jsx": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "src/screens/ServicesScreen.jsx": {
-    "mtime": 1793102688.3542786,
-    "seen": 1793102707.5314667,
-    "ast_hash": "ce43204b6df6d1752bfd77cc421afd88",
+    "mtime": 1793271328.9539528,
+    "seen": 1793271338.4849122,
+    "ast_hash": "da61a83a37776634f5de330665b5322d",
     "semantic_hash": ""
   },
   "src/screens/TwoWheelerDetailScreen.jsx": {
@@ -378,15 +378,15 @@
     "semantic_hash": ""
   },
   "src/screens/VehicleScreen.jsx": {
-    "mtime": 1793102688.3552825,
-    "seen": 1793102707.5314667,
-    "ast_hash": "cf95e3cb0e17a8a6914958419d4c8381",
+    "mtime": 1793268125.982899,
+    "seen": 1793268152.1975088,
+    "ast_hash": "0c233ee37f67b70150ec0928ecbdcbe5",
     "semantic_hash": ""
   },
   "src/screens/WishlistScreen.jsx": {
-    "mtime": 1793102688.3562765,
-    "seen": 1793102707.5314667,
-    "ast_hash": "751ea1ceadcfef1ff0aaa8a7d4844b74",
+    "mtime": 1793271129.9424431,
+    "seen": 1793271168.7122889,
+    "ast_hash": "e06c2397bc925a9e8d59e5c1e1f427fa",
     "semantic_hash": ""
   },
   "src/screens/authScreen/LoginScreen.jsx": {
@@ -705,6 +705,30 @@
     "mtime": 1793183065.9622426,
     "seen": 1793183288.0121458,
     "ast_hash": "ffe69fdcf2b9abd64300989602b4530e",
+    "semantic_hash": ""
+  },
+  "__tests__/VehicleLayout.test.jsx": {
+    "mtime": 1793268125.9913108,
+    "seen": 1793268152.1975088,
+    "ast_hash": "975fd38f3e087326ce8620ec02a9e191",
+    "semantic_hash": ""
+  },
+  "__tests__/HomeLayout.test.jsx": {
+    "mtime": 1793343128.4137795,
+    "seen": 1793343161.137859,
+    "ast_hash": "e275ea7660f38a91754296019042f202",
+    "semantic_hash": ""
+  },
+  "__tests__/PartsServices.test.jsx": {
+    "mtime": 1793270589.512383,
+    "seen": 1793270611.5226712,
+    "ast_hash": "f4c5b94908259a15bccdbb2d07731bed",
+    "semantic_hash": ""
+  },
+  "__tests__/WishlistCards.test.jsx": {
+    "mtime": 1793271150.337281,
+    "seen": 1793271168.7122889,
+    "ast_hash": "03ee1f7969d2eac0c97033d4109c3362",
     "semantic_hash": ""
   }
 }

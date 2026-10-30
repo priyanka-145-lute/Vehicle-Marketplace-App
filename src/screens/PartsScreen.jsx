@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SearchBar from '../components/SearchBar';
 
 const {width} = Dimensions.get('window');
 const twoWheelerPartsImage = require('../assets/images/parts/two-wheeler-parts.png');
@@ -18,7 +19,7 @@ const fourWheelerPartsImage = require('../assets/images/parts/four-wheeler-parts
 
 const PARTS = {
   '2wheeler-parts': {
-    title: '2 Wheeler Parts',
+    title: 'Two Wheeler Old Parts',
     subtitle: 'Parts on sale for your bike & scooter',
     categoryLabel: 'Motorcycle & scooter parts only',
     productImage: twoWheelerPartsImage,
@@ -37,7 +38,7 @@ const PARTS = {
     ],
   },
   '4wheeler-parts': {
-    title: '4 Wheeler Parts',
+    title: 'Four Wheeler Old Parts',
     subtitle: 'Quality car parts at sale prices',
     categoryLabel: 'Car parts only',
     productImage: fourWheelerPartsImage,
@@ -64,6 +65,8 @@ const PartsScreen = ({navigation, route}) => {
   const insets = useSafeAreaInsets();
   const sliderRef = useRef(null);
   const [activeBanner, setActiveBanner] = useState(0);
+  const [search, setSearch] = useState('');
+  const items = catalog.items.filter(item => `${item.name} ${item.brand}`.toLowerCase().includes(search.trim().toLowerCase()));
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -79,16 +82,20 @@ const PartsScreen = ({navigation, route}) => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton} accessibilityLabel="Go back">
           <Icon name="chevron-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <View><Text style={styles.title}>{catalog.title}</Text><Text style={styles.subtitle}>{catalog.subtitle}</Text></View>
+        <View style={styles.headerContent}><Text style={styles.title}>{catalog.title}</Text><Text style={styles.subtitle}>{catalog.subtitle}</Text></View>
       </View>
+
+      <SearchBar value={search} onChangeText={setSearch} placeholder="Search old parts..." />
 
       <FlatList
         ListHeaderComponent={(
           <>
+            <Text style={styles.sectionHeading}>Featured Parts</Text>
             <FlatList
               ref={sliderRef}
               data={catalog.banners}
               horizontal
+              getItemLayout={(_, index) => ({length: width, offset: width * index, index})}
               pagingEnabled
               showsHorizontalScrollIndicator={false}
               keyExtractor={item => item.id}
@@ -97,17 +104,18 @@ const PartsScreen = ({navigation, route}) => {
             />
             <View style={styles.dots}>{catalog.banners.map((item, index) => <View key={item.id} style={[styles.dot, activeBanner === index && styles.activeDot]} />)}</View>
             <View style={styles.saleHeading}>
-              <Text style={styles.saleTitle}>Sale parts</Text>
+              <Text style={styles.saleTitle}>All Parts</Text>
               <View style={styles.categoryChip}><Text style={styles.categoryChipText}>{catalog.categoryLabel}</Text></View>
             </View>
           </>
         )}
-        data={catalog.items}
+        data={items}
+        ListEmptyComponent={<Text style={styles.emptyText}>No parts found</Text>}
         keyExtractor={item => item.id}
         numColumns={2}
         columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.list}
-        renderItem={({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card}><View style={styles.badge}><Text style={styles.badgeText}>SALE</Text></View><Image source={catalog.productImage} style={styles.partImage} /><Text style={styles.partName} numberOfLines={2}>{item.name}</Text><Text style={styles.brand}>{item.brand}</Text><View style={styles.priceRow}><Text style={styles.price}>{item.price}</Text><Text style={styles.oldPrice}>{item.oldPrice}</Text></View></TouchableOpacity>}
+        contentContainerStyle={[styles.list, {paddingBottom: insets.bottom + 20}]}
+        renderItem={({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card}><View style={styles.badge}><Text style={styles.badgeText}>SALE</Text></View><Image source={catalog.productImage} style={styles.partImage} /><Text style={styles.partName} numberOfLines={2}>{item.name}</Text><Text style={styles.brand} numberOfLines={1}>{item.brand}</Text><View style={styles.priceRow}><Text style={styles.price}>{item.price}</Text><Text style={styles.oldPrice}>{item.oldPrice}</Text></View></TouchableOpacity>}
       />
     </View>
   );
@@ -116,5 +124,7 @@ const PartsScreen = ({navigation, route}) => {
 export default PartsScreen;
 
 const createStyles = colors => StyleSheet.create({
-  container: {flex: 1, backgroundColor: colors.background}, header: {paddingHorizontal: 15, paddingTop: 10, paddingBottom: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 12}, backButton: {width: 42, height: 42, borderRadius: 21, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'}, title: {fontSize: 20, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 12, color: colors.textMuted, marginTop: 3}, banner: {width, height: 190, paddingHorizontal: 14, paddingTop: 14}, bannerImage: {width: width - 28, height: 176, borderRadius: 18, resizeMode: 'cover'}, overlay: {position: 'absolute', left: 14, right: 14, top: 14, height: 176, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.40)'}, bannerText: {position: 'absolute', left: 34, top: 42}, offer: {fontSize: 23, fontWeight: '900', color: '#fff'}, bannerLabel: {fontSize: 13, color: '#fff', marginTop: 5}, shopButton: {marginTop: 14, alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 7, backgroundColor: '#ef4444'}, shopText: {fontSize: 10, fontWeight: '800', color: '#fff'}, dots: {flexDirection: 'row', justifyContent: 'center', marginTop: 4, marginBottom: 10}, dot: {width: 7, height: 7, marginHorizontal: 4, borderRadius: 4, backgroundColor: colors.textMuted}, activeDot: {width: 18, backgroundColor: '#ef4444'}, saleHeading: {marginHorizontal: 14, marginVertical: 8}, saleTitle: {fontSize: 20, fontWeight: '800', color: colors.text}, categoryChip: {alignSelf: 'flex-start', marginTop: 6, paddingHorizontal: 9, paddingVertical: 5, borderRadius: 7, backgroundColor: colors.accentSurface}, categoryChipText: {fontSize: 11, fontWeight: '700', color: '#ef4444'}, list: {paddingBottom: 30}, row: {justifyContent: 'space-between', paddingHorizontal: 14}, card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 15, backgroundColor: colors.surface, elevation: 2}, badge: {position: 'absolute', top: 10, left: 10, zIndex: 1, paddingHorizontal: 7, paddingVertical: 4, borderRadius: 6, backgroundColor: '#ef4444'}, badgeText: {fontSize: 9, fontWeight: '800', color: '#fff'}, partImage: {width: '100%', height: 116, borderRadius: 10, backgroundColor: colors.surfaceMuted}, partName: {fontSize: 14, fontWeight: '700', color: colors.text, marginTop: 10, minHeight: 34}, brand: {fontSize: 11, color: colors.textMuted, marginTop: 3}, priceRow: {flexDirection: 'row', alignItems: 'center', gap: 7, marginTop: 8}, price: {fontSize: 15, fontWeight: '800', color: '#ef4444'}, oldPrice: {fontSize: 11, color: colors.textMuted, textDecorationLine: 'line-through'},
+  sectionHeading: {fontSize: 17, fontWeight: '700', color: colors.text, marginHorizontal: 16, marginTop: 12}, emptyText: {padding: 24, textAlign: 'center', color: colors.textMuted},
+  headerContent: {flex: 1},
+  container: {flex: 1, backgroundColor: colors.background}, header: {paddingHorizontal: 15, paddingTop: 10, paddingBottom: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 12}, backButton: {width: 42, height: 42, borderRadius: 21, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'}, title: {fontSize: 19, fontWeight: '800', color: colors.text}, subtitle: {fontSize: 12, color: colors.textMuted, marginTop: 3}, banner: {width, height: 160, paddingHorizontal: 14, paddingTop: 14}, bannerImage: {width: width - 28, height: 146, borderRadius: 18, resizeMode: 'cover'}, overlay: {position: 'absolute', left: 14, right: 14, top: 14, height: 146, borderRadius: 18, backgroundColor: 'rgba(0,0,0,0.40)'}, bannerText: {position: 'absolute', left: 34, right: 24, top: 30}, offer: {fontSize: 23, fontWeight: '900', color: '#fff'}, bannerLabel: {fontSize: 13, color: '#fff', marginTop: 5}, shopButton: {marginTop: 14, alignSelf: 'flex-start', paddingVertical: 8, paddingHorizontal: 12, borderRadius: 7, backgroundColor: '#ef4444'}, shopText: {fontSize: 10, fontWeight: '800', color: '#fff'}, dots: {flexDirection: 'row', justifyContent: 'center', marginTop: 4, marginBottom: 10}, dot: {width: 7, height: 7, marginHorizontal: 4, borderRadius: 4, backgroundColor: colors.textMuted}, activeDot: {width: 18, backgroundColor: '#ef4444'}, saleHeading: {marginHorizontal: 14, marginVertical: 8}, saleTitle: {fontSize: 17, fontWeight: '800', color: colors.text}, categoryChip: {alignSelf: 'flex-start', marginTop: 6, paddingHorizontal: 9, paddingVertical: 5, borderRadius: 7, backgroundColor: colors.accentSurface}, categoryChipText: {fontSize: 11, fontWeight: '700', color: '#ef4444'}, list: {paddingBottom: 30}, row: {justifyContent: 'space-between', paddingHorizontal: 10}, card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: colors.surface, shadowColor: '#000', shadowOffset: {width: 0, height: 2}, shadowOpacity: 0.07, shadowRadius: 6, elevation: 3}, badge: {position: 'absolute', top: 10, left: 10, zIndex: 1, paddingHorizontal: 7, paddingVertical: 4, borderRadius: 6, backgroundColor: '#ef4444'}, badgeText: {fontSize: 9, fontWeight: '800', color: '#fff'}, partImage: {width: '100%', height: 115, resizeMode: 'contain', borderRadius: 12, backgroundColor: colors.surfaceMuted}, partName: {fontSize: 15, fontWeight: '700', color: colors.text, marginTop: 10, minHeight: 38}, brand: {fontSize: 12, color: colors.textMuted, marginTop: 5}, priceRow: {flexWrap: 'wrap', flexDirection: 'row', alignItems: 'center', gap: 7, marginTop: 6}, price: {fontSize: 15, fontWeight: '700', color: 'red'}, oldPrice: {fontSize: 11, color: colors.textMuted, textDecorationLine: 'line-through'},
 });

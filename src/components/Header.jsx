@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 
-const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSettingsPress, onHelpPress, onLogoutPress}) => {
+const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSettingsPress, onHelpPress, onLogoutPress, compact}) => {
   const {styles} = useThemeStyles(createStyles);
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -25,7 +25,7 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
 
   return (
     <>
-      <View style={[styles.container, isDark && styles.containerDark]}>
+      <View style={[styles.container, isDark && styles.containerDark, compact && styles.compact]}>
 
       <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)} accessibilityLabel="Open menu">
         <Icon name="menu" size={28} color={iconColor} />
@@ -90,6 +90,7 @@ const MenuItem = ({icon, label, destructive, onPress}) => {
 export default Header;
 
 const createStyles = colors => StyleSheet.create({
+  compact: {paddingVertical: 0},
   container: {
     backgroundColor: colors.surface,
     paddingHorizontal: 14,

@@ -10,39 +10,39 @@ const getFallbackImage = type => type === '2wheeler'
   ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
   : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
-const TopVehicleCard = ({item, onPress}) => {
+const TopVehicleCard = ({item, onPress, cardHeight, style}) => {
   const {colors, styles} = useThemeStyles(createStyles);
 
   return (
-    <TouchableOpacity activeOpacity={0.85} style={styles.topCard} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.85} style={[styles.topCard, cardHeight && {height: cardHeight, padding: 8}, style]} onPress={onPress}>
 
       {/* NEW Badge */}
-      <View style={styles.newTag}>
+      <View style={[styles.newTag, cardHeight && {position: 'absolute', left: 8, top: 8, zIndex: 1}]}>
         <Text style={styles.newText}>NEW</Text>
       </View>
 
       {/* Heart */}
-      <WishlistHeart item={item} style={styles.topHeart} color={colors.text} />
+      <WishlistHeart item={{...item, wishlistCardVariant: 'featured', wishlistCardHeight: cardHeight}} style={styles.topHeart} color={colors.text} />
 
       {/* Image */}
       <NetworkVehicleImage
         uri={item.image}
         fallbackUri={getFallbackImage(item.type)}
-        style={styles.topCarImage}
+        style={[styles.topCarImage, cardHeight && {height: undefined, flex: 1, minHeight: 20, marginTop: 0}]}
       />
 
       {/* Title */}
-      <Text style={styles.topCarTitle} numberOfLines={1}>
+      <Text style={[styles.topCarTitle, cardHeight && {marginTop: 4, fontSize: 13}]} numberOfLines={1}>
         {item.title}
       </Text>
 
       {/* Details */}
-      <Text style={styles.topDetails}>
+      <Text style={[styles.topDetails, cardHeight && {marginTop: 2}]} numberOfLines={1}>
         {item.fuel} • {item.transmission}
       </Text>
 
       {/* Price */}
-      <Text style={styles.topPrice}>{item.price}</Text>
+      <Text style={[styles.topPrice, cardHeight && {marginTop: 3, fontSize: 13}]} numberOfLines={1}>{item.price}</Text>
 
     </TouchableOpacity>
   );

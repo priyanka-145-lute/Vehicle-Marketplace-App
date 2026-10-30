@@ -10,12 +10,12 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 
-const SearchBar = ({value, onChangeText, onSaveSearch}) => {
+const SearchBar = ({value, onChangeText, onSaveSearch, compact, placeholder = 'Search categories...'}) => {
   const {styles} = useThemeStyles(createStyles);
 
   const {isDark} = useTheme();
   return (
-    <View style={[styles.container, isDark && styles.containerDark]}>
+    <View style={[styles.container, isDark && styles.containerDark, compact && styles.compact]}>
 
       <Icon
         name="search"
@@ -26,20 +26,20 @@ const SearchBar = ({value, onChangeText, onSaveSearch}) => {
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder="Search categories..."
+        placeholder={placeholder}
         style={[styles.input, isDark && styles.inputDark]}
         placeholderTextColor={isDark ? '#94a3b8' : '#777'}
       />
 
       {value ? <TouchableOpacity onPress={() => onChangeText('')} accessibilityLabel="Clear search"><Icon name="close-circle" size={21} color={isDark ? '#cbd5e1' : '#777'} /></TouchableOpacity> : null}
 
-      <TouchableOpacity onPress={onSaveSearch} accessibilityLabel="Save search">
+      {onSaveSearch && <TouchableOpacity onPress={onSaveSearch} accessibilityLabel="Save search">
         <Icon
           name="options-outline"
           size={22}
           color={isDark ? '#cbd5e1' : '#777'}
         />
-      </TouchableOpacity>
+      </TouchableOpacity>}
 
     </View>
   );
@@ -48,6 +48,7 @@ const SearchBar = ({value, onChangeText, onSaveSearch}) => {
 export default SearchBar;
 
 const createStyles = colors => StyleSheet.create({
+  compact: {height: 40, marginTop: 6, borderRadius: 22},
   container: {
     backgroundColor: colors.surface,
     marginHorizontal: 10,

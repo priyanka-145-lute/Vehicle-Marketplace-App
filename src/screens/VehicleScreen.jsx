@@ -4,12 +4,12 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   FlatList,
   Dimensions,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -191,6 +191,10 @@ const VehicleScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const featuredListRef = useRef(null);
+  const [viewportHeight, setViewportHeight] = useState(0);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [controlsHeight, setControlsHeight] = useState(0);
+  const cardHeight = Math.max(110, Math.floor((viewportHeight - headerHeight - controlsHeight - 16) / 3));
 
   const categories = CATEGORIES[vehicleType] ?? ['All'];
 
@@ -225,7 +229,8 @@ const VehicleScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} onLayout={event => setViewportHeight(event.nativeEvent.layout.height)}>
+        <View testID="vehicle-header" onLayout={event => setHeaderHeight(event.nativeEvent.layout.height)}>
 
         {/* ── Header ── */}
           <Header />
@@ -238,6 +243,7 @@ const VehicleScreen = () => {
 
         {/* ── New Vehicles Section ── */}
         <SectionHeader
+          compact
           emoji="🔥"
           title="New Vehicles"
           onViewAll={() => {
@@ -252,6 +258,7 @@ const VehicleScreen = () => {
             }
           }}
         />
+        </View>
 
         {/* Featured horizontal cards */}
         <FlatList
@@ -265,6 +272,7 @@ const VehicleScreen = () => {
           }}
           renderItem={({item}) => (
             <TopVehicleCard
+              cardHeight={cardHeight}
               item={item}
               onPress={() => {
                 if (vehicleType === '2wheeler') {
@@ -282,7 +290,8 @@ const VehicleScreen = () => {
         />
 
         {/* Pagination Dots */}
-        <View style={styles.dotContainer}>
+        <View testID="vehicle-controls" onLayout={event => setControlsHeight(event.nativeEvent.layout.height)}>
+        <View style={[styles.dotContainer, {marginTop: 8}]}>
           {featuredData.map((item, index) => (
             <View
               key={item.id}
@@ -293,6 +302,7 @@ const VehicleScreen = () => {
 
         {/* ── All Vehicles Section ── */}
         <SectionHeader
+          compact
           emoji="🚘"
           title="All Vehicles"
           onViewAll={() => {
@@ -322,6 +332,7 @@ const VehicleScreen = () => {
             />
           ))}
         </ScrollView>
+        </View>
 
         {/* Vehicle Grid */}
         <FlatList
@@ -332,6 +343,7 @@ const VehicleScreen = () => {
           columnWrapperStyle={styles.columnWrapper}
           renderItem={({item}) => (
             <VehicleCard
+              cardHeight={cardHeight}
               item={item}
               onPress={() => {
                 if (vehicleType === '2wheeler') {

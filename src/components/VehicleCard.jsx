@@ -9,34 +9,34 @@ const getFallbackImage = type => type === '2wheeler'
   ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
   : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
-const VehicleCard = ({item, onPress, onBookmarkPress}) => {
+const VehicleCard = ({item, onPress, onBookmarkPress, cardHeight}) => {
   const {colors, styles} = useThemeStyles(createStyles);
 
   return (
-    <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={onPress}>
+    <TouchableOpacity activeOpacity={0.85} style={[styles.card, cardHeight && {height: cardHeight, padding: 8, marginBottom: 8}]} onPress={onPress}>
 
       {/* Heart / Wishlist */}
-      <WishlistHeart item={item} style={styles.heartBtn} color={colors.text} />
+      <WishlistHeart item={{...item, wishlistCardVariant: 'grid', wishlistCardHeight: cardHeight}} style={styles.heartBtn} color={colors.text} />
 
       {/* Vehicle Image */}
       <NetworkVehicleImage
         uri={item.image}
         fallbackUri={getFallbackImage(item.type)}
-        style={styles.carImage}
+        style={[styles.carImage, cardHeight && {height: undefined, flex: 1, minHeight: 20}]}
       />
 
       {/* Title */}
-      <Text style={styles.carTitle} numberOfLines={1}>
+      <Text style={[styles.carTitle, cardHeight && {marginTop: 4, fontSize: 13}]} numberOfLines={1}>
         {item.title}
       </Text>
 
       {/* Fuel & Transmission */}
-      <Text style={styles.carDetails}>
+      <Text style={[styles.carDetails, cardHeight && {marginTop: 2}]} numberOfLines={1}>
         {item.fuel} • {item.transmission}
       </Text>
 
       {/* Price */}
-      <Text style={styles.carPrice}>{item.price}</Text>
+      <Text style={[styles.carPrice, cardHeight && {marginTop: 3, fontSize: 13}]} numberOfLines={1}>{item.price}</Text>
 
       {/* Bookmark */}
       <TouchableOpacity style={styles.bookmarkBtn} onPress={onBookmarkPress}>
