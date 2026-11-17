@@ -21,6 +21,8 @@ const CategoryCard = ({ item }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
+      accessibilityRole="button"
+      accessibilityLabel={item.title}
      onPress={() => {
        if (item.type === 'other') {
          navigation.navigate('VehicleScreen', {vehicleType: 'other'});
@@ -39,10 +41,9 @@ const CategoryCard = ({ item }) => {
       style={styles.container}
     >
 
-      <Image
-        source={{ uri: item.image }}
-        style={styles.image}
-      />
+      <View style={styles.imageFrame}>
+        <Image source={{uri: item.image}} style={styles.image} />
+      </View>
 
       <View style={styles.content}>
 
@@ -60,7 +61,7 @@ const CategoryCard = ({ item }) => {
         <Icon
           name="chevron-forward"
           size={20}
-          color={colors.surface}
+          color={colors.text}
         />
       </View>
 
@@ -73,44 +74,23 @@ export default CategoryCard;
 const createStyles = colors => StyleSheet.create({
   container: {
     backgroundColor: colors.surface,
-    borderRadius: 14,
-    marginBottom: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 10,
     padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    elevation: 2,
+    shadowColor: '#0f172a',
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 1,
   },
-
-  image: {
-    width: 95,
-    height: 75,
-    resizeMode: 'contain',
-  },
-
-  content: {
-    flex: 1,
-    marginLeft: 12,
-  },
-
-  title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.text,
-  },
-
-  subtitle: {
-    fontSize: 13,
-    color: colors.textMuted,
-    marginTop: 5,
-    lineHeight: 18,
-  },
-
-  arrowButton: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: colors.text,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  imageFrame: {width: 68, height: 68, borderRadius: 12, overflow: 'hidden', backgroundColor: colors.surfaceMuted},
+  image: {width: '100%', height: '100%', resizeMode: 'cover'},
+  content: {flex: 1, marginLeft: 12, marginRight: 8, paddingVertical: 2},
+  title: {fontSize: 16, lineHeight: 22, fontWeight: '700', color: colors.text},
+  subtitle: {fontSize: 12, color: colors.textMuted, marginTop: 5, lineHeight: 18},
+  arrowButton: {width: 30, height: 30, borderRadius: 10, backgroundColor: colors.accentSurface, justifyContent: 'center', alignItems: 'center'},
 });

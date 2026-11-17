@@ -20,7 +20,7 @@ test('Home uses the original scrollable category layout', async () => {
   expect(list.props.data.some(item => item.type === 'other')).toBe(true);
   expect(list.props.data.some(item => item.type === 'services')).toBe(true);
   const card = list.props.renderItem({item: list.props.data[0]});
-  expect(list.props.data.map(item => item.title)).toEqual(['2 Wheeler', '4 Wheeler', 'Other Vehicles', '2 Wheeler Parts', '4 Wheeler Parts', 'Services']);
+  expect(list.props.data.map(item => item.title)).toEqual(['Two Wheeler', 'Four Wheeler', 'Commercial Vehicle', 'Two Wheeler Old Parts', 'Four Wheeler Old Parts', 'All Vehicle Services']);
   expect(card.props.compact).toBeUndefined();
   expect(card.props.cardHeight).toBeUndefined();
   expect(tree.root.findByType('Banner').props.height).toBeUndefined();

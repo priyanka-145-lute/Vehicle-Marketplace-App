@@ -10,7 +10,7 @@ const getFallbackImage = type => type === '2wheeler'
   ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
   : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
 
-const TopVehicleCard = ({item, onPress, cardHeight, style}) => {
+const TopVehicleCard = ({item, onPress, cardHeight, style, inlineDetails}) => {
   const {colors, styles} = useThemeStyles(createStyles);
 
   return (
@@ -22,7 +22,7 @@ const TopVehicleCard = ({item, onPress, cardHeight, style}) => {
       </View>
 
       {/* Heart */}
-      <WishlistHeart item={{...item, wishlistCardVariant: 'featured', wishlistCardHeight: cardHeight}} style={styles.topHeart} color={colors.text} />
+      {!inlineDetails && <WishlistHeart item={{...item, wishlistCardVariant: 'featured', wishlistCardHeight: cardHeight}} style={styles.topHeart} color={colors.text} />}
 
       {/* Image */}
       <NetworkVehicleImage
@@ -31,18 +31,29 @@ const TopVehicleCard = ({item, onPress, cardHeight, style}) => {
         style={[styles.topCarImage, cardHeight && {height: undefined, flex: 1, minHeight: 20, marginTop: 0}]}
       />
 
-      {/* Title */}
-      <Text style={[styles.topCarTitle, cardHeight && {marginTop: 4, fontSize: 13}]} numberOfLines={1}>
-        {item.title}
-      </Text>
+      {inlineDetails ? <>
+        <View style={styles.titleRow}>
+          <Text style={styles.inlineTitle} numberOfLines={1}>{item.title}</Text>
+          <WishlistHeart item={{...item, wishlistCardVariant: 'featured', wishlistCardHeight: cardHeight}} style={styles.inlineHeart} color={colors.text} />
+        </View>
+        <View style={styles.detailsRow}>
+          <Text style={styles.inlineSpecs}>{item.fuel} • {item.transmission}</Text>
+          <Text style={styles.priceBadge}>{item.price}</Text>
+        </View>
+      </> : <>
+        {/* Title */}
+        <Text style={[styles.topCarTitle, cardHeight && {marginTop: 4, fontSize: 13}]} numberOfLines={1}>
+          {item.title}
+        </Text>
 
-      {/* Details */}
-      <Text style={[styles.topDetails, cardHeight && {marginTop: 2}]} numberOfLines={1}>
-        {item.fuel} • {item.transmission}
-      </Text>
+        {/* Details */}
+        <Text style={[styles.topDetails, cardHeight && {marginTop: 2}]} numberOfLines={1}>
+          {item.fuel} • {item.transmission}
+        </Text>
 
-      {/* Price */}
-      <Text style={[styles.topPrice, cardHeight && {marginTop: 3, fontSize: 13}]} numberOfLines={1}>{item.price}</Text>
+        {/* Price */}
+        <Text style={[styles.topPrice, cardHeight && {marginTop: 3, fontSize: 13}]} numberOfLines={1}>{item.price}</Text>
+      </>}
 
     </TouchableOpacity>
   );
@@ -51,6 +62,13 @@ const TopVehicleCard = ({item, onPress, cardHeight, style}) => {
 export default TopVehicleCard;
 
 const createStyles = colors => StyleSheet.create({
+  titleRow: {flexDirection: 'row', alignItems: 'center', marginTop: 4},
+  inlineTitle: {flex: 1, fontSize: 13, fontWeight: '700', color: colors.text},
+  inlineHeart: {minWidth: 28, minHeight: 28, alignItems: 'center', justifyContent: 'center', marginLeft: 4},
+  detailsRow: {flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, marginTop: 2},
+  inlineSpecs: {flex: 1, fontSize: 10, lineHeight: 14, color: colors.textMuted},
+  priceBadge: {flexShrink: 1, fontSize: 11, fontWeight: '700', color: colors.text, backgroundColor: colors.accentSurface, paddingHorizontal: 6, paddingVertical: 5, borderRadius: 6},
+  inlineBookmark: {top: 10, bottom: undefined, right: 10},
   topCard: {
     width: width * 0.44,
     backgroundColor: colors.surface,

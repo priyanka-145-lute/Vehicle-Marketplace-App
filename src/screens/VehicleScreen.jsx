@@ -272,6 +272,7 @@ const VehicleScreen = () => {
           }}
           renderItem={({item}) => (
             <TopVehicleCard
+              inlineDetails
               cardHeight={cardHeight}
               item={item}
               onPress={() => {
@@ -343,6 +344,7 @@ const VehicleScreen = () => {
           columnWrapperStyle={styles.columnWrapper}
           renderItem={({item}) => (
             <VehicleCard
+              inlineDetails
               cardHeight={cardHeight}
               item={item}
               onPress={() => {

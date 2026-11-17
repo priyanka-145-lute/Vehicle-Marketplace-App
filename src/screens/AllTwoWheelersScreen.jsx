@@ -41,11 +41,11 @@ const AllTwoWheelersScreen = ({navigation}) => {
 
   const renderVehicle = ({item}) => (
     <TouchableOpacity activeOpacity={0.85} style={styles.card} onPress={() => navigation.navigate('TwoWheelerDetail', {item})}>
-      <WishlistHeart item={item} vehicleType="2wheeler" style={styles.heart} size={19} color={colors.text} />
+
       <NetworkVehicleImage uri={item.image} fallbackUri="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop" style={styles.image} />
-      <Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text>
-      <Text style={styles.details}>{item.type} • {item.fuel}</Text>
-      <Text style={styles.price}>₹ {item.price.toLocaleString('en-IN')}</Text>
+      <View style={styles.titleRow}><Text style={styles.cardTitle} numberOfLines={1}>{item.title}</Text><WishlistHeart item={item} vehicleType="2wheeler" style={styles.heart} size={19} color={colors.text} /></View>
+      <View style={styles.detailsRow}><Text style={styles.details}>{item.type} • {item.fuel}</Text>
+      <Text style={styles.price}>₹ {item.price.toLocaleString('en-IN')}</Text></View>
     </TouchableOpacity>
   );
 
@@ -73,8 +73,10 @@ const AllTwoWheelersScreen = ({navigation}) => {
 export default AllTwoWheelersScreen;
 
 const createStyles = colors => StyleSheet.create({
+  titleRow: {flexDirection: 'row', alignItems: 'center', marginTop: 6},
+  detailsRow: {flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 4, marginTop: 4},
   container: {flex: 1, backgroundColor: colors.background}, header: {minHeight: 72, paddingHorizontal: 14, paddingTop: 8, paddingBottom: 10, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center'}, filterButton: {width: 44, height: 44, borderRadius: 13, backgroundColor: '#ef4444', alignItems: 'center', justifyContent: 'center'}, heading: {flex: 1, fontSize: 23, fontWeight: '800', color: colors.text, textAlign: 'center'}, headerSpacer: {width: 44},
   searchBox: {height: 52, marginHorizontal: 14, marginTop: 14, paddingHorizontal: 14, borderRadius: 14, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', elevation: 2}, searchInput: {flex: 1, marginHorizontal: 10, fontSize: 14, color: colors.text},
-  list: {paddingHorizontal: 10, paddingTop: 18, paddingBottom: 28}, columns: {justifyContent: 'space-between'}, card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: colors.surface, elevation: 2}, heart: {position: 'absolute', top: 9, right: 9, zIndex: 2, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center'}, image: {width: '100%', height: 115, borderRadius: 12, resizeMode: 'cover', backgroundColor: colors.surfaceMuted}, cardTitle: {fontSize: 14, fontWeight: '700', color: colors.text, marginTop: 10}, details: {fontSize: 11, color: colors.textMuted, marginTop: 5}, price: {fontSize: 15, fontWeight: '800', color: '#ef4444', marginTop: 7}, empty: {alignItems: 'center', paddingTop: 80}, emptyText: {fontSize: 15, color: colors.textMuted, marginTop: 10},
+  list: {paddingHorizontal: 10, paddingTop: 18, paddingBottom: 28}, columns: {justifyContent: 'space-between'}, card: {width: '48%', marginBottom: 14, padding: 10, borderRadius: 16, backgroundColor: colors.surface, elevation: 2}, heart: {marginLeft: 4, width: 30, height: 30, borderRadius: 15, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center'}, image: {width: '100%', height: 115, borderRadius: 12, resizeMode: 'cover', backgroundColor: colors.surfaceMuted}, cardTitle: {flex: 1, fontSize: 14, fontWeight: '700', color: colors.text}, details: {flex: 1, fontSize: 10, lineHeight: 14, color: colors.textMuted}, price: {flexShrink: 1, fontSize: 11, fontWeight: '800', color: colors.text, backgroundColor: colors.accentSurface, borderRadius: 6, paddingHorizontal: 6, paddingVertical: 5}, empty: {alignItems: 'center', paddingTop: 80}, emptyText: {fontSize: 15, color: colors.textMuted, marginTop: 10},
   overlay: {flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.45)'}, sheet: {maxHeight: '78%', padding: 20, paddingBottom: 26, borderTopLeftRadius: 24, borderTopRightRadius: 24, backgroundColor: colors.surface}, sheetHeader: {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 10}, sheetTitle: {fontSize: 21, fontWeight: '800', color: colors.text}, label: {fontSize: 14, fontWeight: '700', color: colors.text, marginTop: 20, marginBottom: 10}, chipRow: {flexDirection: 'row', flexWrap: 'wrap', gap: 9}, filterChip: {height: 39, paddingHorizontal: 14, borderRadius: 9, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center'}, filterChipActive: {borderColor: '#ef4444', backgroundColor: colors.accentSurface}, filterChipText: {fontSize: 13, color: colors.textMuted}, filterChipTextActive: {fontWeight: '700', color: '#ef4444'}, actions: {flexDirection: 'row', gap: 10, marginTop: 26}, clearButton: {flex: 1, height: 50, borderRadius: 12, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center'}, clearText: {fontSize: 15, fontWeight: '700', color: colors.text}, applyButton: {flex: 1.5, height: 50, borderRadius: 12, backgroundColor: '#ef4444', alignItems: 'center', justifyContent: 'center'}, applyText: {fontSize: 15, fontWeight: '700', color: '#fff'},
 });

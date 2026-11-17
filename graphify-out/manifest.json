@@ -174,9 +174,9 @@
     "semantic_hash": ""
   },
   "src/components/CategoryCard.jsx": {
-    "mtime": 1793343128.2042596,
-    "seen": 1793343161.137859,
-    "ast_hash": "9887ad793e82ea2fc58ff8ee968f6a7a",
+    "mtime": 1793344823.2627265,
+    "seen": 1793344856.9750924,
+    "ast_hash": "4f1ff1a7403bb64ca414b0e6e23002be",
     "semantic_hash": ""
   },
   "src/components/CategoryTab.jsx": {
@@ -228,9 +228,9 @@
     "semantic_hash": ""
   },
   "src/components/TopVehicleCard.jsx": {
-    "mtime": 1793271129.5979898,
-    "seen": 1793271168.7122889,
-    "ast_hash": "49c6ed7145a95d5f7718b227320572ab",
+    "mtime": 1793345113.4436812,
+    "seen": 1793345184.6154578,
+    "ast_hash": "d07e68c1f6ea7ae7999dde475724b31f",
     "semantic_hash": ""
   },
   "src/components/TwoWheelerFilterDrawer.jsx": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "src/components/VehicleCard.jsx": {
-    "mtime": 1793271129.2412462,
-    "seen": 1793271168.7122889,
-    "ast_hash": "f37b6bf55c960bd55b4c47206c0dd3e6",
+    "mtime": 1793345113.4436812,
+    "seen": 1793345184.6154578,
+    "ast_hash": "858f7a27cfa8526edb56afd97b07ef8c",
     "semantic_hash": ""
   },
   "src/components/WishlistHeart.jsx": {
@@ -264,9 +264,9 @@
     "semantic_hash": ""
   },
   "src/data/dummyData.jsx": {
-    "mtime": 1793343128.4137795,
-    "seen": 1793343161.137859,
-    "ast_hash": "26a9b2c002f3cae3a41c11a9e7cf539d",
+    "mtime": 1793345017.9880185,
+    "seen": 1793345047.7437816,
+    "ast_hash": "c3c8e464e9495a4cf46676f6567271fc",
     "semantic_hash": ""
   },
   "src/data/ehicleData.jsx": {
@@ -300,21 +300,21 @@
     "semantic_hash": ""
   },
   "src/screens/AllFourWheelersScreen.jsx": {
-    "mtime": 1793102688.3442757,
-    "seen": 1793102707.5314667,
-    "ast_hash": "666135ae9949198d85eb2fc2c3cb537d",
+    "mtime": 1793345113.4477162,
+    "seen": 1793345184.6154578,
+    "ast_hash": "20c0f899178623e4c840c41015705a25",
     "semantic_hash": ""
   },
   "src/screens/AllOtherVehiclesScreen.jsx": {
-    "mtime": 1793102688.3442757,
-    "seen": 1793102707.5314667,
-    "ast_hash": "1630420f7326311d659777a55bfdb2b9",
+    "mtime": 1793345113.449737,
+    "seen": 1793345184.6154578,
+    "ast_hash": "19f1cc131f7e651196cb51bd2769a450",
     "semantic_hash": ""
   },
   "src/screens/AllTwoWheelersScreen.jsx": {
-    "mtime": 1793102688.3452773,
-    "seen": 1793102707.5314667,
-    "ast_hash": "07bb1b48d78db440c7ef54b93190623d",
+    "mtime": 1793345113.4477162,
+    "seen": 1793345184.6154578,
+    "ast_hash": "34b1c3b719dca1334215c3efd33b3278",
     "semantic_hash": ""
   },
   "src/screens/CarScreen.jsx": {
@@ -324,8 +324,8 @@
     "semantic_hash": ""
   },
   "src/screens/HomeScreen.jsx": {
-    "mtime": 1793343128.146608,
-    "seen": 1793343161.137859,
+    "mtime": 1793344601.165635,
+    "seen": 1793344616.3386083,
     "ast_hash": "cdf1592a0b0a920da974da4c18ac9c8e",
     "semantic_hash": ""
   },
@@ -378,9 +378,9 @@
     "semantic_hash": ""
   },
   "src/screens/VehicleScreen.jsx": {
-    "mtime": 1793268125.982899,
-    "seen": 1793268152.1975088,
-    "ast_hash": "0c233ee37f67b70150ec0928ecbdcbe5",
+    "mtime": 1793345113.445698,
+    "seen": 1793345184.6154578,
+    "ast_hash": "74983e0b130d09e35b6680f09f4a522b",
     "semantic_hash": ""
   },
   "src/screens/WishlistScreen.jsx": {
@@ -714,9 +714,9 @@
     "semantic_hash": ""
   },
   "__tests__/HomeLayout.test.jsx": {
-    "mtime": 1793343128.4137795,
-    "seen": 1793343161.137859,
-    "ast_hash": "e275ea7660f38a91754296019042f202",
+    "mtime": 1793344931.5478003,
+    "seen": 1793344978.1287904,
+    "ast_hash": "654ff403941bdf328b0e10c8d0124f84",
     "semantic_hash": ""
   },
   "__tests__/PartsServices.test.jsx": {

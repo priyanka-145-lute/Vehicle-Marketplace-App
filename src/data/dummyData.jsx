@@ -33,7 +33,7 @@ export const bannerData = [
 export const categoryData = [
   {
     id: '1',
-    title: '2 Wheeler',
+    title: 'Two Wheeler',
     subtitle: 'Explore wide range of bikes and scooters',
      type: '2wheeler',
     image:
@@ -42,7 +42,7 @@ export const categoryData = [
 
   {
     id: '2',
-    title: '4 Wheeler',
+    title: 'Four Wheeler',
     subtitle: 'Find the best cars for every need',
      type: '4wheeler',
     image:
@@ -51,7 +51,7 @@ export const categoryData = [
 
   {
     id: '3',
-    title: 'Other Vehicles',
+    title: 'Commercial Vehicle',
     subtitle: 'Trucks, buses, tractors and more',
     type: 'other',
     image:
@@ -60,7 +60,7 @@ export const categoryData = [
 
   {
     id: '4',
-    title: '2 Wheeler Parts',
+    title: 'Two Wheeler Old Parts',
     subtitle: 'Genuine parts for top performance',
     type: '2wheeler-parts',
     image:
@@ -69,7 +69,7 @@ export const categoryData = [
 
   {
     id: '5',
-    title: '4 Wheeler Parts',
+    title: 'Four Wheeler Old Parts',
     subtitle: 'Quality parts for longer car life',
     type: '4wheeler-parts',
     image:
@@ -78,7 +78,7 @@ export const categoryData = [
 
   {
     id: '6',
-    title: 'Services',
+    title: 'All Vehicle Services',
     subtitle: 'Inspection, insurance, repairs and more',
     type: 'services',
     image:
