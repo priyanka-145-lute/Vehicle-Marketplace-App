@@ -1,11 +1,13 @@
 /* eslint-env jest */
 import React from 'react';
 import {act, create} from 'react-test-renderer';
-import {Alert, FlatList, Text, TextInput, TouchableOpacity} from 'react-native';
+import {Alert, FlatList, Platform, Switch, Text, TextInput, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MySalesScreen from '../src/screens/MySalesScreen';
+import {keepLocalCopy, pick} from '@react-native-documents/picker';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn()}));
+jest.mock('@react-native-documents/picker', () => ({pick: jest.fn(), keepLocalCopy: jest.fn()}));
 
 jest.mock('../src/redux/api', () => ({
   useGetVehicleCategoriesQuery: jest.fn(() => ({currentData: {success: true, data: [{VehicleCategoryId: 2008, VEHICLETYPEID: 2000, VEHICLETYPENAME: 'Car', CATEGORYCODE: 'VC2005', CATEGORYNAME: 'SUV', ParentCategoryID: 0, CategoryLevel: 1}]}})),
@@ -44,16 +46,42 @@ test('creates, edits, marks sold, restores and deletes a listing', async () => {
   await press(tree, 'Vehicle Category: SUV');
   await press(tree, 'Select Brand');
   await press(tree, 'Brand: Tata');
-  await fill(tree, 'Vehicle name *', 'Honda City');
-  await fill(tree, 'Price (₹) *', '650000');
-  await fill(tree, 'Model year *', '2024');
+  await fill(tree, 'Listing title *', 'Tata Nexon');
+  await fill(tree, 'Expected price (₹) *', '650000');
+  await fill(tree, 'Manufacturing year *', '2024');
+  await fill(tree, 'Model', 'Nexon');
+  await fill(tree, 'Variant', 'XZ');
+  await fill(tree, 'Registration year', '2023');
+  await fill(tree, 'Kilometres driven', '35000');
+  await fill(tree, 'Owner mobile number', '9876543210');
+  await fill(tree, 'Address line 1', 'Main Road');
   await fill(tree, 'Fuel type *', 'Petrol');
+  await act(async () => tree.root.findByType(Switch).props.onValueChange(true));
   for (const label of ['Select Country', 'Country: India', 'Select State', 'State: Maharashtra', 'Select City', 'City: Nagpur', 'Select Area', 'Area: Ayodhya Nagar']) {await press(tree, label);}
   await press(tree, 'Save Listing');
-  expect(tree.root.findByType(FlatList).props.data[0].title).toBe('Honda City');
+  expect(AsyncStorage.setItem).not.toHaveBeenCalled();
+  await fill(tree, 'Registration year', '2025');
+  pick.mockResolvedValue([{uri: 'content://vehicle', name: 'vehicle.jpg', type: 'image/jpeg', hasRequestedType: true, size: 1000}]);
+  keepLocalCopy.mockResolvedValue([{status: 'success', localUri: 'file:///saved-vehicle.jpg'}]);
+  const platform = jest.replaceProperty(Platform, 'OS', 'android');
+  try {
+    await press(tree, 'Choose vehicle photos');
+    expect(pick).toHaveBeenCalledWith({type: 'image/*', allowMultiSelection: true});
+  } finally {
+    platform.restore();
+  }
+  await press(tree, 'Save Listing');
+  expect(tree.root.findByType(FlatList).props.data[0]).toMatchObject({
+    title: 'Tata Nexon', model: 'Nexon', variant: 'XZ', registrationYear: '2025', kilometres: '35000',
+    ownerMobile: '9876543210', addressLine1: 'Main Road', pincode: '440024', negotiable: true,
+    photos: ['file:///saved-vehicle.jpg'],
+  });
   await press(tree, 'Edit');
-  await fill(tree, 'Price (₹) *', '620000');
+  expect(tree.root.findAllByType(TextInput).find(node => node.props.accessibilityLabel === 'Model').props.value).toBe('Nexon');
+  await press(tree, 'Remove photo 1');
+  await fill(tree, 'Expected price (₹) *', '620000');
   await press(tree, 'Save Changes');
+  expect(tree.root.findByType(FlatList).props.data[0].photos).toEqual([]);
   await press(tree, 'Mark as Sold');
   await act(async () => alert.mock.calls.at(-1)[2][1].onPress());
   await press(tree, 'Active (0)');

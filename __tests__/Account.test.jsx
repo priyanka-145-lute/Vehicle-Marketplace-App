@@ -3,10 +3,13 @@ import React from 'react';
 import {act, create} from 'react-test-renderer';
 import {Alert, Linking, Text, TextInput, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {keepLocalCopy, pick} from '@react-native-documents/picker';
 import AccountNavigator, {AccountLogoutContext} from '../src/screens/AccountScreens';
 import {useDeleteAddressMutation, useGetProfileQuery, useGetUserAddressByIdMutation, useGetUserAddressesQuery, useUpdateAddressMutation} from '../src/redux/api';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({getItem: jest.fn(), setItem: jest.fn()}));
+jest.mock('@react-native-documents/picker', () => ({pick: jest.fn(), keepLocalCopy: jest.fn()}));
+jest.mock('react-redux', () => ({useSelector: jest.fn(selector => selector({auth: {session: {userId: 10}}}))}));
 
 jest.mock('../src/redux/api', () => ({
   useGetUserAddressByIdMutation: jest.fn(() => [jest.fn()]),
@@ -57,6 +60,76 @@ test('backend profile supplies Account, My Profile and the edit form; failures c
   await act(async () => tree.update(<AccountNavigator />));
   await press(tree, 'Try Again');
   expect(refetch).toHaveBeenCalledTimes(1);
+  await act(async () => tree.unmount());
+});
+
+test('vendor registration validates details and reopens the saved record for the same account', async () => {
+  useGetProfileQuery.mockReturnValue({currentData: {success: true, data: [{UserID: 10, FirstName: 'Test', LastName: 'Vendor', MobileNo: '9876543210', Email: 'vendor@example.com'}]}});
+  let tree;
+  await act(async () => {tree = create(<AccountNavigator />);});
+  await press(tree, 'My Profile');
+  expect(tree.root.findAllByType(Text).some(node => node.props.children === 'Register as a Vendor')).toBe(false);
+  await press(tree, 'Go back');
+  await press(tree, 'Register as a Vendor');
+  const field = label => tree.root.findAllByType(TextInput).find(node => node.props.accessibilityLabel === label);
+  expect(field('Name').props.value).toBe('Test Vendor');
+  expect(field('Event category')).toBeUndefined();
+  await press(tree, 'Save Registration');
+  expect(AsyncStorage.setItem).not.toHaveBeenCalled();
+  await act(async () => field('Address').props.onChangeText('Main Road'));
+  await press(tree, 'Select District');
+  await press(tree, 'District: Pune');
+  await press(tree, 'Select City');
+  await press(tree, 'City: Pune');
+  await press(tree, 'Select District');
+  await press(tree, 'District: Nagpur');
+  await press(tree, 'Save Registration');
+  expect(AsyncStorage.setItem).not.toHaveBeenCalled();
+  await press(tree, 'Select City');
+  await press(tree, 'City: Nagpur');
+  await press(tree, 'Save Registration');
+  const [key, raw] = AsyncStorage.setItem.mock.calls[0];
+  expect(key).toBe('vehicle-vendor-registration:10');
+  const registration = JSON.parse(raw);
+  expect(registration).toMatchObject({name: 'Test Vendor', mobile: '9876543210', district: 'Nagpur', city: 'Nagpur', registeredAt: expect.any(String)});
+  expect(registration).not.toHaveProperty('eventCategory');
+  AsyncStorage.getItem.mockImplementation(async requestedKey => requestedKey === key ? JSON.stringify({...registration, eventCategory: 'Photography, Hall'}) : null);
+  expect(tree.root.findAllByType(Text).some(node => node.props.children === 'Business Setup')).toBe(true);
+  await press(tree, 'Go back');
+  await press(tree, 'Go back');
+  useGetProfileQuery.mockReturnValue({isError: true});
+  await act(async () => tree.update(<AccountNavigator />));
+  await press(tree, 'Register as a Vendor');
+  const hasText = value => tree.root.findAllByType(Text).some(node => node.props.children === value);
+  for (const label of ['Vendor Registration', 'Save Changes', 'Saved on this device']) {
+    expect(hasText(label)).toBe(true);
+  }
+  expect(field('Address').props.value).toBe('Main Road');
+  expect(field('Address').props.editable).toBe(true);
+  await act(async () => field('Address').props.onChangeText('New Road'));
+  await press(tree, 'Save Changes');
+  expect(JSON.parse(AsyncStorage.setItem.mock.calls[1][1])).toMatchObject({address: 'New Road', registeredAt: registration.registeredAt});
+  expect(hasText('Event category')).toBe(false);
+  expect(hasText('Photography, Hall')).toBe(false);
+  await press(tree, 'Add Services');
+  await press(tree, 'Add service');
+  await act(async () => field('Service name').props.onChangeText('Vehicle detailing'));
+  await press(tree, 'Save Service');
+  expect(hasText('Vehicle detailing')).toBe(true);
+  await press(tree, 'Go back');
+
+  await press(tree, 'Add Images');
+  pick.mockResolvedValue([{uri: 'content://vendor-image', name: 'gallery.jpg', type: 'image/jpeg', hasRequestedType: true, size: 1000}]);
+  keepLocalCopy.mockResolvedValue([{status: 'success', localUri: 'file:///vendor-gallery.jpg'}]);
+  await press(tree, 'Add image');
+  await press(tree, 'Save Images');
+  expect(AsyncStorage.setItem).toHaveBeenCalledWith('vehicle-vendor-setup:10:VendorImages', JSON.stringify(['file:///vendor-gallery.jpg']));
+
+  await press(tree, 'Add Business Details');
+  await act(async () => field('Business name').props.onChangeText('Test Garage'));
+  await press(tree, 'Save Business Details');
+  expect(AsyncStorage.setItem).toHaveBeenCalledWith('vehicle-vendor-setup:10:VendorBusinessDetails', expect.stringContaining('Test Garage'));
+  expect(hasText('Business Setup')).toBe(true);
   await act(async () => tree.unmount());
 });
 

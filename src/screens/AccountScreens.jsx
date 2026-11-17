@@ -1,12 +1,15 @@
 import {useThemeStyles} from '../theme/colors';
 import React, {createContext, useContext, useEffect, useRef, useState} from 'react';
-import {ActivityIndicator, Alert, KeyboardAvoidingView, Linking, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Alert, Keyboard, KeyboardAvoidingView, Linking, Modal, Platform, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 import LocationFields from '../components/LocationFields';
+import vendorLocations from '../data/vendorLocations';
+import VendorSetup from './VendorSetup';
 import {useDeleteAddressMutation, useGetProfileQuery, useGetUserAddressByIdMutation, useGetUserAddressesQuery, useUpdateAddressMutation} from '../redux/api';
 
 export const AccountLogoutContext = createContext(null);
@@ -15,17 +18,17 @@ const Stack = createNativeStackNavigator();
 const STORAGE_KEY = 'vehicle-account-profile';
 const EMPTY_PROFILE = {name: '', mobile: '', email: '', city: ''};
 
-const Button = ({title, onPress, disabled}) => {
+const Button = ({title, onPress, disabled, style}) => {
   const {styles} = useThemeStyles(createStyles);
-  return (<TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={onPress} style={[styles.button, disabled && styles.disabled]}><Text style={styles.buttonText}>{title}</Text></TouchableOpacity>);
+  return (<TouchableOpacity accessibilityRole="button" disabled={disabled} onPress={onPress} style={[styles.button, style, disabled && styles.disabled]}><Text style={styles.buttonText}>{title}</Text></TouchableOpacity>);
 };
 const Avatar = ({name}) => {
   const {styles} = useThemeStyles(createStyles);
   return (<View style={styles.avatar}>{name ? <Text style={styles.initial}>{name.trim().charAt(0).toUpperCase()}</Text> : <Icon name="person-outline" size={32} color="#ef4444" />}</View>);
 };
-const Page = ({title, navigation, children}) => {
+const Page = ({title, titleStyle, navigation, children}) => {
   const {colors, styles} = useThemeStyles(createStyles);
-  return (<SafeAreaView edges={['top', 'left', 'right']} style={styles.container}><View style={styles.header}>{navigation.canGoBack() && <TouchableOpacity accessibilityRole="button" accessibilityLabel="Go back" style={styles.back} onPress={() => navigation.goBack()}><Icon name="arrow-back" size={24} color={colors.text} /></TouchableOpacity>}<Text style={styles.heading}>{title}</Text></View>{children}</SafeAreaView>);
+  return (<SafeAreaView edges={['top', 'left', 'right']} style={styles.container}><View style={styles.header}>{navigation.canGoBack() && <TouchableOpacity accessibilityRole="button" accessibilityLabel="Go back" style={styles.back} onPress={() => navigation.goBack()}><Icon name="arrow-back" size={24} color={colors.text} /></TouchableOpacity>}<Text style={[styles.heading, titleStyle]}>{title}</Text></View>{children}</SafeAreaView>);
 };
 
 const AccountScreen = ({navigation}) => {
@@ -43,6 +46,7 @@ const AccountScreen = ({navigation}) => {
     <TouchableOpacity accessibilityRole="button" style={styles.profileCard} onPress={() => navigation.navigate('Profile')}><Avatar name={profile.name} /><View style={styles.flex}><Text style={styles.name}>{loading ? 'Loading profile…' : profile.name || 'Your Profile'}</Text><Text style={styles.muted}>{loadError ? 'Tap to retry loading your profile' : profile.city || 'Manage your personal information'}</Text></View><Icon name="chevron-forward" size={21} color={colors.textMuted} /></TouchableOpacity>
     <Text style={styles.sectionLabel}>ACCOUNT & SUPPORT</Text>
     <View style={styles.card}>{options.map(([title, subtitle, icon, route], index) => <TouchableOpacity key={route} accessibilityRole="button" onPress={() => navigation.navigate(route)} style={[styles.menuRow, index !== options.length - 1 && styles.divider]}><View style={styles.menuIcon}><Icon name={icon} size={22} color="#ef4444" /></View><View style={styles.flex}><Text style={styles.menuTitle}>{title}</Text><Text style={styles.muted}>{subtitle}</Text></View><Icon name="chevron-forward" size={18} color={colors.textMuted} /></TouchableOpacity>)}</View>
+    <Button title="Register as a Vendor" onPress={() => navigation.navigate('VendorRegistration')} />
     <TouchableOpacity accessibilityRole="button" style={styles.logout} onPress={() => Alert.alert('Log out?', 'You will return to the sign-in flow. Your saved data will remain on this device.', [{text: 'Cancel', style: 'cancel'}, {text: 'Log Out', style: 'destructive', onPress: logout}])}><Icon name="log-out-outline" size={22} color="#ef4444" /><Text style={styles.logoutText}>Log Out</Text></TouchableOpacity>
   </ScrollView></Page>;
 };
@@ -60,6 +64,179 @@ export const ProfileScreen = ({navigation}) => {
     <Button title="My Addresses" onPress={() => navigation.navigate('MyAddresses')} />
     <Text style={styles.note}>Profile details are saved on this device. Editing your mobile number here does not change your sign-in number.</Text>
   </ScrollView>}</Page>;
+};
+
+const VENDOR_FIELDS = [
+  ['name', 'Name', {placeholder: 'Full name', autoCapitalize: 'words', maxLength: 80}],
+  ['email', 'Email', {placeholder: 'you@example.com', keyboardType: 'email-address', autoCapitalize: 'none', autoCorrect: false, maxLength: 254}],
+  ['mobile', 'Mobile number', {placeholder: '10-digit number', keyboardType: 'phone-pad', maxLength: 10}],
+  ['address', 'Address', {placeholder: 'Street and area', multiline: true, maxLength: 250}],
+  ['district', 'District', {placeholder: 'Enter district', autoCapitalize: 'words', maxLength: 80}],
+  ['city', 'City', {placeholder: 'Enter city', autoCapitalize: 'words', maxLength: 80}],
+];
+const vendorDistricts = Object.keys(vendorLocations);
+
+const useVendorAccountId = () => {
+  const {vendorAccountId} = useContext(ProfileContext);
+  const sessionUserId = useSelector(state => state.auth.session?.userId);
+  return sessionUserId || vendorAccountId;
+};
+
+const VendorSetupScreen = props => {
+  const accountId = useVendorAccountId();
+  return <VendorSetup key={`${props.route.name}:${accountId}`} {...props} accountId={accountId} Page={Page} Button={Button} />;
+};
+
+const VendorRegistrationScreen = ({navigation}) => {
+  const {colors, styles} = useThemeStyles(createStyles);
+  const {profile} = useContext(ProfileContext);
+  const accountId = useVendorAccountId();
+  const storageKey = accountId ? `vehicle-vendor-registration:${accountId}` : null;
+  const [form, setForm] = useState(() => ({
+    name: profile.name, email: profile.email, mobile: profile.mobile, city: profile.city,
+    address: '', district: '',
+  }));
+  const [registration, setRegistration] = useState(undefined);
+  const [loadFailed, setLoadFailed] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [locationMenu, setLocationMenu] = useState(null);
+  const [manualLocation, setManualLocation] = useState(null);
+  const busy = useRef(false);
+
+  useEffect(() => {
+    if (!storageKey) {return;}
+    let active = true;
+    AsyncStorage.getItem(storageKey).then(raw => {
+      const saved = raw ? JSON.parse(raw) : null;
+      if (raw !== null && (!saved || VENDOR_FIELDS.some(([key]) => typeof saved[key] !== 'string') || typeof saved.registeredAt !== 'string' || !Number.isFinite(Date.parse(saved.registeredAt)))) {
+        throw new Error('Invalid vendor registration');
+      }
+      if (active) {
+        if (saved) {setForm(saved);}
+        setRegistration(saved);
+      }
+    }).catch(() => {if (active) {setLoadFailed(true);}});
+    return () => {active = false;};
+  }, [storageKey, retry]);
+
+  const save = async () => {
+    if (!storageKey || busy.current) {return;}
+    const details = Object.fromEntries(VENDOR_FIELDS.map(([key]) => [key, form[key].trim()]));
+    if (Object.values(details).some(value => !value)) {setError('Please fill in all registration details.'); return;}
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(details.email)) {setError('Enter a valid email address.'); return;}
+    if (!/^\d{10}$/.test(details.mobile)) {setError('Enter a valid 10-digit mobile number.'); return;}
+    busy.current = true;
+    setSaving(true);
+    setError('');
+    try {
+      const record = {...details, registeredAt: registration?.registeredAt ?? new Date().toISOString()};
+      await AsyncStorage.setItem(storageKey, JSON.stringify(record));
+      setForm(record);
+      setRegistration(record);
+      navigation.navigate('VendorSetup');
+    } catch {
+      setError('Could not save your vendor registration. Please try again.');
+    } finally {
+      busy.current = false;
+      setSaving(false);
+    }
+  };
+
+  const updateField = (key, value) => {
+    setForm(current => ({
+      ...current,
+      [key]: value,
+      ...(key === 'district' && current.district !== value ? {city: ''} : {}),
+    }));
+  };
+  const cityOptions = vendorDistricts.includes(form.district) ? vendorLocations[form.district] : [];
+  const locationOptions = locationMenu === 'district' ? vendorDistricts : cityOptions;
+  const locationLabel = locationMenu === 'district' ? 'District' : 'City';
+
+  const renderFields = (title, icon, fields) => (
+    <View style={styles.vendorCard}>
+      <View style={styles.vendorSectionHeader}>
+        <View style={styles.vendorSectionIcon}><Icon name={icon} size={20} color={colors.text} /></View>
+        <Text accessibilityRole="header" style={styles.vendorSectionTitle}>{title}</Text>
+      </View>
+      <View style={styles.vendorFields}>
+        {fields.map(([key, label, options]) => (
+          <View key={key} style={styles.vendorField}>
+            <Text style={styles.label}>{label}</Text>
+            {(key === 'district' || key === 'city') && <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel={`Select ${label}`}
+              accessibilityState={{expanded: locationMenu === key}}
+              disabled={saving || (key === 'city' && !form.district.trim())}
+              style={[styles.input, styles.vendorInput, styles.vendorSelect, key === 'city' && !form.district.trim() && styles.disabled]}
+              onPress={() => {Keyboard.dismiss(); setLocationMenu(key);}}>
+              <Text style={[styles.vendorSelection, {color: form[key] ? colors.text : colors.textMuted}]}>
+                {form[key] || `Select ${label.toLowerCase()}`}
+              </Text>
+              <Icon name="chevron-down" size={16} color={colors.textMuted} />
+            </TouchableOpacity>}
+            {((key !== 'district' && key !== 'city') || manualLocation === key) && <TextInput
+              accessibilityLabel={label}
+              editable={!saving}
+              style={[styles.input, styles.vendorInput, options.multiline && styles.vendorAddress]}
+              value={form[key]}
+              placeholderTextColor={colors.textMuted}
+              onChangeText={value => updateField(key, value)}
+              {...options}
+            />}
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+
+  const isSaved = registration && VENDOR_FIELDS.every(([key]) => registration[key] === form[key]);
+  return <Page title="Vendor Registration" titleStyle={styles.vendorTitle} navigation={navigation}>
+    <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView contentContainerStyle={[styles.content, styles.vendorForm]} keyboardShouldPersistTaps="handled">
+        {!storageKey ? <Text accessibilityRole="alert" style={styles.error}>Could not identify your account. Reopen your profile and try again.</Text> : loadFailed ? <>
+          <Text accessibilityRole="alert" style={styles.error}>Could not load your vendor registration.</Text>
+          <Button title="Try Again" onPress={() => {setLoadFailed(false); setRetry(current => current + 1);}} />
+        </> : registration === undefined ? <ActivityIndicator accessibilityLabel="Loading registration" color="#ef4444" /> : <>
+          {renderFields('Contact details', 'person-outline', VENDOR_FIELDS.slice(0, 3))}
+          {renderFields('Business address', 'location-outline', VENDOR_FIELDS.slice(3))}
+          <View style={styles.vendorActions}>
+            {error ? <Text accessibilityRole="alert" style={styles.error}>{error}</Text> : null}
+            <Button title={saving ? 'Saving…' : registration ? 'Save Changes' : 'Save Registration'} disabled={saving} style={styles.vendorSave} onPress={save} />
+            <Text accessibilityLiveRegion="polite" style={[styles.note, styles.vendorNote]}>
+              {isSaved ? 'Saved on this device' : 'Your registration details are saved on this device.'}
+            </Text>
+            {registration && <Text style={[styles.note, styles.vendorNote]}>Registration date: {new Date(registration.registeredAt).toLocaleString('en-IN')}</Text>}
+          </View>
+        </>}
+      </ScrollView>
+    </KeyboardAvoidingView>
+    {locationMenu && <Modal transparent animationType="fade" onRequestClose={() => setLocationMenu(null)}>
+      <View style={styles.vendorModalBackdrop}>
+        <View style={[styles.vendorCard, styles.vendorModal]}>
+          <View style={styles.vendorSectionHeader}>
+            <Text accessibilityRole="header" style={styles.vendorSectionTitle}>Select {locationLabel.toLowerCase()}</Text>
+            <TouchableOpacity accessibilityRole="button" accessibilityLabel="Close location choices" onPress={() => setLocationMenu(null)} style={styles.back}>
+              <Icon name="close" size={22} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            {locationOptions.map(option => <TouchableOpacity key={option} accessibilityRole="button" accessibilityLabel={`${locationLabel}: ${option}`} accessibilityState={{selected: form[locationMenu] === option}} style={styles.vendorOption} onPress={() => {
+              updateField(locationMenu, option);
+              setManualLocation(null);
+              setLocationMenu(null);
+            }}><Text style={styles.label}>{option}</Text></TouchableOpacity>)}
+          </ScrollView>
+          <TouchableOpacity accessibilityRole="button" style={styles.vendorOption} onPress={() => {
+            setManualLocation(locationMenu);
+            setLocationMenu(null);
+          }}><Text style={styles.label}>Enter {locationLabel.toLowerCase()} manually</Text></TouchableOpacity>
+        </View>
+      </View>
+    </Modal>}
+  </Page>;
 };
 
 export const UserAddressesScreen = ({navigation}) => {
@@ -207,11 +384,44 @@ const AccountNavigator = () => {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     setProfile(next);
   };
-  return <ProfileContext.Provider value={{profile, loading: loading || isLoading, loadError: loadError || isError || invalidProfile, load: () => {load(); refetch();}, saveProfile}}><Stack.Navigator screenOptions={{headerShown: false}}><Stack.Screen name="AccountHome" component={AccountScreen} /><Stack.Screen name="Profile" component={ProfileScreen} /><Stack.Screen name="EditProfile" component={EditProfileScreen} /><Stack.Screen name="MyAddresses" component={UserAddressesScreen} /><Stack.Screen name="ContactUs" component={InformationScreen} /><Stack.Screen name="PrivacyPolicy" component={InformationScreen} /><Stack.Screen name="TermsConditions" component={InformationScreen} /></Stack.Navigator></ProfileContext.Provider>;
+  return <ProfileContext.Provider value={{profile, vendorAccountId: customer?.UserID || customer?.MobileNo, loading: loading || isLoading, loadError: loadError || isError || invalidProfile, load: () => {load(); refetch();}, saveProfile}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="AccountHome" component={AccountScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="VendorRegistration" component={VendorRegistrationScreen} />
+      <Stack.Screen name="VendorSetup" component={VendorSetupScreen} />
+      <Stack.Screen name="VendorServices" component={VendorSetupScreen} />
+      <Stack.Screen name="VendorImages" component={VendorSetupScreen} />
+      <Stack.Screen name="VendorBusinessDetails" component={VendorSetupScreen} />
+      <Stack.Screen name="MyAddresses" component={UserAddressesScreen} />
+      <Stack.Screen name="ContactUs" component={InformationScreen} />
+      <Stack.Screen name="PrivacyPolicy" component={InformationScreen} />
+      <Stack.Screen name="TermsConditions" component={InformationScreen} />
+    </Stack.Navigator>
+  </ProfileContext.Provider>;
 };
 export default AccountNavigator;
 
 const createStyles = colors => StyleSheet.create({
+  vendorForm: {alignSelf: 'center', width: '100%', maxWidth: 620, paddingHorizontal: 14, paddingVertical: 10, gap: 10},
+  vendorCard: {padding: 14, gap: 10, borderRadius: 16, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface},
+  vendorSectionHeader: {flexDirection: 'row', alignItems: 'center', gap: 8, paddingBottom: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border},
+  vendorSectionIcon: {width: 30, height: 30, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.accentSurface},
+  vendorSectionTitle: {flex: 1, fontSize: 16, fontWeight: '800', color: colors.text},
+  vendorFields: {gap: 8},
+  vendorField: {gap: 4},
+  vendorInput: {minHeight: 44, paddingVertical: 7, paddingHorizontal: 10, backgroundColor: colors.surfaceMuted},
+  vendorSelect: {flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8},
+  vendorSelection: {flex: 1, fontSize: 15},
+  vendorModalBackdrop: {flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#0008'},
+  vendorModal: {width: '100%', maxWidth: 460, maxHeight: '75%', alignSelf: 'center'},
+  vendorOption: {minHeight: 44, justifyContent: 'center', paddingHorizontal: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border},
+  vendorActions: {gap: 5},
+  vendorSave: {backgroundColor: '#b91c1c'},
+  vendorNote: {textAlign: 'center'},
+  vendorTitle: {flexShrink: 1},
+  vendorAddress: {minHeight: 54, textAlignVertical: 'top'},
   contactActions: {gap: 14}, contactButton: {flexDirection: 'row', gap: 10}, whatsappButton: {backgroundColor: '#15803d'},
   flex: {flex: 1}, container: {flex: 1, backgroundColor: colors.background}, header: {minHeight: 72, paddingHorizontal: 20, paddingVertical: 16, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', gap: 10}, back: {width: 44, height: 44, justifyContent: 'center', alignItems: 'center'}, heading: {fontSize: 23, fontWeight: '800', color: colors.text}, content: {padding: 18, paddingBottom: 30, gap: 18},
   profileCard: {flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: colors.surface, padding: 16, borderRadius: 16}, avatar: {width: 68, height: 68, borderRadius: 34, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'}, initial: {fontSize: 28, fontWeight: '800', color: '#ef4444'}, name: {fontSize: 19, fontWeight: '700', color: colors.text}, muted: {fontSize: 12, color: colors.textMuted, marginTop: 5, lineHeight: 18}, sectionLabel: {fontSize: 11, fontWeight: '700', color: colors.textMuted, letterSpacing: 1, marginTop: 6}, card: {backgroundColor: colors.surface, borderRadius: 16, overflow: 'hidden'}, menuRow: {padding: 16, flexDirection: 'row', alignItems: 'center', gap: 12}, divider: {borderBottomWidth: 1, borderBottomColor: colors.border}, menuIcon: {width: 40, height: 40, borderRadius: 12, backgroundColor: colors.accentSurface, alignItems: 'center', justifyContent: 'center'}, menuTitle: {fontSize: 15, fontWeight: '600', color: colors.text}, logout: {minHeight: 52, backgroundColor: colors.surface, borderRadius: 12, flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center'}, logoutText: {fontSize: 15, color: '#ef4444', fontWeight: '700'},

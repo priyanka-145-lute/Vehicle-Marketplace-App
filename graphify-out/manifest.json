@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "__tests__/Account.test.jsx": {
-    "mtime": 1793192699.2356496,
-    "seen": 1793192733.5350034,
-    "ast_hash": "1b7aa4941537f16c62ab112dff52d872",
+    "mtime": 1794918951.3953898,
+    "seen": 1794918971.2843585,
+    "ast_hash": "c9e533498a4934304b2d79d0e5a6a542",
     "semantic_hash": ""
   },
   "__tests__/App.test.tsx": {
@@ -36,9 +36,9 @@
     "semantic_hash": ""
   },
   "__tests__/MySales.test.jsx": {
-    "mtime": 1793183264.9631803,
-    "seen": 1793183288.0121458,
-    "ast_hash": "67884a113a1f445e723c3dbc8bd7b462",
+    "mtime": 1794915762.0506334,
+    "seen": 1794915773.3360822,
+    "ast_hash": "4a260bf0264fd4b0b3d41ad6714f2553",
     "semantic_hash": ""
   },
   "__tests__/Session.test.jsx": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1793103564.4722495,
-    "seen": 1793104167.4529126,
-    "ast_hash": "5480f97591a4c919bfa33b9f762694e7",
+    "mtime": 1794915146.3362818,
+    "seen": 1794915308.8434994,
+    "ast_hash": "a09cdad1d10d9472e1bad308c76578e4",
     "semantic_hash": ""
   },
   "react-native.config.js": {
@@ -228,9 +228,9 @@
     "semantic_hash": ""
   },
   "src/components/TopVehicleCard.jsx": {
-    "mtime": 1793345113.4436812,
-    "seen": 1793345184.6154578,
-    "ast_hash": "d07e68c1f6ea7ae7999dde475724b31f",
+    "mtime": 1793345189.336438,
+    "seen": 1794915030.3669224,
+    "ast_hash": "408bee609233c7f7b93d8bf4f843ba06",
     "semantic_hash": ""
   },
   "src/components/TwoWheelerFilterDrawer.jsx": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "src/components/VehicleCard.jsx": {
-    "mtime": 1793345113.4436812,
-    "seen": 1793345184.6154578,
-    "ast_hash": "858f7a27cfa8526edb56afd97b07ef8c",
+    "mtime": 1793345189.3344474,
+    "seen": 1794915030.3669224,
+    "ast_hash": "00fccbbf7eac7ba2876f2fc1d9c1ed3b",
     "semantic_hash": ""
   },
   "src/components/WishlistHeart.jsx": {
@@ -294,9 +294,9 @@
     "semantic_hash": ""
   },
   "src/screens/AccountScreens.jsx": {
-    "mtime": 1793192681.2842233,
-    "seen": 1793192733.5350034,
-    "ast_hash": "a80d54900f83807540a3aeaffb38d4e8",
+    "mtime": 1794918932.7120268,
+    "seen": 1794918971.285739,
+    "ast_hash": "f05933bcb2d1112c6d767d7f8073e2a7",
     "semantic_hash": ""
   },
   "src/screens/AllFourWheelersScreen.jsx": {
@@ -312,9 +312,9 @@
     "semantic_hash": ""
   },
   "src/screens/AllTwoWheelersScreen.jsx": {
-    "mtime": 1793345113.4477162,
-    "seen": 1793345184.6154578,
-    "ast_hash": "34b1c3b719dca1334215c3efd33b3278",
+    "mtime": 1793345189.3312724,
+    "seen": 1794915030.3669224,
+    "ast_hash": "7d1a536c82099d785df2e3e8ea90c565",
     "semantic_hash": ""
   },
   "src/screens/CarScreen.jsx": {
@@ -336,9 +336,9 @@
     "semantic_hash": ""
   },
   "src/screens/MySalesScreen.jsx": {
-    "mtime": 1793183066.9203408,
-    "seen": 1793183288.0121458,
-    "ast_hash": "1c37d7a6452b0112525118888b8de83e",
+    "mtime": 1794915934.5943196,
+    "seen": 1794915949.8638024,
+    "ast_hash": "2b01201d5723afdea2944379fa68e0f5",
     "semantic_hash": ""
   },
   "src/screens/NotificationsScreen.jsx": {
@@ -729,6 +729,18 @@
     "mtime": 1793271150.337281,
     "seen": 1793271168.7122889,
     "ast_hash": "03ee1f7969d2eac0c97033d4109c3362",
+    "semantic_hash": ""
+  },
+  "src/data/vendorLocations.js": {
+    "mtime": 1794918230.019752,
+    "seen": 1794918304.8519728,
+    "ast_hash": "be76b47b7da65ff2af0da2203ae9f257",
+    "semantic_hash": ""
+  },
+  "src/screens/VendorSetup.jsx": {
+    "mtime": 1794919394.8829055,
+    "seen": 1794919411.8484666,
+    "ast_hash": "0dc6fe93db7de218e65e8ac0ca182a4a",
     "semantic_hash": ""
   }
 }
