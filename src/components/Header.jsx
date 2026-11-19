@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 
-const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSettingsPress, onHelpPress, onLogoutPress, compact}) => {
+const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSettingsPress, onHelpPress, onLogoutPress, compact, home}) => {
   const {styles} = useThemeStyles(createStyles);
 
   const [menuVisible, setMenuVisible] = useState(false);
@@ -25,26 +25,26 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
 
   return (
     <>
-      <View style={[styles.container, isDark && styles.containerDark, compact && styles.compact]}>
+      <View style={[styles.container, isDark && styles.containerDark, compact && styles.compact, home && styles.homeHeader]}>
 
-      <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)} accessibilityLabel="Open menu">
-        <Icon name="menu" size={28} color={iconColor} />
+      <TouchableOpacity style={[styles.menuButton, home && styles.homeAction]} onPress={() => setMenuVisible(true)} accessibilityLabel="Open menu">
+        <Icon name="menu" size={home ? 23 : 28} color={iconColor} />
       </TouchableOpacity>
 
      <Image
   source={require('../assets/images/gadi-dekho-logo-transparent.png')}
-  style={styles.logo}
+  style={[styles.logo, home && styles.homeLogo]}
 />
 
-      <View style={styles.rightContainer}>
+      <View style={[styles.rightContainer, home && styles.homeActions]}>
 
         <TouchableOpacity
-          style={styles.notificationContainer}
+          style={home ? styles.homeAction : styles.notificationContainer}
           onPress={onNotificationPress}
           accessibilityLabel="Open notifications">
           <Icon
             name="notifications-outline"
-            size={24}
+            size={home ? 21 : 24}
             color={iconColor}
           />
 
@@ -52,12 +52,12 @@ const Header = ({onHeartPress, onNotificationPress, onSavedSearchesPress, onSett
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.heartContainer}
+          style={home ? styles.homeAction : styles.heartContainer}
           onPress={onHeartPress}
           accessibilityLabel="Open wishlist">
           <Icon
             name="heart-outline"
-            size={24}
+            size={home ? 21 : 24}
             color={iconColor}
           />
         </TouchableOpacity>
@@ -90,6 +90,10 @@ const MenuItem = ({icon, label, destructive, onPress}) => {
 export default Header;
 
 const createStyles = colors => StyleSheet.create({
+  homeHeader: {paddingHorizontal: 16, paddingVertical: 8, gap: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border},
+  homeLogo: {top: 0, flexShrink: 1, width: 132, height: 46},
+  homeAction: {top: 0, width: 44, height: 44, borderRadius: 13, backgroundColor: colors.surfaceMuted, alignItems: 'center', justifyContent: 'center'},
+  homeActions: {gap: 6},
   compact: {paddingVertical: 0},
   container: {
     backgroundColor: colors.surface,

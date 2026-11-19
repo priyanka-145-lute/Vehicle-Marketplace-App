@@ -168,15 +168,15 @@
     "semantic_hash": ""
   },
   "src/components/BannerSlider.jsx": {
-    "mtime": 1793343128.3490086,
-    "seen": 1793343161.137859,
-    "ast_hash": "716edb5e120aff6839eea4a3493e0a4e",
+    "mtime": 1795070138.4861083,
+    "seen": 1795070156.9906905,
+    "ast_hash": "2d99d715bda56008881ca463e99ce6c5",
     "semantic_hash": ""
   },
   "src/components/CategoryCard.jsx": {
-    "mtime": 1793344823.2627265,
-    "seen": 1793344856.9750924,
-    "ast_hash": "4f1ff1a7403bb64ca414b0e6e23002be",
+    "mtime": 1795072112.0889943,
+    "seen": 1795072183.4311354,
+    "ast_hash": "52a586f04e898824b993b1123e1d3f52",
     "semantic_hash": ""
   },
   "src/components/CategoryTab.jsx": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "src/components/Header.jsx": {
-    "mtime": 1793268268.5487268,
-    "seen": 1793268307.663135,
-    "ast_hash": "3fec286bde69422642dde02665207357",
+    "mtime": 1794919663.8795419,
+    "seen": 1794919713.3876493,
+    "ast_hash": "0834320edbc4cf82fac9fae600eafd82",
     "semantic_hash": ""
   },
   "src/components/NetworkVehicleImage.jsx": {
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "src/components/SearchBar.jsx": {
-    "mtime": 1793270569.8416743,
-    "seen": 1793270611.5226712,
-    "ast_hash": "e509fb1ad88a7aa54801c11cb4883f7f",
+    "mtime": 1794919664.187024,
+    "seen": 1794919713.3876493,
+    "ast_hash": "85e589988a0f062faa82d6b4b0c3bc3a",
     "semantic_hash": ""
   },
   "src/components/SectionHeader.jsx": {
@@ -228,9 +228,9 @@
     "semantic_hash": ""
   },
   "src/components/TopVehicleCard.jsx": {
-    "mtime": 1793345189.336438,
-    "seen": 1794915030.3669224,
-    "ast_hash": "408bee609233c7f7b93d8bf4f843ba06",
+    "mtime": 1795071198.523664,
+    "seen": 1795071237.8656392,
+    "ast_hash": "f52536fad73b323ba3be811fcdd9d1ef",
     "semantic_hash": ""
   },
   "src/components/TwoWheelerFilterDrawer.jsx": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "src/components/VehicleCard.jsx": {
-    "mtime": 1793345189.3344474,
-    "seen": 1794915030.3669224,
-    "ast_hash": "00fccbbf7eac7ba2876f2fc1d9c1ed3b",
+    "mtime": 1795071071.9222455,
+    "seen": 1795071237.8656392,
+    "ast_hash": "0f43b43159483c056c39e25aac096605",
     "semantic_hash": ""
   },
   "src/components/WishlistHeart.jsx": {
@@ -264,9 +264,9 @@
     "semantic_hash": ""
   },
   "src/data/dummyData.jsx": {
-    "mtime": 1793345017.9880185,
-    "seen": 1793345047.7437816,
-    "ast_hash": "c3c8e464e9495a4cf46676f6567271fc",
+    "mtime": 1795072203.2655077,
+    "seen": 1795092610.3000584,
+    "ast_hash": "6afd9e382ebf9b03cb7504bbff841fb7",
     "semantic_hash": ""
   },
   "src/data/ehicleData.jsx": {
@@ -300,21 +300,21 @@
     "semantic_hash": ""
   },
   "src/screens/AllFourWheelersScreen.jsx": {
-    "mtime": 1793345113.4477162,
-    "seen": 1793345184.6154578,
-    "ast_hash": "20c0f899178623e4c840c41015705a25",
+    "mtime": 1795071071.9182422,
+    "seen": 1795071237.8656392,
+    "ast_hash": "3ee637408757df15e6c5fef632c97d20",
     "semantic_hash": ""
   },
   "src/screens/AllOtherVehiclesScreen.jsx": {
-    "mtime": 1793345113.449737,
-    "seen": 1793345184.6154578,
-    "ast_hash": "19f1cc131f7e651196cb51bd2769a450",
+    "mtime": 1795071071.9212456,
+    "seen": 1795071237.8656392,
+    "ast_hash": "ead091eb1e8d0006592582d86b97809a",
     "semantic_hash": ""
   },
   "src/screens/AllTwoWheelersScreen.jsx": {
-    "mtime": 1793345189.3312724,
-    "seen": 1794915030.3669224,
-    "ast_hash": "7d1a536c82099d785df2e3e8ea90c565",
+    "mtime": 1795071071.9202418,
+    "seen": 1795071237.8656392,
+    "ast_hash": "1ae963f854107584540809d0af269320",
     "semantic_hash": ""
   },
   "src/screens/CarScreen.jsx": {
@@ -324,8 +324,8 @@
     "semantic_hash": ""
   },
   "src/screens/HomeScreen.jsx": {
-    "mtime": 1793344601.165635,
-    "seen": 1793344616.3386083,
+    "mtime": 1795070138.390922,
+    "seen": 1795070156.9906905,
     "ast_hash": "cdf1592a0b0a920da974da4c18ac9c8e",
     "semantic_hash": ""
   },
@@ -348,9 +348,9 @@
     "semantic_hash": ""
   },
   "src/screens/PartsScreen.jsx": {
-    "mtime": 1793271328.9519641,
-    "seen": 1793271338.4849122,
-    "ast_hash": "8b00f5f3c422d34140a279d077e1dfb3",
+    "mtime": 1795072111.131029,
+    "seen": 1795072183.4311354,
+    "ast_hash": "818baac54187d78b3d735b6fa3f9c1bf",
     "semantic_hash": ""
   },
   "src/screens/PreferencesScreens.jsx": {
@@ -360,27 +360,27 @@
     "semantic_hash": ""
   },
   "src/screens/ServiceDetailsScreen.jsx": {
-    "mtime": 1793102688.3532796,
-    "seen": 1793102707.5314667,
-    "ast_hash": "90002e2e5f8252dc0b56bd76f3c5d1b4",
+    "mtime": 1795072080.9382012,
+    "seen": 1795072183.4311354,
+    "ast_hash": "4b05261da0c6debc7f92b7f4403b02c2",
     "semantic_hash": ""
   },
   "src/screens/ServicesScreen.jsx": {
-    "mtime": 1793271328.9539528,
-    "seen": 1793271338.4849122,
-    "ast_hash": "da61a83a37776634f5de330665b5322d",
+    "mtime": 1795072111.5403583,
+    "seen": 1795072183.4311354,
+    "ast_hash": "b55a505a66dd78332cb50bbb020f4060",
     "semantic_hash": ""
   },
   "src/screens/TwoWheelerDetailScreen.jsx": {
-    "mtime": 1793102688.3552825,
-    "seen": 1793102707.5314667,
-    "ast_hash": "a451a43b9de4b69d49856654932b8533",
+    "mtime": 1795092610.4841661,
+    "seen": 1795092626.304545,
+    "ast_hash": "6b33027c41d7159be5fca42c4b6d51aa",
     "semantic_hash": ""
   },
   "src/screens/VehicleScreen.jsx": {
-    "mtime": 1793345113.445698,
-    "seen": 1793345184.6154578,
-    "ast_hash": "74983e0b130d09e35b6680f09f4a522b",
+    "mtime": 1795070945.3967757,
+    "seen": 1795071237.8656392,
+    "ast_hash": "0bf8dc069290c62c8f489b554d20e05a",
     "semantic_hash": ""
   },
   "src/screens/WishlistScreen.jsx": {
@@ -666,8 +666,8 @@
     "semantic_hash": ""
   },
   "__tests__/Banner.test.jsx": {
-    "mtime": 1793181170.351701,
-    "seen": 1793181224.0866685,
+    "mtime": 1795070138.631111,
+    "seen": 1795070156.9906905,
     "ast_hash": "c957dd388669c6cc8d4d4e52dfd48851",
     "semantic_hash": ""
   },
@@ -708,21 +708,21 @@
     "semantic_hash": ""
   },
   "__tests__/VehicleLayout.test.jsx": {
-    "mtime": 1793268125.9913108,
-    "seen": 1793268152.1975088,
-    "ast_hash": "975fd38f3e087326ce8620ec02a9e191",
+    "mtime": 1795071072.2313607,
+    "seen": 1795071237.8656392,
+    "ast_hash": "e2239ed8f5a4096853492be51aa76680",
     "semantic_hash": ""
   },
   "__tests__/HomeLayout.test.jsx": {
-    "mtime": 1793344931.5478003,
-    "seen": 1793344978.1287904,
-    "ast_hash": "654ff403941bdf328b0e10c8d0124f84",
+    "mtime": 1795070138.549111,
+    "seen": 1795070156.9906905,
+    "ast_hash": "6376fa82978bc75dd0c4e9e8c199b7d6",
     "semantic_hash": ""
   },
   "__tests__/PartsServices.test.jsx": {
-    "mtime": 1793270589.512383,
-    "seen": 1793270611.5226712,
-    "ast_hash": "f4c5b94908259a15bccdbb2d07731bed",
+    "mtime": 1795072153.113303,
+    "seen": 1795072183.4311354,
+    "ast_hash": "ddb0060506a2e63b1d5617bcb108eec2",
     "semantic_hash": ""
   },
   "__tests__/WishlistCards.test.jsx": {
@@ -741,6 +741,300 @@
     "mtime": 1794919394.8829055,
     "seen": 1794919411.8484666,
     "ast_hash": "0dc6fe93db7de218e65e8ac0ca182a4a",
+    "semantic_hash": ""
+  },
+  "src/assets/images/home-automotive-hero.jpg": {
+    "mtime": 1794920015.8513865,
+    "seen": 1794920128.348216,
+    "ast_hash": "f91cd6c56a83e637301a4415696bc078",
+    "semantic_hash": ""
+  },
+  "src/data/vehicleCatalog.js": {
+    "mtime": 1795071199.873952,
+    "seen": 1795071237.8656392,
+    "ast_hash": "7003db4f004a76e875ebfdba7af4adcc",
+    "semantic_hash": ""
+  },
+  "__tests__/VehicleDemo.test.jsx": {
+    "mtime": 1795071215.6584466,
+    "seen": 1795071237.8656392,
+    "ast_hash": "0257501003d61dbefe53152b77578bd4",
+    "semantic_hash": ""
+  },
+  "src/data/vehicleImageSources.json": {
+    "mtime": 1795071199.8982568,
+    "seen": 1795071237.8656392,
+    "ast_hash": "9e93eab5de28e4c381a95d8567ffe8e0",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/access.webp": {
+    "mtime": 1795070661.038381,
+    "seen": 1795071237.8656392,
+    "ast_hash": "93710cb601ca243cc5073ccf3a3e8ab0",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/ace.png": {
+    "mtime": 1795092928.3022552,
+    "seen": 1795092931.7464309,
+    "ast_hash": "6106ea438b255f832e2f72d4395cf9f6",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/activa.jpg": {
+    "mtime": 1795070660.398993,
+    "seen": 1795071237.8656392,
+    "ast_hash": "58b9ec0295dc371bed33709b40d123eb",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/apache.webp": {
+    "mtime": 1795070661.263663,
+    "seen": 1795071237.8656392,
+    "ast_hash": "cafc225ed9e238a4e4af9863f8bc18bc",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/ather.webp": {
+    "mtime": 1795070661.0613751,
+    "seen": 1795071237.8656392,
+    "ast_hash": "17491f64fd3fe7b083a0a198146589bf",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/auto.jpg": {
+    "mtime": 1795070661.8150437,
+    "seen": 1795071237.8656392,
+    "ast_hash": "5297dc092c66cf42d8fe0631f3deac48",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/city.jpg": {
+    "mtime": 1795070659.932936,
+    "seen": 1795071237.8656392,
+    "ast_hash": "b915942518e12f7b691f48ba2977e585",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/classic.jpg": {
+    "mtime": 1795070660.445329,
+    "seen": 1795071237.8656392,
+    "ast_hash": "0a74523f2fd2daa558d9215ef71180be",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/creta.png": {
+    "mtime": 1795070659.978787,
+    "seen": 1795071237.8656392,
+    "ast_hash": "c23da42de1e6fbb0aec0405af5ec5db2",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/dost.jpg": {
+    "mtime": 1795070661.694976,
+    "seen": 1795071237.8656392,
+    "ast_hash": "63f0896decab4617f752f8b2d1a4aed7",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/duke.jpg": {
+    "mtime": 1795070662.311347,
+    "seen": 1795071237.8656392,
+    "ast_hash": "8dc6a1bb792d77e2a41246a89b7e181b",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/eicher.jpg": {
+    "mtime": 1795070707.0448108,
+    "seen": 1795071237.8656392,
+    "ast_hash": "b7be0ff7fda682b32503d948c7e6b5b7",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/godrej.jpg": {
+    "mtime": 1795070662.6354182,
+    "seen": 1795071237.8656392,
+    "ast_hash": "4f429c4f12520f62b3d4fd7cea70d18e",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/hector.jpg": {
+    "mtime": 1795070660.7708125,
+    "seen": 1795071237.8656392,
+    "ast_hash": "fbdbada51a5c4ea2fe1f7a3f3f41f112",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/i20.jpg": {
+    "mtime": 1795070661.3628068,
+    "seen": 1795071237.8656392,
+    "ast_hash": "4e1c8c6809d1fac680cd27ba08e54800",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/innova.jpg": {
+    "mtime": 1795070660.237303,
+    "seen": 1795071237.8656392,
+    "ast_hash": "56544e01e45b02707a5a4faa063148e3",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/jcb.webp": {
+    "mtime": 1795070661.543326,
+    "seen": 1795071237.8656392,
+    "ast_hash": "361755485791ed47a12cefebebfdb922",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/nexon.jpg": {
+    "mtime": 1795070659.8718102,
+    "seen": 1795071237.8656392,
+    "ast_hash": "1057d0c04ba58cb16af2942f621eb0e8",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/pulsar.png": {
+    "mtime": 1795070661.1785445,
+    "seen": 1795071237.8656392,
+    "ast_hash": "e88b10d2a37bc10bdf2de25db876bf3f",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/r15.webp": {
+    "mtime": 1795070660.945256,
+    "seen": 1795071237.8656392,
+    "ast_hash": "293c79e169597e61142c69da186b0aea",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/seltos.jpg": {
+    "mtime": 1795070705.811512,
+    "seen": 1795071237.8656392,
+    "ast_hash": "3bbd3d0e393417f542de3b33cf403682",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/starbus.jpg": {
+    "mtime": 1795070813.110305,
+    "seen": 1795071237.8656392,
+    "ast_hash": "b3c174a9f8317292a42ca7e43e8c882b",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/swaraj.jpg": {
+    "mtime": 1795070661.9011211,
+    "seen": 1795071237.8656392,
+    "ast_hash": "e5d00a4010dd8b080e441c10350e348c",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/swift.jpg": {
+    "mtime": 1795070659.9468763,
+    "seen": 1795071237.8656392,
+    "ast_hash": "794af38564005b328e48931145ae4dec",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/tata407.jpg": {
+    "mtime": 1795070661.7090814,
+    "seen": 1795071237.8656392,
+    "ast_hash": "e254c827e2c86f37c5605326eb3bce6c",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/thar.jpg": {
+    "mtime": 1795070659.9970038,
+    "seen": 1795071237.8656392,
+    "ast_hash": "1d2da6a8e515b949d5233343b1b4e12d",
+    "semantic_hash": ""
+  },
+  "src/assets/images/vehicles/traveller.jpg": {
+    "mtime": 1795070661.9134367,
+    "seen": 1795071237.8656392,
+    "ast_hash": "cf4b8938170e58ddaefc5cc727fdcd26",
+    "semantic_hash": ""
+  },
+  "src/data/partsServiceImageSources.json": {
+    "mtime": 1795072059.028521,
+    "seen": 1795072183.4311354,
+    "ast_hash": "3dba66233f885e6f4c5065a578136f3d",
+    "semantic_hash": ""
+  },
+  "src/data/partsServiceImages.js": {
+    "mtime": 1795072080.457763,
+    "seen": 1795072183.4311354,
+    "ast_hash": "cd72e4d1667669b5f405e459d2d35a82",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/b1.jpg": {
+    "mtime": 1795071958.816883,
+    "seen": 1795072183.4311354,
+    "ast_hash": "85107cc5f2b16b4f3f9e425d8e4c3753",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/b2.webp": {
+    "mtime": 1795072014.8141208,
+    "seen": 1795072183.4311354,
+    "ast_hash": "265c8ed4b82afac40d16992f3ff7bb63",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/b3.jpg": {
+    "mtime": 1795071957.788777,
+    "seen": 1795072183.4311354,
+    "ast_hash": "d8675d6c0b898ff2cf48446ade38c255",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/b4.jpg": {
+    "mtime": 1795071957.2303598,
+    "seen": 1795072183.4311354,
+    "ast_hash": "99bcf346146d31cdc3219e73a6046659",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/b5.jpg": {
+    "mtime": 1795071957.7334318,
+    "seen": 1795072183.4311354,
+    "ast_hash": "dcbcc937e87fbc581c65ad2fa6090e06",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/b6.jpg": {
+    "mtime": 1795071957.157809,
+    "seen": 1795072183.4311354,
+    "ast_hash": "fd5cf05534c2ac022afa57205e193051",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/c1.jpg": {
+    "mtime": 1795072015.0317957,
+    "seen": 1795072183.4311354,
+    "ast_hash": "e4acd97c5dd07f9a7287ff07bec24526",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/c2.jpg": {
+    "mtime": 1795072015.1035986,
+    "seen": 1795072183.4311354,
+    "ast_hash": "13ecd75e7091a55beb4cd8a90d6c01fd",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/c3.png": {
+    "mtime": 1795071957.6264594,
+    "seen": 1795072183.4311354,
+    "ast_hash": "610d197e6974a034cf33e4320c67ba6e",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/c4.jpg": {
+    "mtime": 1795071958.3448653,
+    "seen": 1795072183.4311354,
+    "ast_hash": "663ff39c946f2b8727c755d50db3bb5b",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/c5.jpg": {
+    "mtime": 1795071958.0940235,
+    "seen": 1795072183.4311354,
+    "ast_hash": "3979384f1d5ff773032314d14afb0a40",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/c6.jpg": {
+    "mtime": 1795071957.926024,
+    "seen": 1795072183.4311354,
+    "ast_hash": "77d019c9a02b24957bab24b33877469d",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/s1.jpg": {
+    "mtime": 1795071959.599013,
+    "seen": 1795072183.4311354,
+    "ast_hash": "b4a57e3d5ede2c625e16fc38f97567fe",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/s2.jpg": {
+    "mtime": 1795071959.0899282,
+    "seen": 1795072183.4311354,
+    "ast_hash": "3fe51c2363cb01447d6d01e4587c3376",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/s3.jpg": {
+    "mtime": 1795071958.6668968,
+    "seen": 1795072183.4311354,
+    "ast_hash": "e86f07cc2392a5d48182d8d3ebac8430",
+    "semantic_hash": ""
+  },
+  "src/assets/images/parts-services/s4.jpg": {
+    "mtime": 1795072059.0202296,
+    "seen": 1795072183.4311354,
+    "ast_hash": "ca229c4f2abe4016cce57e6601af0920",
     "semantic_hash": ""
   }
 }

@@ -16,7 +16,11 @@ jest.mock('../src/components/VehicleCard', () => 'VehicleCard');
 jest.mock('../src/components/TopVehicleCard', () => 'TopVehicleCard');
 jest.mock('react-native-vector-icons/Ionicons', () => 'Icon');
 
-test.each(['2wheeler', '4wheeler', 'other'])('%s fits a featured row and two grid rows in the measured viewport', async vehicleType => {
+test.each([
+  ['2wheeler', 8, 'Scooter', 'Ather 450X'],
+  ['4wheeler', 9, 'MUV', 'Toyota Innova Crysta'],
+  ['other', 10, 'Forklift', 'Godrej UNO 20'],
+])('%s shows its expanded grid and fits three rows in the measured viewport', async (vehicleType, count, category, title) => {
   jest.useFakeTimers();
   useRoute.mockReturnValue({params: {vehicleType}});
   let tree;
@@ -30,12 +34,17 @@ test.each(['2wheeler', '4wheeler', 'other'])('%s fits a featured row and two gri
   const featured = lists.find(node => node.props.horizontal);
   const grid = lists.find(node => node.props.numColumns === 2);
   expect(featured.props.data).toHaveLength(2);
-  expect(grid.props.data.length).toBeGreaterThanOrEqual(4);
+  expect(grid.props.data).toHaveLength(count);
+  expect(new Set(grid.props.data.map(grid.props.keyExtractor)).size).toBe(count);
   const card = grid.props.renderItem({item: grid.props.data[0]});
   expect(card.props.cardHeight * 3 + 16 + 180 + 100).toBeLessThanOrEqual(700);
   expect(featured.props.renderItem({item: featured.props.data[0]}).props.cardHeight).toBe(card.props.cardHeight);
   await measure(tree.root.findAllByType(ScrollView).find(node => node.props.onLayout), 850);
   expect(tree.root.findAllByType(FlatList).find(node => node.props.numColumns === 2).props.renderItem({item: grid.props.data[0]}).props.cardHeight).toBeGreaterThan(card.props.cardHeight);
+  const tab = tree.root.findAllByType('CategoryTab').find(node => node.props.label === category);
+  await act(async () => tab.props.onPress());
+  expect(grid.props.data.every(item => item.category === category)).toBe(true);
+  expect(grid.props.data.some(item => item.title === title)).toBe(true);
   await act(async () => tree.unmount());
   jest.useRealTimers();
 });

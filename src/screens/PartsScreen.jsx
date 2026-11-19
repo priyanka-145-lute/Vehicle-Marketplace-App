@@ -12,48 +12,45 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchBar from '../components/SearchBar';
+import {partImages} from '../data/partsServiceImages';
 
 const {width} = Dimensions.get('window');
-const twoWheelerPartsImage = require('../assets/images/parts/two-wheeler-parts.png');
-const fourWheelerPartsImage = require('../assets/images/parts/four-wheeler-parts.png');
 
 const PARTS = {
   '2wheeler-parts': {
     title: 'Two Wheeler Old Parts',
     subtitle: 'Parts on sale for your bike & scooter',
     categoryLabel: 'Motorcycle & scooter parts only',
-    productImage: twoWheelerPartsImage,
     banners: [
-      {id: 'bike-sale', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=1200&auto=format&fit=crop', offer: 'UP TO 30% OFF', label: 'Bike essentials on sale'},
-      {id: 'helmet-sale', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop', offer: 'RIDE SAFE, SAVE MORE', label: 'Limited-time riding offers'},
-      {id: 'scooter-sale', image: 'https://images.unsplash.com/photo-1558980664-10ea8a61c6b4?q=80&w=1200&auto=format&fit=crop', offer: 'WEEKEND DEALS', label: 'Fresh offers every week'},
+      {id: 'bike-sale', image: partImages.b1, offer: 'UP TO 30% OFF', label: 'Bike essentials on sale'},
+      {id: 'helmet-sale', image: partImages.b2, offer: 'RIDE SAFE, SAVE MORE', label: 'Limited-time riding offers'},
+      {id: 'scooter-sale', image: partImages.b5, offer: 'WEEKEND DEALS', label: 'Fresh offers every week'},
     ],
     items: [
-      {id: 'b1', name: 'LED Headlight Assembly', brand: 'Universal fit', price: '₹ 1,499', oldPrice: '₹ 2,100', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=600&auto=format&fit=crop'},
-      {id: 'b2', name: 'Premium Brake Pads', brand: 'Honda / Hero', price: '₹ 599', oldPrice: '₹ 850', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=600&auto=format&fit=crop'},
-      {id: 'b3', name: 'Performance Air Filter', brand: 'Yamaha', price: '₹ 749', oldPrice: '₹ 1,050', image: 'https://images.unsplash.com/photo-1524591652733-73fa1ae7b5ee?q=80&w=600&auto=format&fit=crop'},
-      {id: 'b4', name: 'Rear View Mirror Set', brand: 'Royal Enfield', price: '₹ 899', oldPrice: '₹ 1,250', image: 'https://images.unsplash.com/photo-1558980394-0c7d6b0393ae?q=80&w=600&auto=format&fit=crop'},
-      {id: 'b5', name: 'Drive Chain & Sprocket Kit', brand: 'Bajaj / TVS', price: '₹ 1,299', oldPrice: '₹ 1,800', image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=600&auto=format&fit=crop'},
-      {id: 'b6', name: 'Motorcycle Spark Plug', brand: 'NGK compatible', price: '₹ 249', oldPrice: '₹ 350', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=600&auto=format&fit=crop'},
+      {id: 'b1', name: 'LED Headlight Assembly', brand: 'Universal fit', price: '₹ 1,499', oldPrice: '₹ 2,100', image: partImages.b1},
+      {id: 'b2', name: 'Premium Brake Pads', brand: 'Honda / Hero', price: '₹ 599', oldPrice: '₹ 850', image: partImages.b2},
+      {id: 'b3', name: 'Performance Air Filter', brand: 'Yamaha', price: '₹ 749', oldPrice: '₹ 1,050', image: partImages.b3},
+      {id: 'b4', name: 'Rear View Mirror Set', brand: 'Royal Enfield', price: '₹ 899', oldPrice: '₹ 1,250', image: partImages.b4},
+      {id: 'b5', name: 'Drive Chain & Sprocket Kit', brand: 'Bajaj / TVS', price: '₹ 1,299', oldPrice: '₹ 1,800', image: partImages.b5},
+      {id: 'b6', name: 'Motorcycle Spark Plug', brand: 'NGK compatible', price: '₹ 249', oldPrice: '₹ 350', image: partImages.b6},
     ],
   },
   '4wheeler-parts': {
     title: 'Four Wheeler Old Parts',
     subtitle: 'Quality car parts at sale prices',
     categoryLabel: 'Car parts only',
-    productImage: fourWheelerPartsImage,
     banners: [
-      {id: 'car-sale', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop', offer: 'UP TO 25% OFF', label: 'Car care essentials on sale'},
-      {id: 'garage-sale', image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=1200&auto=format&fit=crop', offer: 'SERVICE DAY DEALS', label: 'Get more for your car'},
-      {id: 'road-sale', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop', offer: 'DRIVE & SAVE', label: 'Limited-time part offers'},
+      {id: 'car-sale', image: partImages.c2, offer: 'UP TO 25% OFF', label: 'Car care essentials on sale'},
+      {id: 'garage-sale', image: partImages.c3, offer: 'SERVICE DAY DEALS', label: 'Get more for your car'},
+      {id: 'road-sale', image: partImages.c1, offer: 'DRIVE & SAVE', label: 'Limited-time part offers'},
     ],
     items: [
-      {id: 'c1', name: 'Bosch Wiper Blade Set', brand: 'All sedan models', price: '₹ 1,099', oldPrice: '₹ 1,450', image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=600&auto=format&fit=crop'},
-      {id: 'c2', name: 'Car Battery 60 Ah', brand: 'Exide', price: '₹ 5,899', oldPrice: '₹ 6,750', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=600&auto=format&fit=crop'},
-      {id: 'c3', name: 'Front Brake Disc Pair', brand: 'Maruti / Hyundai', price: '₹ 2,799', oldPrice: '₹ 3,500', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=600&auto=format&fit=crop'},
-      {id: 'c4', name: 'Cabin Air Filter', brand: 'Premium carbon', price: '₹ 499', oldPrice: '₹ 699', image: 'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=600&auto=format&fit=crop'},
-      {id: 'c5', name: 'Engine Oil Filter', brand: 'Tata / Mahindra', price: '₹ 349', oldPrice: '₹ 499', image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=600&auto=format&fit=crop'},
-      {id: 'c6', name: 'Car Tail Light Assembly', brand: 'Maruti Suzuki', price: '₹ 2,199', oldPrice: '₹ 2,950', image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=600&auto=format&fit=crop'},
+      {id: 'c1', name: 'Bosch Wiper Blade Set', brand: 'All sedan models', price: '₹ 1,099', oldPrice: '₹ 1,450', image: partImages.c1},
+      {id: 'c2', name: 'Car Battery 60 Ah', brand: 'Exide', price: '₹ 5,899', oldPrice: '₹ 6,750', image: partImages.c2},
+      {id: 'c3', name: 'Front Brake Disc Pair', brand: 'Maruti / Hyundai', price: '₹ 2,799', oldPrice: '₹ 3,500', image: partImages.c3},
+      {id: 'c4', name: 'Cabin Air Filter', brand: 'Premium carbon', price: '₹ 499', oldPrice: '₹ 699', image: partImages.c4},
+      {id: 'c5', name: 'Engine Oil Filter', brand: 'Tata / Mahindra', price: '₹ 349', oldPrice: '₹ 499', image: partImages.c5},
+      {id: 'c6', name: 'Car Tail Light Assembly', brand: 'Maruti Suzuki', price: '₹ 2,199', oldPrice: '₹ 2,950', image: partImages.c6},
     ],
   },
 };
@@ -100,7 +97,7 @@ const PartsScreen = ({navigation, route}) => {
               showsHorizontalScrollIndicator={false}
               keyExtractor={item => item.id}
               onMomentumScrollEnd={event => setActiveBanner(Math.round(event.nativeEvent.contentOffset.x / width))}
-              renderItem={({item}) => <View style={styles.banner}><Image source={catalog.productImage} style={styles.bannerImage} /><View style={styles.overlay} /><View style={styles.bannerText}><Text style={styles.offer}>{item.offer}</Text><Text style={styles.bannerLabel}>{item.label}</Text><View style={styles.shopButton}><Text style={styles.shopText}>SHOP SALE</Text></View></View></View>}
+              renderItem={({item}) => <View style={styles.banner}><Image source={item.image} style={styles.bannerImage} /><View style={styles.overlay} /><View style={styles.bannerText}><Text style={styles.offer}>{item.offer}</Text><Text style={styles.bannerLabel}>{item.label}</Text><View style={styles.shopButton}><Text style={styles.shopText}>SHOP SALE</Text></View></View></View>}
             />
             <View style={styles.dots}>{catalog.banners.map((item, index) => <View key={item.id} style={[styles.dot, activeBanner === index && styles.activeDot]} />)}</View>
             <View style={styles.saleHeading}>
@@ -115,7 +112,7 @@ const PartsScreen = ({navigation, route}) => {
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={[styles.list, {paddingBottom: insets.bottom + 20}]}
-        renderItem={({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card}><View style={styles.badge}><Text style={styles.badgeText}>SALE</Text></View><Image source={catalog.productImage} style={styles.partImage} /><Text style={styles.partName} numberOfLines={2}>{item.name}</Text><Text style={styles.brand} numberOfLines={1}>{item.brand}</Text><View style={styles.priceRow}><Text style={styles.price}>{item.price}</Text><Text style={styles.oldPrice}>{item.oldPrice}</Text></View></TouchableOpacity>}
+        renderItem={({item}) => <TouchableOpacity activeOpacity={0.85} style={styles.card}><View style={styles.badge}><Text style={styles.badgeText}>SALE</Text></View><Image source={item.image} style={styles.partImage} /><Text style={styles.partName} numberOfLines={2}>{item.name}</Text><Text style={styles.brand} numberOfLines={1}>{item.brand}</Text><View style={styles.priceRow}><Text style={styles.price}>{item.price}</Text><Text style={styles.oldPrice}>{item.oldPrice}</Text></View></TouchableOpacity>}
       />
     </View>
   );

@@ -4,20 +4,21 @@ import {Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} f
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchBar from '../components/SearchBar';
+import {serviceImages} from '../data/partsServiceImages';
 
 const {width} = Dimensions.get('window');
 
 const serviceShops = [
-  {id: '1', name: 'Gadi Dekho Auto Care', address: 'Baner Road, Pune', phone: '+91 98765 43210', email: 'baner@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=800&auto=format&fit=crop'},
-  {id: '2', name: 'City Car Service', address: 'Wakad, Pune', phone: '+91 98765 43211', email: 'wakad@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: 'https://images.unsplash.com/photo-1632823471565-1ecdf5c6d7f7?q=80&w=800&auto=format&fit=crop'},
-  {id: '3', name: 'Premium Vehicle Care', address: 'Hinjewadi Phase 1, Pune', phone: '+91 98765 43212', email: 'hinjewadi@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: 'https://images.unsplash.com/photo-1625047509248-ec889cbff17f?q=80&w=800&auto=format&fit=crop'},
-  {id: '4', name: 'Express Auto Garage', address: 'Aundh, Pune', phone: '+91 98765 43213', email: 'aundh@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: 'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?q=80&w=800&auto=format&fit=crop'},
+  {id: '1', name: 'Gadi Dekho Auto Care', address: 'Baner Road, Pune', phone: '+91 98765 43210', email: 'baner@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: serviceImages.s1},
+  {id: '2', name: 'City Car Service', address: 'Wakad, Pune', phone: '+91 98765 43211', email: 'wakad@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: serviceImages.s2},
+  {id: '3', name: 'Premium Vehicle Care', address: 'Hinjewadi Phase 1, Pune', phone: '+91 98765 43212', email: 'hinjewadi@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: serviceImages.s3},
+  {id: '4', name: 'Express Auto Garage', address: 'Aundh, Pune', phone: '+91 98765 43213', email: 'aundh@gadidekho.com', website: 'www.gadidekho.com', services: ['Washing', 'Servicing'], image: serviceImages.s4},
 ];
 
 const banners = [
-  {id: '1', image: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=1200&auto=format&fit=crop', title: 'Complete Vehicle Care', subtitle: 'Washing, servicing and trusted support'},
-  {id: '2', image: 'https://images.unsplash.com/photo-1632823471565-1ecdf5c6d7f7?q=80&w=1200&auto=format&fit=crop', title: 'Professional Servicing', subtitle: 'Keep your vehicle running smoothly'},
-  {id: '3', image: 'https://images.unsplash.com/photo-1486006920555-c77dcf18193c?q=80&w=1200&auto=format&fit=crop', title: 'Premium Car Washing', subtitle: 'Clean care for every vehicle'},
+  {id: '1', image: serviceImages.s4, title: 'Complete Vehicle Care', subtitle: 'Washing, servicing and trusted support'},
+  {id: '2', image: serviceImages.s2, title: 'Professional Servicing', subtitle: 'Keep your vehicle running smoothly'},
+  {id: '3', image: serviceImages.s1, title: 'Premium Car Washing', subtitle: 'Clean care for every vehicle'},
 ];
 
 const ServicesScreen = ({navigation}) => {
@@ -67,7 +68,7 @@ const ServicesScreen = ({navigation}) => {
               showsHorizontalScrollIndicator={false}
               keyExtractor={item => item.id}
               onMomentumScrollEnd={event => setActiveBanner(Math.round(event.nativeEvent.contentOffset.x / width))}
-              renderItem={({item}) => <View style={styles.banner}><Image source={{uri: item.image}} style={styles.bannerImage} /><View style={styles.overlay} /><View style={styles.bannerText}><Text style={styles.bannerTitle}>{item.title}</Text><Text style={styles.bannerSubtitle}>{item.subtitle}</Text></View></View>}
+              renderItem={({item}) => <View style={styles.banner}><Image source={item.image} style={styles.bannerImage} /><View style={styles.overlay} /><View style={styles.bannerText}><Text style={styles.bannerTitle}>{item.title}</Text><Text style={styles.bannerSubtitle}>{item.subtitle}</Text></View></View>}
             />
             <View style={styles.dots}>{banners.map((item, index) => <View key={item.id} style={[styles.dot, activeBanner === index && styles.activeDot]} />)}</View>
             <Text style={styles.sectionTitle}>All Services</Text>
@@ -75,7 +76,7 @@ const ServicesScreen = ({navigation}) => {
         )}
         renderItem={({item}) => (
           <View style={styles.card}>
-            <Image source={{uri: item.image}} style={styles.shopImage} />
+            <Image source={item.image} style={styles.shopImage} />
             <View style={styles.cardContent}>
               <Text numberOfLines={2} style={styles.shopName}>{item.name}</Text>
               <View style={styles.addressRow}><Icon name="location-outline" size={14} color={colors.textMuted} /><Text numberOfLines={2} style={styles.address}>{item.address}</Text></View>

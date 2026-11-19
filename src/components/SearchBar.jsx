@@ -10,12 +10,12 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useTheme} from '../context/ThemeContext';
 
-const SearchBar = ({value, onChangeText, onSaveSearch, compact, placeholder = 'Search categories...'}) => {
+const SearchBar = ({value, onChangeText, onSaveSearch, compact, home, placeholder = 'Search categories...'}) => {
   const {styles} = useThemeStyles(createStyles);
 
   const {isDark} = useTheme();
   return (
-    <View style={[styles.container, isDark && styles.containerDark, compact && styles.compact]}>
+    <View style={[styles.container, isDark && styles.containerDark, compact && styles.compact, home && styles.homeSearch]}>
 
       <Icon
         name="search"
@@ -31,11 +31,11 @@ const SearchBar = ({value, onChangeText, onSaveSearch, compact, placeholder = 'S
         placeholderTextColor={isDark ? '#94a3b8' : '#777'}
       />
 
-      {value ? <TouchableOpacity onPress={() => onChangeText('')} accessibilityLabel="Clear search"><Icon name="close-circle" size={21} color={isDark ? '#cbd5e1' : '#777'} /></TouchableOpacity> : null}
+      {value ? <TouchableOpacity style={home && styles.homeAction} onPress={() => onChangeText('')} accessibilityLabel="Clear search"><Icon name="close-circle" size={21} color={isDark ? '#cbd5e1' : '#777'} /></TouchableOpacity> : null}
 
-      {onSaveSearch && <TouchableOpacity onPress={onSaveSearch} accessibilityLabel="Save search">
+      {onSaveSearch && <TouchableOpacity style={home && styles.homeAction} onPress={onSaveSearch} accessibilityLabel="Save search">
         <Icon
-          name="options-outline"
+          name={home ? 'bookmark-outline' : 'options-outline'}
           size={22}
           color={isDark ? '#cbd5e1' : '#777'}
         />
@@ -48,6 +48,8 @@ const SearchBar = ({value, onChangeText, onSaveSearch, compact, placeholder = 'S
 export default SearchBar;
 
 const createStyles = colors => StyleSheet.create({
+  homeSearch: {marginHorizontal: 0, marginTop: 0, elevation: 0, borderWidth: 1, borderColor: colors.border, paddingRight: 4},
+  homeAction: {minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center'},
   compact: {height: 40, marginTop: 6, borderRadius: 22},
   container: {
     backgroundColor: colors.surface,

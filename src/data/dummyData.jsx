@@ -1,3 +1,5 @@
+import {serviceImages} from './partsServiceImages';
+
 export const bannerData = [
   {
     id: '1',
@@ -63,8 +65,7 @@ export const categoryData = [
     title: 'Two Wheeler Old Parts',
     subtitle: 'Genuine parts for top performance',
     type: '2wheeler-parts',
-    image:
-      'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=1200&auto=format&fit=crop',
+    image: require('../assets/images/parts/two-wheeler-parts.png'),
   },
 
   {
@@ -72,8 +73,7 @@ export const categoryData = [
     title: 'Four Wheeler Old Parts',
     subtitle: 'Quality parts for longer car life',
     type: '4wheeler-parts',
-    image:
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop',
+    image: require('../assets/images/parts/four-wheeler-parts.png'),
   },
 
   {
@@ -81,8 +81,7 @@ export const categoryData = [
     title: 'All Vehicle Services',
     subtitle: 'Inspection, insurance, repairs and more',
     type: 'services',
-    image:
-      'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=1200&auto=format&fit=crop',
+    image: serviceImages.s2,
   },
 
 ];

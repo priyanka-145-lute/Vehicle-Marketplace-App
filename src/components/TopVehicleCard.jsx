@@ -6,10 +6,6 @@ import NetworkVehicleImage from './NetworkVehicleImage';
 
 const {width} = Dimensions.get('window');
 
-const getFallbackImage = type => type === '2wheeler'
-  ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
-  : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
-
 const TopVehicleCard = ({item, onPress, cardHeight, style, inlineDetails}) => {
   const {colors, styles} = useThemeStyles(createStyles);
 
@@ -18,7 +14,7 @@ const TopVehicleCard = ({item, onPress, cardHeight, style, inlineDetails}) => {
 
       {/* NEW Badge */}
       <View style={[styles.newTag, cardHeight && {position: 'absolute', left: 8, top: 8, zIndex: 1}]}>
-        <Text style={styles.newText}>NEW</Text>
+        <Text style={styles.newText}>{item.isDemo ? 'DEMO' : 'NEW'}</Text>
       </View>
 
       {/* Heart */}
@@ -27,8 +23,8 @@ const TopVehicleCard = ({item, onPress, cardHeight, style, inlineDetails}) => {
       {/* Image */}
       <NetworkVehicleImage
         uri={item.image}
-        fallbackUri={getFallbackImage(item.type)}
-        style={[styles.topCarImage, cardHeight && {height: undefined, flex: 1, minHeight: 20, marginTop: 0}]}
+        fallbackUri={item.image}
+        style={[styles.topCarImage, item.isDemo && styles.demoImage, cardHeight && {height: undefined, flex: 1, minHeight: 20, marginTop: 0}]}
       />
 
       {inlineDetails ? <>
@@ -37,7 +33,7 @@ const TopVehicleCard = ({item, onPress, cardHeight, style, inlineDetails}) => {
           <WishlistHeart item={{...item, wishlistCardVariant: 'featured', wishlistCardHeight: cardHeight}} style={styles.inlineHeart} color={colors.text} />
         </View>
         <View style={styles.detailsRow}>
-          <Text style={styles.inlineSpecs}>{item.fuel} • {item.transmission}</Text>
+          <Text style={styles.inlineSpecs}>{[item.fuel, item.transmission].filter(Boolean).join(' • ')}</Text>
           <Text style={styles.priceBadge}>{item.price}</Text>
         </View>
       </> : <>
@@ -62,6 +58,7 @@ const TopVehicleCard = ({item, onPress, cardHeight, style, inlineDetails}) => {
 export default TopVehicleCard;
 
 const createStyles = colors => StyleSheet.create({
+  demoImage: {resizeMode: 'contain'},
   titleRow: {flexDirection: 'row', alignItems: 'center', marginTop: 4},
   inlineTitle: {flex: 1, fontSize: 13, fontWeight: '700', color: colors.text},
   inlineHeart: {minWidth: 28, minHeight: 28, alignItems: 'center', justifyContent: 'center', marginLeft: 4},

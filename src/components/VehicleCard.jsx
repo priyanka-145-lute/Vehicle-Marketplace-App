@@ -5,10 +5,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import WishlistHeart from './WishlistHeart';
 import NetworkVehicleImage from './NetworkVehicleImage';
 
-const getFallbackImage = type => type === '2wheeler'
-  ? 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop'
-  : 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop';
-
 const VehicleCard = ({item, onPress, onBookmarkPress, cardHeight, inlineDetails}) => {
   const {colors, styles} = useThemeStyles(createStyles);
 
@@ -21,8 +17,8 @@ const VehicleCard = ({item, onPress, onBookmarkPress, cardHeight, inlineDetails}
       {/* Vehicle Image */}
       <NetworkVehicleImage
         uri={item.image}
-        fallbackUri={getFallbackImage(item.type)}
-        style={[styles.carImage, cardHeight && {height: undefined, flex: 1, minHeight: 20}]}
+        fallbackUri={item.image}
+        style={[styles.carImage, item.isDemo && styles.demoImage, cardHeight && {height: undefined, flex: 1, minHeight: 20}]}
       />
 
       {inlineDetails ? <>
@@ -31,7 +27,7 @@ const VehicleCard = ({item, onPress, onBookmarkPress, cardHeight, inlineDetails}
           <WishlistHeart item={{...item, wishlistCardVariant: 'grid', wishlistCardHeight: cardHeight}} style={styles.inlineHeart} color={colors.text} />
         </View>
         <View style={styles.detailsRow}>
-          <Text style={styles.inlineSpecs}>{item.fuel} • {item.transmission}</Text>
+          <Text style={styles.inlineSpecs}>{[item.fuel, item.transmission].filter(Boolean).join(' • ')}</Text>
           <Text style={styles.priceBadge}>{item.price}</Text>
         </View>
       </> : <>
@@ -61,6 +57,7 @@ const VehicleCard = ({item, onPress, onBookmarkPress, cardHeight, inlineDetails}
 export default VehicleCard;
 
 const createStyles = colors => StyleSheet.create({
+  demoImage: {resizeMode: 'contain'},
   titleRow: {flexDirection: 'row', alignItems: 'center', marginTop: 4},
   inlineTitle: {flex: 1, fontSize: 13, fontWeight: '700', color: colors.text},
   inlineHeart: {minWidth: 28, minHeight: 28, alignItems: 'center', justifyContent: 'center', marginLeft: 4},

@@ -14,18 +14,13 @@ const ServiceDetailsScreen = ({navigation, route}) => {
   const phone = item.phone || '';
   const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.address || '')}`;
   const availableServices = [...new Set([...services, 'Oil Change', 'Wheel Alignment', 'Interior Cleaning', 'Battery Check'])];
-  const galleryImages = [
-    item.image,
-    'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?q=80&w=800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1632823471565-1ecdf5c6d7f7?q=80&w=800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1625047509248-ec889cbff17f?q=80&w=800&auto=format&fit=crop',
-  ].filter(Boolean);
+  const galleryImages = [item.image].filter(Boolean);
 
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.imageWrap}>
-          <Image source={{uri: item.image}} style={styles.heroImage} />
+          <Image source={typeof item.image === 'string' ? {uri: item.image} : item.image} style={styles.heroImage} />
           <TouchableOpacity style={[styles.backButton, {top: insets.top + 10}]} onPress={() => navigation.goBack()} accessibilityLabel="Go back">
             <Icon name="chevron-back" size={24} color="#111827" />
           </TouchableOpacity>
@@ -64,7 +59,7 @@ const ServiceDetailsScreen = ({navigation, route}) => {
 
               <Text style={styles.galleryTitle}>Our Work</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.horizontalList}>
-                {galleryImages.map((image, index) => <Image key={`${image}-${index}`} source={{uri: image}} style={styles.galleryImage} />)}
+                {galleryImages.map((image, index) => <Image key={index} source={typeof image === 'string' ? {uri: image} : image} style={styles.galleryImage} />)}
               </ScrollView>
             </View>
           ) : (

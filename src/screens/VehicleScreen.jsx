@@ -21,157 +21,16 @@ import CategoryTab from '../components/CategoryTab';
 import Header from '../components/Header';
 import SectionHeader from '../components/SectionHeader';
 import SearchBar from '../components/SearchBar';
+import {CARS, OTHER_VEHICLES, TWO_WHEELERS} from '../data/vehicleCatalog';
 
 const {width} = Dimensions.get('window');
 const FEATURED_CARD_INTERVAL = width * 0.44 + 16;
 
-// ─── Vehicle Data ─────────────────────────────────────────────────────────────
-const vehicleData = [
-  // ── 4 Wheelers ──
-  {
-    id: '1',
-    title: 'Swift 2024',
-    fuel: 'Petrol',
-    transmission: 'Manual',
-    price: '₹ 6,50,000',
-    category: 'Hatchback',
-    type: '4wheeler',
-    image:
-      'https://stimg.cardekho.com/images/carexteriorimages/930x620/Maruti/Swift/9226/1687940953941/front-left-side-47.jpg',
-  },
-  {
-    id: '2',
-    title: 'i20 2024',
-    fuel: 'Petrol',
-    transmission: 'Manual',
-    price: '₹ 7,20,000',
-    category: 'Hatchback',
-    type: '4wheeler',
-    image:
-      'https://stimg.cardekho.com/images/carexteriorimages/930x620/Hyundai/i20/10148/1685604173114/front-left-side-47.jpg',
-  },
-  {
-    id: '3',
-    title: 'Nexon 2024',
-    fuel: 'Diesel',
-    transmission: 'Manual',
-    price: '₹ 8,00,000',
-    category: 'SUV',
-    type: '4wheeler',
-    image:
-      'https://stimg.cardekho.com/images/carexteriorimages/930x620/Tata/Nexon/9675/1730206352693/front-left-side-47.jpg',
-  },
-  {
-    id: '4',
-    title: 'Creta 2024',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    price: '₹ 11,00,000',
-    category: 'SUV',
-    type: '4wheeler',
-    image:
-      'https://stimg.cardekho.com/images/carexteriorimages/930x620/Hyundai/Creta/9829/1696253789133/front-left-side-47.jpg',
-  },
-  {
-    id: '4b',
-    title: 'City 2024',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    price: '₹ 12,50,000',
-    category: 'Sedan',
-    type: '4wheeler',
-    image:
-      'https://stimg.cardekho.com/images/carexteriorimages/930x620/Tata/Nexon/9675/1730206352693/front-left-side-47.jpg',
-  },
-
-  // ── 2 Wheelers ──
-  {
-    id: '5',
-    title: 'Yamaha R15 V4',
-    fuel: 'Petrol',
-    transmission: 'Manual',
-    price: '₹ 1,85,000',
-    category: 'Sports',
-    type: '2wheeler',
-    image:
-      'https://imgd.aeplcdn.com/664x374/n/cw/ec/103795/r15-v4-right-front-three-quarter.jpeg',
-  },
-  {
-    id: '6',
-    title: 'Activa 6G',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    price: '₹ 85,000',
-    category: 'Scooter',
-    type: '2wheeler',
-    image:
-      'https://imgd.aeplcdn.com/664x374/n/cw/ec/44686/activa-6g-right-front-three-quarter.jpeg',
-  },
-  {
-    id: '7',
-    title: 'Royal Enfield',
-    fuel: 'Petrol',
-    transmission: 'Manual',
-    price: '₹ 2,10,000',
-    category: 'Cruiser',
-    type: '2wheeler',
-    image:
-      'https://imgd.aeplcdn.com/664x374/n/cw/ec/183389/classic-350-right-side-view.jpeg',
-  },
-  {
-    id: '8',
-    title: 'KTM Duke 390',
-    fuel: 'Petrol',
-    transmission: 'Manual',
-    price: '₹ 3,20,000',
-    category: 'Sports',
-    type: '2wheeler',
-    image:
-      'https://imgd.aeplcdn.com/664x374/n/cw/ec/183523/duke-390-right-front-three-quarter.jpeg',
-  },
-
-  // ── Other Vehicles ──
-  {
-    id: 'other-1',
-    title: 'Tata Starbus',
-    fuel: 'Diesel',
-    transmission: 'Manual',
-    price: '₹ 18,50,000',
-    category: 'Bus',
-    type: 'other',
-    image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=900&auto=format&fit=crop',
-  },
-  {
-    id: 'other-2',
-    title: 'Bajaj RE Auto',
-    fuel: 'CNG',
-    transmission: 'Manual',
-    price: '₹ 3,75,000',
-    category: 'Auto Rickshaw',
-    type: 'other',
-    image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?q=80&w=900&auto=format&fit=crop',
-  },
-  {
-    id: 'other-3',
-    title: 'Eicher Pro 3016',
-    fuel: 'Diesel',
-    transmission: 'Manual',
-    price: '₹ 26,50,000',
-    category: 'Truck',
-    type: 'other',
-    image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=900&auto=format&fit=crop',
-  },
-  {
-    id: 'other-4',
-    title: 'Swaraj 744 FE',
-    fuel: 'Diesel',
-    transmission: 'Manual',
-    price: '₹ 7,10,000',
-    category: 'Tractor',
-    type: 'other',
-    image: 'https://images.unsplash.com/photo-1515569067071-ec3b51335dd0?q=80&w=900&auto=format&fit=crop',
-  },
-];
+const catalog = [...CARS, ...TWO_WHEELERS, ...OTHER_VEHICLES].map(item => ({
+  ...item,
+  price: '₹ ' + item.price.toLocaleString('en-IN'),
+}));
+const catalogKey = item => item.vehicleType + ':' + item.id;
 
 // ─── Category Maps ────────────────────────────────────────────────────────────
 const CATEGORIES = {
@@ -196,16 +55,9 @@ const VehicleScreen = () => {
   const [controlsHeight, setControlsHeight] = useState(0);
   const cardHeight = Math.max(110, Math.floor((viewportHeight - headerHeight - controlsHeight - 16) / 3));
 
-  const categories = CATEGORIES[vehicleType] ?? ['All'];
-
-  // Filter data by vehicle type + selected category
-  const filteredData =
-    selectedCategory === 'All'
-      ? vehicleData.filter(item => item.type === vehicleType)
-      : vehicleData.filter(
-          item =>
-            item.type === vehicleType && item.category === selectedCategory,
-        );
+  const vehicles = catalog.filter(item => (item.vehicleType || item.type) === vehicleType);
+  const categories = [...new Set([...(CATEGORIES[vehicleType] ?? ['All']), ...vehicles.map(item => item.category)])];
+  const filteredData = selectedCategory === 'All' ? vehicles : vehicles.filter(item => item.category === selectedCategory);
 
   // Top 2 for the featured horizontal strip
   const featuredData = filteredData.slice(0, 2);
@@ -265,7 +117,7 @@ const VehicleScreen = () => {
           ref={featuredListRef}
           horizontal
           data={featuredData}
-          keyExtractor={item => item.id}
+          keyExtractor={catalogKey}
           showsHorizontalScrollIndicator={false}
           onMomentumScrollEnd={event => {
             setFeaturedIndex(Math.round(event.nativeEvent.contentOffset.x / FEATURED_CARD_INTERVAL));
@@ -295,7 +147,7 @@ const VehicleScreen = () => {
         <View style={[styles.dotContainer, {marginTop: 8}]}>
           {featuredData.map((item, index) => (
             <View
-              key={item.id}
+              key={catalogKey(item)}
               style={featuredIndex === index ? styles.activeDot : styles.dot}
             />
           ))}
@@ -338,7 +190,7 @@ const VehicleScreen = () => {
         {/* Vehicle Grid */}
         <FlatList
           data={filteredData}
-          keyExtractor={item => item.id}
+          keyExtractor={catalogKey}
           numColumns={2}
           scrollEnabled={false}
           columnWrapperStyle={styles.columnWrapper}

@@ -42,7 +42,7 @@ const CategoryCard = ({ item }) => {
     >
 
       <View style={styles.imageFrame}>
-        <Image source={{uri: item.image}} style={styles.image} />
+        <Image source={typeof item.image === 'string' ? {uri: item.image} : item.image} style={styles.image} />
       </View>
 
       <View style={styles.content}>
